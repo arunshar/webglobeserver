@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <!-- All the files that are required -->
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <!--Local Stylesheet-->
+    <link rel="stylesheet" href="http://www.cse.buffalo.edu/~chandola/css/login.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  </head>
+  <body>
+    <!-- LOGIN FORM -->
+    <div class="text-center" style="padding:50px 0">
+      <div class="logo">WebGlobe 2.0</div>
+      <!-- Main Form -->
+      <div class="login-form-1">
+	<form id="login-form" class="text-left" method="POST" action="j_security_check">
+	  <div class="login-form-main-message"></div>
+	  <div class="main-login-form">
+	    <div class="login-group">
+	      <div class="form-group">
+		<label for="j_username" class="sr-only">Username</label>
+		<input type="text" class="form-control" id="j_username" name="j_username" placeholder="username">
+	      </div>
+	      <div class="form-group">
+		<label for="j_password" class="sr-only">Password</label>
+		<input type="password" class="form-control" id="j_password" name="j_password" placeholder="password">
+	      </div>
+	    </div>
+	    <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+	  </div>
+	  <div class="etc-login-form">
+	    <p>forgot your password? <a href="#">click here</a></p>
+	  </div>
+	</form>
+      </div>
+      <div><img width="240px" class="img-responsive" alt="WebGlobe 2.0" src='http://www.cse.buffalo.edu/~chandola/research/webglobe/webglobe_files/icon.png'/></div>
+      <br/>
+      <div><span> Powered by:</span></div>
+      <div><a href="https://federatedcloud.org"><img width="160px" class="img-responsive" alt="Aristotle Federated Cloud" src='https://federatedcloud.org/images/Aristotle.jpg'/></a></div>
+
+      <!-- end:Main Form -->
+    </div>
+  </body>
+</html>
