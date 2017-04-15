@@ -1,5 +1,8 @@
 package edu.buffalo.webglobe.server.utils;
 
+import ucar.ma2.Array;
+import ucar.ma2.MAMath;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
@@ -9,6 +12,31 @@ import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
 public class Utils {
+
+    public static File[] createImages(NetcdfDir netcdfDir, String saveDir,String hdfsAddress, String hdfsDir, String from, String to){
+
+        File folder = new File(LocalFileServer.LOCAL_DIRECTORY + saveDir);
+        folder.mkdirs();
+
+        int startIndex = Math.max(netcdfDir.getIndexFromDate(from),0);
+        int endIndex = Math.min(netcdfDir.getIndexFromDate(to),netcdfDir.getFilepaths().size()*netcdfDir.getTimeLen()-1);
+        for (int i = startIndex; i <= endIndex; ++i) {
+            Array src = netcdfDir.getData(i);
+            float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
+            MAMath.MinMax minmax;
+            if (netcdfDir.getVariableName().equals("tasmax")) {
+                minmax = new MAMath.MinMax(200, 350);
+            } else if (netcdfDir.getVariableName().equals("ChangeDetection")) {
+                minmax = new MAMath.MinMax(-1, 2);
+            } else {
+                minmax = MAMath.getMinMax(src);
+            }
+
+            Utils.createImage(data, (float) minmax.min, (float) minmax.max, LocalFileServer.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
+        }
+        File[] listOfFiles = folder.listFiles();
+        return listOfFiles;
+    }
 
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;

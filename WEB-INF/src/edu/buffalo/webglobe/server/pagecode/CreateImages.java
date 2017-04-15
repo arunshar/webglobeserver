@@ -56,35 +56,14 @@ public class CreateImages extends HttpServlet {
 		String hdfsDir = hdfsAddress.substring(hdfsAddress.indexOf("/user"), hdfsAddress.length());
 		String from = dataJson.get("from").getAsString();
 		String to = dataJson.get("to").getAsString();
+        NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress);
+        String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
 
-		NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress);
-		
-		String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
-		File folder = new File(LocalFileServer.LOCAL_DIRECTORY + saveDir);
-		folder.mkdirs();
-		
-		int startIndex = Math.max(netcdfDir.getIndexFromDate(from),0);
-		int endIndex = Math.min(netcdfDir.getIndexFromDate(to),netcdfDir.getFilepaths().size()*netcdfDir.getTimeLen()-1);
-		for (int i = startIndex; i <= endIndex; ++i) {
-			Array src = netcdfDir.getData(i);
-			float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
-			MAMath.MinMax minmax;
-			if (netcdfDir.getVariableName().equals("tasmax")) {
-				minmax = new MAMath.MinMax(200, 350);
-			} else if (netcdfDir.getVariableName().equals("ChangeDetection")) {
-				minmax = new MAMath.MinMax(-1, 2);
-			} else {
-				minmax = MAMath.getMinMax(src);
-			}
-			
-			Utils.createImage(data, (float) minmax.min, (float) minmax.max, LocalFileServer.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
-		}
-		
-		Map<String, String> responseData = new HashMap<>();
+		File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, hdfsAddress,hdfsDir,from,to);
+
+		Map<String, String> responseData = new HashMap<String, String>();
 		responseData.put("imagesAddress", saveDir);
-		
-		
-		File[] listOfFiles = folder.listFiles();
+
 		Arrays.sort(listOfFiles);
 		String fName = listOfFiles[0].getName();
 		responseData.put("imageMinDate", fName.substring(0, fName.lastIndexOf('.')));
@@ -96,5 +75,6 @@ public class CreateImages extends HttpServlet {
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write(responseJson);
 	}
+
 
 }
