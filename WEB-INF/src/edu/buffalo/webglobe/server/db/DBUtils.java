@@ -16,6 +16,7 @@ public class DBUtils {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("ALERT: WEBGLOBESERVER: "+Constants.DB_PASSWORD+" "+Constants.DB_USER_NAME);
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", Constants.DB_USER_NAME, Constants.DB_PASSWORD);
         }  catch (SQLException ex) {
             ex.printStackTrace();
