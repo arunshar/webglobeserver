@@ -57,10 +57,12 @@ public class NetcdfDir implements Serializable {
 			endDate = calDate;		
 			
 			dataset.close();			
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-	}
+    }
 	
 	public String getVariableName() {
 		return variableName;
@@ -72,10 +74,6 @@ public class NetcdfDir implements Serializable {
 
 	public CalendarDate getEndDate() {
 		return endDate;
-	}
-	
-	public String getHdfsuri() {
-		return hdfsuri;
 	}
 
 	public String getDir() {
@@ -115,12 +113,15 @@ public class NetcdfDir implements Serializable {
 			src = cdfFile.findVariable(variableName).read(origin, shape);
 			dataset.close();
 			return src;
-		} catch (IOException | InvalidRangeException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidRangeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return null;
+        return null;
 	}
 	
 }

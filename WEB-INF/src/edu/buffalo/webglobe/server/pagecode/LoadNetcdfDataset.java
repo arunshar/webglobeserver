@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import ucar.nc2.time.CalendarDateFormatter;
-import edu.buffalo.webglobe.server.utils.LocalFileServer;
+import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 
 /**
@@ -54,7 +54,7 @@ public class LoadNetcdfDataset extends HttpServlet {
 
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         String hdfsAddress = data.get("url").getAsString();
-        Map<String, Map<String, String>> responseData = new HashMap<>();
+        Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 
         String hdfsuri = hdfsAddress.substring(0, hdfsAddress.indexOf("/user"));
         FileSystem fs = null;
@@ -64,13 +64,13 @@ public class LoadNetcdfDataset extends HttpServlet {
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
-            Map<String, String> variableInfo = new HashMap<>();
+            Map<String, String> variableInfo = new HashMap<String, String>();
             variableInfo.put("name", netcdfDir.getVariableName());
             variableInfo.put("address", hdfsAddress+"/netCDFs");
             variableInfo.put("minDate", dateFormatter.toString(netcdfDir.getStartDate()));
             variableInfo.put("maxDate", dateFormatter.toString(netcdfDir.getEndDate()));
 
-            File folder = new File(LocalFileServer.LOCAL_DIRECTORY + saveDir);
+            File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
             System.out.println(folder.getAbsolutePath());
             if (folder.exists()) {
                 variableInfo.put("imagesAddress", saveDir);
@@ -89,7 +89,7 @@ public class LoadNetcdfDataset extends HttpServlet {
 
             fs = FileSystem.get(new URI(hdfsuri), new Configuration());
             Path analysisPath = new Path(hdfsAddress + "/analysis");
-            Map<String, String> analysisInfo = new HashMap<>();
+            Map<String, String> analysisInfo = new HashMap<String, String>();
             if (fs.exists(analysisPath)) {
                 Path analysisImageDir = fs.listStatus(analysisPath)[0].getPath();
                 analysisInfo.put("name", analysisImageDir.getName());
@@ -99,7 +99,7 @@ public class LoadNetcdfDataset extends HttpServlet {
                 analysisInfo.put("minDate", dateFormatter.toString(analysisDir.getStartDate()));
                 analysisInfo.put("maxDate", dateFormatter.toString(analysisDir.getEndDate()));
 
-                folder = new File(LocalFileServer.LOCAL_DIRECTORY + saveDir);
+                folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
 
                 if (folder.exists()) {
                     analysisInfo.put("imagesAddress", saveDir);

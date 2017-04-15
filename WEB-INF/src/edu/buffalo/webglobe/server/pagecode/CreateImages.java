@@ -15,9 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import ucar.ma2.Array;
-import ucar.ma2.MAMath;
-import edu.buffalo.webglobe.server.utils.LocalFileServer;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import edu.buffalo.webglobe.server.utils.Utils;
 
@@ -59,7 +56,7 @@ public class CreateImages extends HttpServlet {
         NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress);
         String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
 
-		File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, hdfsAddress,hdfsDir,from,to);
+		File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, hdfsAddress, hdfsDir, from, to);
 
 		Map<String, String> responseData = new HashMap<String, String>();
 		responseData.put("imagesAddress", saveDir);

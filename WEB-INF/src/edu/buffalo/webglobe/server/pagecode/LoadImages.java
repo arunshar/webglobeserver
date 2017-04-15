@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.buffalo.webglobe.server.utils.LocalFileServer;
+import edu.buffalo.webglobe.server.utils.Constants;
 
 /**
  * Servlet implementation class LoadImages
@@ -61,8 +61,8 @@ public class LoadImages extends HttpServlet {
 
 			for (Date date = start.getTime(); start.before(end) || start.equals(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
 				String filePath = imagesAddress + "/" + dateFormatter.format(date) + ".png";
-				if (new File(LocalFileServer.LOCAL_DIRECTORY + filePath).exists())
-					imageUrls += LocalFileServer.PUBLIC_ADDRESS + filePath + ","; 
+				if (new File(Constants.LOCAL_DIRECTORY + filePath).exists())
+					imageUrls += Constants.PUBLIC_ADDRESS + filePath + ",";
 			}
 			
 			response.getWriter().append(imageUrls);

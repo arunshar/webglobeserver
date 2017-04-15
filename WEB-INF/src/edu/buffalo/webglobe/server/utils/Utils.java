@@ -15,7 +15,7 @@ public class Utils {
 
     public static File[] createImages(NetcdfDir netcdfDir, String saveDir,String hdfsAddress, String hdfsDir, String from, String to){
 
-        File folder = new File(LocalFileServer.LOCAL_DIRECTORY + saveDir);
+        File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
         folder.mkdirs();
 
         int startIndex = Math.max(netcdfDir.getIndexFromDate(from),0);
@@ -32,7 +32,7 @@ public class Utils {
                 minmax = MAMath.getMinMax(src);
             }
 
-            Utils.createImage(data, (float) minmax.min, (float) minmax.max, LocalFileServer.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
+            Utils.createImage(data, (float) minmax.min, (float) minmax.max, Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
         }
         File[] listOfFiles = folder.listFiles();
         return listOfFiles;

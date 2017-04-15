@@ -51,7 +51,7 @@ public class GetSubmittedJobsInfo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Map<String, Map<String, String>> responseData = new HashMap<>();
+		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		String userName = request.getUserPrincipal().getName();
 		// query database
 
@@ -60,16 +60,15 @@ public class GetSubmittedJobsInfo extends HttpServlet {
 		ResultSet rset = null;
 		try {
 			// Step 1: Allocate a database Connection object
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "mysql");
-			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "0pt1musPr1me@");
+            conn = DBUtils.getConnection();
+
 			stmt = conn.createStatement();
 			String cmd = "select J.id as id,J.dataset_id as dataset_id,J.analysis as analysis,J.field as field,J.status as status,J.submission_time as submission_time, J.finish_time as finish_time, J.result_loc as result_loc, J.priority as priority, N.name as name from submitted_jobs J, netcdf_datasets N where J.dataset_id = N.id and J.user_name = \""
 					+ userName + "\" order by J.submission_time";
 			rset = stmt.executeQuery(cmd);
 			int i = 0;
 			while (rset.next()) {
-				Map<String, String> submittedJobInfo = new HashMap<>();
+				Map<String, String> submittedJobInfo = new HashMap<String, String>();
 				int id = rset.getInt("id");
 				String analysis = rset.getString("analysis");
 				String field = rset.getString("field");
@@ -96,8 +95,6 @@ public class GetSubmittedJobsInfo extends HttpServlet {
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 		String responseJson = new Gson().toJson(responseData);
 		response.setContentType("application/json");

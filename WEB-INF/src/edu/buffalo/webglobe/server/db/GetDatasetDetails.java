@@ -51,7 +51,7 @@ public class GetDatasetDetails extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String userName = request.getUserPrincipal().getName();
-		Map<String, Map<String, String>> responseData = new HashMap<>();
+		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		// query database
 
 		Connection conn = null;
@@ -59,16 +59,14 @@ public class GetDatasetDetails extends HttpServlet {
 		ResultSet rset = null, rset1 = null;
 		try {
 			// Step 1: Allocate a database Connection object
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "root");
-			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "0pt1musPr1me@");
+            conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
 			String cmd = "select id,name,url,available,info,info_url from netcdf_datasets where available = \"all\" or available = \""
 					+ userName + "\"";
 			rset = stmt.executeQuery(cmd);
 			int i = 0;
 			while (rset.next()) {
-				Map<String, String> datasetInfo = new HashMap<>();
+				Map<String, String> datasetInfo = new HashMap<String, String>();
 				String name = rset.getString("name");
 				String url = rset.getString("url");
 				String available = rset.getString("available");
@@ -87,7 +85,6 @@ public class GetDatasetDetails extends HttpServlet {
 				rset1 = stmt1.executeQuery(cmd1);
 				int j = 0;
 				while (rset1.next()) {
-					Map<String, String> fieldInfo = new HashMap<>();
 					datasetInfo.put("field" + j, rset1.getString("field_name"));
 					j++;
 				}
@@ -97,7 +94,7 @@ public class GetDatasetDetails extends HttpServlet {
 				stmt1.close();
 				i++;
 			}
-			Map<String, String> countInfo = new HashMap<>();
+			Map<String, String> countInfo = new HashMap<String, String>();
 			countInfo.put("value", (new Integer(i)).toString());
 			responseData.put("count", countInfo);
 			rset.close();
@@ -105,8 +102,6 @@ public class GetDatasetDetails extends HttpServlet {
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 		String responseJson = new Gson().toJson(responseData);
 		response.setContentType("application/json");

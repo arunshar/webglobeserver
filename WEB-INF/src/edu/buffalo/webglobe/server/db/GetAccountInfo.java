@@ -40,9 +40,9 @@ public class GetAccountInfo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	    Map<String,  Map<String,String> > responseData = new HashMap<>();
+	    Map<String,  Map<String,String> > responseData = new HashMap<String,  Map<String,String> >();
 	    String userName = request.getUserPrincipal().getName();
-	    Map<String, String> userInfo = new HashMap<>();
+	    Map<String, String> userInfo = new HashMap<String, String>();
 	    userInfo.put("userName",userName);
 	    responseData.put("userInfo",userInfo);
 	    String responseJson = new Gson().toJson(responseData);

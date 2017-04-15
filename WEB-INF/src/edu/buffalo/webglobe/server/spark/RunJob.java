@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import edu.buffalo.webglobe.server.db.DBUtils;
 
 /**
  * Servlet implementation class RunJob
@@ -57,10 +58,7 @@ public class RunJob extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
-			// Step 1: Allocate a database Connection object
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "mysql");
-			//conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", "root", "0pt1musPr1me@");
+			conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
 			
 			//add an entry to the submitted_jobs table
@@ -161,8 +159,6 @@ public class RunJob extends HttpServlet {
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 
 	}
