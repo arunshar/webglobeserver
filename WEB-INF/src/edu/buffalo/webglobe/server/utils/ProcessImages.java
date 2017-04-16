@@ -13,9 +13,10 @@ public class ProcessImages {
         }
         String hdfsAddress = args[0];
         String hdfsDir = hdfsAddress.substring(hdfsAddress.indexOf("/user"), hdfsAddress.length());
-        String from = args[1];
-        String to = args[2];
-        NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress);
+        String variableName = args[1];
+        String from = args[2];
+        String to = args[3];
+        NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress,variableName);
         String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
 
         File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, from, to);
