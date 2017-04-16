@@ -94,8 +94,6 @@ public class NetCDFUtils {
 		FileSystem fs = FileSystem.get(new URI(dfsuri), new Configuration());
 		Path dirPath = new Path(dir);
 		FileStatus[] fstatus = fs.listStatus(dirPath);
-        Logger logger = Logger.getLogger("webglobe.logger");
-        logger.warning("@@@@@@@ "+fstatus.length);
         ArrayList<String> paths = new ArrayList<String>();
 
 		for (int i = 0; i < fstatus.length; i++)

@@ -53,6 +53,7 @@ public class LoadNetcdfDataset extends HttpServlet {
         String variableName = data.get("fieldname").getAsString();
         Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
         Logger logger = Logger.getLogger("webglobe.logger");
+        logger.warning("%%%%%%% "+hdfsAddress+"/"+variableName);
         FileSystem fs = null;
         try {
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/"+variableName, variableName);
