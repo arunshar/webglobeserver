@@ -13,12 +13,10 @@ import java.lang.Integer;
 import com.google.gson.Gson;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetSubmittedJobsInfo

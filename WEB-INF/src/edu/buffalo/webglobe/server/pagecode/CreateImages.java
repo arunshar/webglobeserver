@@ -56,7 +56,7 @@ public class CreateImages extends HttpServlet {
         NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress);
         String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
 
-		File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, hdfsAddress, hdfsDir, from, to);
+		File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, from, to);
 
 		Map<String, String> responseData = new HashMap<String, String>();
 		responseData.put("imagesAddress", saveDir);

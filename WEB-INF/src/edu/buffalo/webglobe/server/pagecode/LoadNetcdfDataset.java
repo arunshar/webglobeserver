@@ -25,6 +25,7 @@ import ucar.nc2.time.CalendarDateFormatter;
 import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 
+import java.util.logging.Logger;
 /**
  * Servlet implementation class LoadNetcdfDataset
  */
@@ -58,9 +59,12 @@ public class LoadNetcdfDataset extends HttpServlet {
 
         String hdfsuri = hdfsAddress.substring(0, hdfsAddress.indexOf("/user"));
         FileSystem fs = null;
-        try {
+        Logger logger = Logger.getLogger("webglobe.logger");
 
+        try {
+            logger.warning("In here "+hdfsAddress);
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/netCDFs");
+
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 

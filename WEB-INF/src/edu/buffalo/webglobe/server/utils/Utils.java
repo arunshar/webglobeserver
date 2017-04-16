@@ -13,7 +13,7 @@ import javax.xml.stream.XMLStreamException;
 
 public class Utils {
 
-    public static File[] createImages(NetcdfDir netcdfDir, String saveDir,String hdfsAddress, String hdfsDir, String from, String to){
+    public static File[] createImages(NetcdfDir netcdfDir, String saveDir, String from, String to){
 
         File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
         folder.mkdirs();
