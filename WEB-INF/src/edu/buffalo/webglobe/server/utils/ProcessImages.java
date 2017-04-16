@@ -17,13 +17,13 @@ public class ProcessImages {
         String variableName = args[1];
         String from = args[2];
         String to = args[3];
-        NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress,variableName);
-        String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
+        //NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress,variableName);
+        //String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
 
-        File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, from, to);
+        //File[] listOfFiles = Utils.createImages(netcdfDir, saveDir, from, to);
 
-        for(int i = 0; i < listOfFiles.length; i++){
-            System.out.println(listOfFiles[i].getAbsolutePath());
-        }
+        //for(int i = 0; i < listOfFiles.length; i++){
+        //    System.out.println(listOfFiles[i].getAbsolutePath());
+        //}
     }
 }
