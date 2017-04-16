@@ -57,6 +57,7 @@ public class LoadNetcdfDataset extends HttpServlet {
         try {
              logger.warning("@@@@ OK UP TIL HERE @@@@");
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/"+variableName, variableName);
+            logger.warning("%%%%%%%% "+hdfsAddress);
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
             logger.warning("#### "+saveDir);
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
