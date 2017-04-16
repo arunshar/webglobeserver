@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
@@ -34,6 +35,9 @@ public class NetcdfDir implements Serializable {
 
 	public NetcdfDir(String hdfsuri) {
 		this.hdfsuri = hdfsuri;
+        Logger logger = Logger.getLogger("webglobe.logger");
+
+        logger.warning("++++++ In here "+this.hdfsuri);
 		this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
 		try {
 			this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
