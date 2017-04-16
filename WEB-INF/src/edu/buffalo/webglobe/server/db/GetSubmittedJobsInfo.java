@@ -55,8 +55,6 @@ public class GetSubmittedJobsInfo extends HttpServlet {
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		String userName = request.getUserPrincipal().getName();
 		// query database
-        Logger logger = Logger.getLogger("webglobe.logger");
-        logger.warning(userName);
         Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
