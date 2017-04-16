@@ -52,8 +52,7 @@ public class LoadNetcdfDataset extends HttpServlet {
         String hdfsAddress = data.get("url").getAsString();
         String variableName = data.get("fieldname").getAsString();
         Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
-        Logger logger = Logger.getLogger("webglobe.logger");
-        logger.warning("%%%%%%% "+hdfsAddress+"/"+variableName);
+
         FileSystem fs = null;
         try {
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/"+variableName, variableName);
@@ -71,10 +70,16 @@ public class LoadNetcdfDataset extends HttpServlet {
             if (folder.exists()) {
                 variableInfo.put("imagesAddress", saveDir);
                 File[] listOfFiles = folder.listFiles();
-                String fName = listOfFiles[0].getName();
-                variableInfo.put("imageMinDate", fName.substring(0, fName.lastIndexOf('.')));
-                fName = listOfFiles[listOfFiles.length-1].getName();
-                variableInfo.put("imageMaxDate", fName.substring(0, fName.lastIndexOf('.')));
+                if(listOfFiles.length > 0) {
+                    String fName = listOfFiles[0].getName();
+                    variableInfo.put("imageMinDate", fName.substring(0, fName.lastIndexOf('.')));
+                    fName = listOfFiles[listOfFiles.length - 1].getName();
+                    variableInfo.put("imageMaxDate", fName.substring(0, fName.lastIndexOf('.')));
+                }else{
+                    variableInfo.put("imagesAddress", "");
+                    variableInfo.put("imageMinDate", "");
+                    variableInfo.put("imageMaxDate", "");
+                }
             } else {
                 variableInfo.put("imagesAddress", "");
                 variableInfo.put("imageMinDate", "");
