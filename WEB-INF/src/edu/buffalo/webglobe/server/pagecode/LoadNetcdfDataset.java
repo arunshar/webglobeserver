@@ -52,11 +52,13 @@ public class LoadNetcdfDataset extends HttpServlet {
         String hdfsAddress = data.get("url").getAsString();
         String variableName = data.get("fieldname").getAsString();
         Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
-
+        Logger logger = Logger.getLogger("webglobe.logger");
         FileSystem fs = null;
         try {
+             logger.warning("@@@@ OK UP TIL HERE @@@@");
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/"+variableName, variableName);
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
+            logger.warning("#### "+saveDir);
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
             Map<String, String> variableInfo = new HashMap<String, String>();
@@ -82,47 +84,14 @@ public class LoadNetcdfDataset extends HttpServlet {
 
             responseData.put("variable", variableInfo);
 
-            /*
-            fs = FileSystem.get(new URI(hdfsuri), new Configuration());
-            Path analysisPath = new Path(hdfsAddress + "/analysis");
-            Map<String, String> analysisInfo = new HashMap<String, String>();
-            if (fs.exists(analysisPath)) {
-                Path analysisImageDir = fs.listStatus(analysisPath)[0].getPath();
-                analysisInfo.put("name", analysisImageDir.getName());
-                analysisInfo.put("address", analysisImageDir.toString());
-                NetcdfDir analysisDir = new NetcdfDir(analysisImageDir.toString());
-                saveDir = analysisDir.getDir() + "/variable/" + analysisDir.getVariableName();
-                analysisInfo.put("minDate", dateFormatter.toString(analysisDir.getStartDate()));
-                analysisInfo.put("maxDate", dateFormatter.toString(analysisDir.getEndDate()));
-
-                folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
-
-                if (folder.exists()) {
-                    analysisInfo.put("imagesAddress", saveDir);
-                    File[] listOfFiles = folder.listFiles();
-                    Arrays.sort(listOfFiles);
-                    String fName = listOfFiles[0].getName();
-                    analysisInfo.put("imageMinDate", fName.substring(0, fName.lastIndexOf('.')));
-                    fName = listOfFiles[listOfFiles.length-1].getName();
-                    analysisInfo.put("imageMaxDate", fName.substring(0, fName.lastIndexOf('.')));
-                } else {
-                    analysisInfo.put("imagesAddress", "");
-                    analysisInfo.put("imageMinDate", "");
-                    analysisInfo.put("imageMaxDate", "");
-                }
-            }
-
-            responseData.put("analysis", analysisInfo);
-            */
             String responseJson = new Gson().toJson(responseData);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(responseJson);
-        //} catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-           // e.printStackTrace();
+
         } finally {
-            fs.close();
+            if (fs != null)
+                fs.close();
         }
 
     }
