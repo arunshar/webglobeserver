@@ -85,6 +85,8 @@ public class NetCDFUtils {
 	/**
 	 * Return a list of paths of files in a HDFS directory.
 	 *
+	 * @param dfsUri
+	 *            HDFS URI(eg. hdfs://master:9000/)
 	 * @param dir
 	 *            Directory path on HDFS
 	 */
