@@ -107,6 +107,11 @@ define(
 	      });
 	}
 
+	self.uploadData = function(){
+		alert('Com');
+		var hdfsURL = $("#hdfsURL").text();
+		
+	}
 	self.showDatasetPanel = function(dataset) {
 	  if (!self.openActive) {
 	    self.selectedDataset = dataset;
@@ -146,9 +151,8 @@ define(
 	self.displayTimePanel = function() {
 	  var fieldname = $("#fieldSelect :selected").text();
 	  self.selectedDataset.fieldname = fieldname;
-	  var url = self.selectedDataset.url;
+	  var url1 = self.selectedDataset.url;
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  alert(webGlobeServer+'LoadNetcdfDataset');
 
 	  $.ajax({
 	    url: webGlobeServer + 'LoadNetcdfDataset',
@@ -156,7 +160,7 @@ define(
 	    type: 'POST',
 	    contentType: 'application/json; charset=utf-8',
 	    data: JSON.stringify({
-	      url: url,
+	      url: url1,
 	      fieldname: fieldname
 	    }),
 	    success: function (dataJSON) {
@@ -205,7 +209,7 @@ define(
 
 	  if (self.selectedDataset.variableAddress  !== "") { 
 	    var webGlobeServer = constants.WEBGLOBE_SERVER;
-
+alert(self.selectedDataset.variableAddress);
 	    self.downloading = true;
 	    logger.log("Creating images for <a href=\"" + self.selectedDataset.url + "\">"
 		+ self.selectedDataset.name + ":" + self.selectedDataset.fieldname
