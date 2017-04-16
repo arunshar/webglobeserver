@@ -10,6 +10,7 @@ public class ProcessImages {
     public static void main(String args[]){
         if(args.length < 3){
             System.err.println("Insufficient arguments.");
+            System.exit(1);
         }
         String hdfsAddress = args[0];
         String hdfsDir = hdfsAddress.substring(hdfsAddress.indexOf("/user"), hdfsAddress.length());
