@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -84,8 +85,6 @@ public class NetCDFUtils {
 	/**
 	 * Return a list of paths of files in a HDFS directory.
 	 *
-	 * @param dfsUri
-	 *            HDFS URI(eg. hdfs://master:9000/)
 	 * @param dir
 	 *            Directory path on HDFS
 	 */
@@ -93,7 +92,9 @@ public class NetCDFUtils {
 		FileSystem fs = FileSystem.get(new URI(dfsuri), new Configuration());
 		Path dirPath = new Path(dir);
 		FileStatus[] fstatus = fs.listStatus(dirPath);
-		ArrayList<String> paths = new ArrayList<String>();
+        Logger logger = Logger.getLogger("webglobe.logger");
+        logger.warning("@@@@@@@ "+fstatus.length);
+        ArrayList<String> paths = new ArrayList<String>();
 
 		for (int i = 0; i < fstatus.length; i++)
 			paths.add(fstatus[i].getPath().toString());
