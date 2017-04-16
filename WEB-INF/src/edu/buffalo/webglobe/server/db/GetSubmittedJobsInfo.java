@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetSubmittedJobsInfo
@@ -54,8 +55,9 @@ public class GetSubmittedJobsInfo extends HttpServlet {
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		String userName = request.getUserPrincipal().getName();
 		// query database
-
-		Connection conn = null;
+        Logger logger = Logger.getLogger("webglobe.logger");
+        logger.warning(userName);
+        Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
 		try {
