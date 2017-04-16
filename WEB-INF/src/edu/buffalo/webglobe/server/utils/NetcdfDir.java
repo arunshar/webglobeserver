@@ -37,11 +37,11 @@ public class NetcdfDir implements Serializable {
 		this.hdfsuri = hdfsuri;
         Logger logger = Logger.getLogger("webglobe.logger");
 
-        logger.warning("++++++ In here "+this.hdfsuri);
+
 		this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
 		try {
 			this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
-			
+            logger.warning("++++++ In here "+this.filepaths.size());
 			// get dimension's length
 			NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filepaths.get(0), 3000);
 			NetcdfFile cdfFile = dataset.getReferencedFile();
