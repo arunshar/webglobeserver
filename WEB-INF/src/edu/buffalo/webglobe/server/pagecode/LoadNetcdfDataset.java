@@ -61,7 +61,7 @@ public class LoadNetcdfDataset extends HttpServlet {
 
             Map<String, String> variableInfo = new HashMap<String, String>();
             variableInfo.put("name", netcdfDir.getVariableName());
-            variableInfo.put("address", hdfsAddress+"/netCDFs");
+            variableInfo.put("address", hdfsAddress);
             variableInfo.put("minDate", dateFormatter.toString(netcdfDir.getStartDate()));
             variableInfo.put("maxDate", dateFormatter.toString(netcdfDir.getEndDate()));
 
