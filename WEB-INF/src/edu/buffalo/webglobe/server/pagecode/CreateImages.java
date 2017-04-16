@@ -21,6 +21,7 @@ import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.ma2.MAMath;
 
+import java.util.logging.Logger;
 /**
  * Servlet implementation class CreateImages
  */
@@ -58,6 +59,9 @@ public class CreateImages extends HttpServlet {
         String from = dataJson.get("from").getAsString();
         String to = dataJson.get("to").getAsString();
 
+        Logger logger = Logger.getLogger("webglobe.logger");
+        logger.warning("@@@ hdfsAddress "+hdfsAddress);
+        logger.warning("@@@ variableName "+variableName);
         NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress, variableName);
 
         String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
