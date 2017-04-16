@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
@@ -33,13 +32,12 @@ public class NetcdfDir implements Serializable {
 	private CalendarDate startDate;
 	private CalendarDate endDate;
 
-	public NetcdfDir(String hdfsuri) {
+	public NetcdfDir(String hdfsuri, String varName) {
 		this.hdfsuri = hdfsuri;
-
-
 		this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
 		try {
 			this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
+
 			// get dimension's length
 			NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filepaths.get(0), 3000);
 			NetcdfFile cdfFile = dataset.getReferencedFile();
@@ -47,7 +45,7 @@ public class NetcdfDir implements Serializable {
 			timeLen = dims.get(0).getLength();
 			latLen = dims.get(1).getLength();
 			longLen = dims.get(2).getLength();
-			variableName =  cdfFile.getVariables().get(3).getShortName();
+            variableName =  varName;
 			Array arrTime = cdfFile.findVariable("time").read();
 			
 			CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
@@ -76,6 +74,10 @@ public class NetcdfDir implements Serializable {
 
 	public CalendarDate getEndDate() {
 		return endDate;
+	}
+
+	public String getHdfsuri() {
+		return hdfsuri;
 	}
 
 	public String getDir() {
