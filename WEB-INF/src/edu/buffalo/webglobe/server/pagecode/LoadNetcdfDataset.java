@@ -62,10 +62,11 @@ public class LoadNetcdfDataset extends HttpServlet {
         Logger logger = Logger.getLogger("webglobe.logger");
 
         try {
-            logger.warning("In here "+hdfsAddress);
             NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/netCDFs");
 
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
+            logger.warning("In here "+saveDir);
+
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
             Map<String, String> variableInfo = new HashMap<String, String>();
