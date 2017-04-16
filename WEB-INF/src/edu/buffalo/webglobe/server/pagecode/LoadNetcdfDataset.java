@@ -2,9 +2,6 @@ package edu.buffalo.webglobe.server.pagecode;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -55,18 +50,13 @@ public class LoadNetcdfDataset extends HttpServlet {
 
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         String hdfsAddress = data.get("url").getAsString();
+        String variableName = data.get("fieldname").getAsString();
         Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 
-        String hdfsuri = hdfsAddress.substring(0, hdfsAddress.indexOf("/user"));
         FileSystem fs = null;
-        Logger logger = Logger.getLogger("webglobe.logger");
-
         try {
-            NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/netCDFs");
-
+            NetcdfDir netcdfDir = new NetcdfDir(hdfsAddress+"/"+variableName, variableName);
             String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
-            logger.warning("**** In here "+saveDir);
-
             CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
             Map<String, String> variableInfo = new HashMap<String, String>();
@@ -76,7 +66,7 @@ public class LoadNetcdfDataset extends HttpServlet {
             variableInfo.put("maxDate", dateFormatter.toString(netcdfDir.getEndDate()));
 
             File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
-            System.out.println(folder.getAbsolutePath());
+
             if (folder.exists()) {
                 variableInfo.put("imagesAddress", saveDir);
                 File[] listOfFiles = folder.listFiles();
@@ -92,6 +82,7 @@ public class LoadNetcdfDataset extends HttpServlet {
 
             responseData.put("variable", variableInfo);
 
+            /*
             fs = FileSystem.get(new URI(hdfsuri), new Configuration());
             Path analysisPath = new Path(hdfsAddress + "/analysis");
             Map<String, String> analysisInfo = new HashMap<String, String>();
@@ -122,14 +113,14 @@ public class LoadNetcdfDataset extends HttpServlet {
             }
 
             responseData.put("analysis", analysisInfo);
-
+            */
             String responseJson = new Gson().toJson(responseData);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(responseJson);
-        } catch (URISyntaxException e) {
+        //} catch (URISyntaxException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+           // e.printStackTrace();
         } finally {
             fs.close();
         }
