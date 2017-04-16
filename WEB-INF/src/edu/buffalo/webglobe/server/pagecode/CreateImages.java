@@ -50,7 +50,7 @@ public class CreateImages extends HttpServlet {
 	 */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-
+        Logger logger = Logger.getLogger("WEBGLOBE.SERVER");
         JsonObject dataJson = new Gson().fromJson(request.getReader(), JsonObject.class);
 
         String hdfsAddress = dataJson.get("url").getAsString();
@@ -64,7 +64,7 @@ public class CreateImages extends HttpServlet {
         String saveDir = hdfsDir + "/variable/" + netcdfDir.getVariableName();
         File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
         folder.mkdirs();
-
+        logger.info("STARTING PROCESS");
         int startIndex = Math.max(netcdfDir.getIndexFromDate(from),0);
         int endIndex = Math.min(netcdfDir.getIndexFromDate(to),netcdfDir.getFilepaths().size()*netcdfDir.getTimeLen()-1);
         for (int i = startIndex; i <= endIndex; ++i) {
@@ -81,7 +81,7 @@ public class CreateImages extends HttpServlet {
 
             Utils.createImage(data, (float) minmax.min, (float) minmax.max, Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
         }
-
+        logger.info("ENDED PROCESS");
         Map<String, String> responseData = new HashMap<String, String>();
         responseData.put("imagesAddress", saveDir);
 
