@@ -128,6 +128,37 @@
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.displayTimePanel"></span>
 	    </form>
 	    <div id="selectTimePanel" style="display: none;">
+<<<<<<< HEAD
+                <div class="input-group" align="center">
+                    <label for="create-start-date">From:</label>
+                    <input type="date" id="create-start-date"/>
+                    <label for="create-end-date">To:</label>
+                    <input type="date" id="create-end-date"/>
+                    <button type="button" class="btn btn-primary btn-sm" id="create-images" 
+                    		data-bind="click: $root.createImages">
+                        Create Images
+                    </button>                                      
+                </div>
+                <div class="input-group" align="center">
+                    <label for="load-start-date">From:</label>
+                    <input type="date" id="load-start-date"/>
+                    <label for="load-end-date">To:</label>
+                    <input type="date" id="load-end-date"/>
+                    <button type="button" class="btn btn-primary btn-sm" id="load-images"
+                    		data-bind="click: $root.loadImages">
+                        Load Images
+                    </button>                                      
+                </div>
+                <div class="well"> 
+                    <input type="range"
+                    	   id="index-of-show-date"
+                           data-bind="event: {change: $root.onInputShowDate}"/>                    
+                	<div align="center">
+                    	<input type="text" id="show-date"/>
+                	</div>
+            	</div>
+         </div>	    
+=======
 	      <div class="input-group" align="center">
 		<label for="create-start-date">From:</label>
 		<input type="date" id="create-start-date"/>
@@ -157,6 +188,7 @@
 		</div>
 	      </div>
 	    </div>	    
+>>>>>>> c8924952ae7edebe1cec1b816941ad924a7e6f4a
 	  </div>
 	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
 	    <form role="form" id="analysisForm">
@@ -195,6 +227,34 @@
 	</div>
       </div>
       <div id="upload" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
+<<<<<<< HEAD
+       <div class="panel panel-default">
+        <div class="panel-body">
+<form>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-folder" aria-hidden="true"></i><span> HDFS URL</span></div>
+	<input type="text" class="form-control form-control-sm" id="hdfsURL"/>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><span>Dataset Name</span></div>
+	<input type="text" class="form-control form-control-sm" id="dataName"/>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-info" aria-hidden="true"></i><span> Data set Description</span></div>
+    <textarea class="form-control" id="dataInfo" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i><span> URL for More Information</span></div>
+	<input type="text" class="form-control form-control-sm" id="dataInfoURL"/>
+  </div>
+	<button type="button" class="btn btn-primary btn-sm" id="upload-data" data-bind="click: $root.uploadData">Upload</button>       
+	</form>                               
+	</div>
+	</div>
+	</div>
+	<script type="text/html" id="layer-template">
+	<div class="btn-group btn-block">
+=======
 	<div class="panel panel-default">
 	  <div class="panel-body">
 	    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
@@ -209,6 +269,7 @@
       </div>
       <script type="text/html" id="layer-template">
 <div class="btn-group btn-block">
+>>>>>>> c8924952ae7edebe1cec1b816941ad924a7e6f4a
 	<!--Layer name and visibility button-->
 	<button type="button"
 	class="btn btn-default layer-name wrap-panel-heading btn-xs"
