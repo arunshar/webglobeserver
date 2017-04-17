@@ -107,11 +107,7 @@ define(
 	      });
 	}
 
-	self.uploadData = function(){
-		alert('Com');
-		var hdfsURL = $("#hdfsURL").text();
-		
-	}
+
 	self.showDatasetPanel = function(dataset) {
 	  if (!self.openActive) {
 	    self.selectedDataset = dataset;
@@ -374,6 +370,42 @@ alert(self.selectedDataset.variableAddress);
 	    $("#datasetInfo").hide();
 	    self.infoActive = false;
 	  }
+	}
+	self.uploadData = function(){
+	  var hdfsURL = $('#hdfsURL').val();
+	  var dataName = $('#dataName').val();
+	  var dataInfo = $('#dataInfo').val();
+	  var dataInfoURL = $('#dataInfoURL').val();
+  	  if (hdfsURL == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
+  	    logger.log('Insufficient arguments.','alert-danger');
+	    return;
+  	  }	
+	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  self.uploading = true;
+
+	  $.ajax({
+	    url: webGlobeServer + 'UploadDataset',
+	    cache: false,
+	    type: 'POST',
+	    data: JSON.stringify({
+	      hdfsURL: hdfsURL,
+	      dataName: dataName,
+	      dataInfo: dataInfo,
+	      dataInfoURL: dataInfoURL
+	    }),
+	    success: function (data) {
+		var message = data.message;
+		var status = data.status;
+		if(status == "-1"){
+		  logger.log(message,'alert-danger');
+		}else{
+		  logger.log(message,'info');
+		}
+
+	    }
+	  }).fail(function (xhr, textStatus, err) {
+	    logger.log(err,"alert-danger");
+	  });                            
 	}
 	self.populateDatasets();
 
