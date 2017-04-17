@@ -107,7 +107,7 @@ define(
 	      });
 	}
 
-	self.uploadData = function(){
+	self.uploadData = function(dataset){
 		alert('Com');
 		var hdfsURL = $("#hdfsURL").text();
 		
