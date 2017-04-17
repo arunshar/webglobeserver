@@ -52,14 +52,14 @@ public class UploadDataset extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        logger.warning("In HERE -- **********************");
+
         String hdfsURL = request.getParameter("hdfsURL");
         String dataName = request.getParameter("dataName");
         String dataInfo = request.getParameter("dataInfo");
         String dataInfoURL = request.getParameter("dataInfoURL");
         Map<String, String> responseData = new HashMap<String, String>();
         String userName = request.getUserPrincipal().getName();
-
+        logger.warning("In HERE -- **********************"+userName);
         responseData = this.uploadDataset(userName,hdfsURL,dataName,dataInfo,dataInfoURL,responseData);
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
