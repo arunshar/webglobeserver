@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 @WebServlet("/UploadDataset")
 public class UploadDataset extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private Logger logger;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -51,7 +52,7 @@ public class UploadDataset extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+        logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
         String hdfsURL = request.getParameter("hdfsURL");
         String dataName = request.getParameter("dataName");
@@ -59,7 +60,7 @@ public class UploadDataset extends HttpServlet {
         String dataInfoURL = request.getParameter("dataInfoURL");
         Map<String, String> responseData = new HashMap<String, String>();
         String userName = request.getUserPrincipal().getName();
-        logger.warning("In HERE -- **********************"+userName);
+
         responseData = this.uploadDataset(userName,hdfsURL,dataName,dataInfo,dataInfoURL,responseData);
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
@@ -78,6 +79,7 @@ public class UploadDataset extends HttpServlet {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '"+dataName+"' AND url = '"+hdfsURL+"'";
+            logger.warning("In HERE -- **********************"+userName);
             rset = stmt.executeQuery(cmd);
             while(rset.next()){
                 message = "Error: Dataset already exists in database";
