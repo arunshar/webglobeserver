@@ -1,15 +1,10 @@
 package edu.buffalo.webglobe.server.pagecode;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,10 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import edu.buffalo.webglobe.server.db.DBUtils;
-import edu.buffalo.webglobe.server.utils.Constants;
-import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import edu.buffalo.webglobe.server.utils.NetcdfDirNoVar;
-
+import java.util.logging.Logger;
 /**
  * @author chandola
  * @version $Id$
@@ -57,6 +50,9 @@ public class UploadDataset extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+        logger.warning("In HERE -- **********************");
         String hdfsURL = request.getParameter("hdfsURL");
         String dataName = request.getParameter("dataName");
         String dataInfo = request.getParameter("dataInfo");
