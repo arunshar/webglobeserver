@@ -79,7 +79,7 @@ public class UploadDataset extends HttpServlet {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '"+dataName+"' AND url = '"+hdfsURL+"'";
-            logger.warning("In HERE -- **********************"+userName);
+
             rset = stmt.executeQuery(cmd);
             while(rset.next()){
                 message = "Error: Dataset already exists in database";
@@ -92,6 +92,7 @@ public class UploadDataset extends HttpServlet {
 
             NetcdfDirNoVar ncDir = null;
             try {
+                logger.warning("In HERE -- **********************"+userName);
                 ncDir = new NetcdfDirNoVar(hdfsURL);
             }catch(Exception e){
                 message = "Error: Unable to open HDFS file.";
