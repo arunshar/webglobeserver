@@ -28,6 +28,9 @@
 	</fileset>
       </classpath>
     </javac>
+      <copy todir="${build}">
+          <fileset dir="config"/>
+      </copy>
   </target>
 
   <target name="clean"
