@@ -92,8 +92,9 @@ public class UploadDataset extends HttpServlet {
 
             NetcdfDirNoVar ncDir = null;
             try {
-                logger.warning("In HERE -- **********************"+userName);
+                logger.warning("In HERE -- Entering constructor **********************"+userName);
                 ncDir = new NetcdfDirNoVar(hdfsURL);
+                logger.warning("Out HERE -- Exiting constructor **********************"+userName);
             }catch(Exception e){
                 message = "Error: Unable to open HDFS file.";
                 status = "-1";
