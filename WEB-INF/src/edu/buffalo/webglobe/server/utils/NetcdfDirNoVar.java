@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Logger;
 
 
 public class NetcdfDirNoVar implements Serializable {
@@ -40,11 +40,14 @@ public class NetcdfDirNoVar implements Serializable {
     private ArrayList<String> variables = null;
     private CalendarDate startDate;
     private CalendarDate endDate;
+    private Logger logger;
 
     public NetcdfDirNoVar(String hdfsuri) throws Exception {
+        this.logger = Logger.getLogger("WEBGLOBE.LOGGER");
         this.hdfsuri = hdfsuri;
+        logger.warning("@@@@@@@@@ "+hdfsuri);
         this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
-
+        logger.warning("*********"+this.dir);
         this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 
         // get dimension's length
