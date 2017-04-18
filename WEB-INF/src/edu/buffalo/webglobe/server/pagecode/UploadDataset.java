@@ -90,11 +90,11 @@ public class UploadDataset extends HttpServlet {
                     dataName + "\",\"" +
                     "RUNNING" + "\",\"" +
                     curDate + "\"," +
-                    "NULL" + ",\"1\")";
+                    "NULL" + ",1)";
 
-            stmt.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
 
-            ResultSet rs = stmt.getGeneratedKeys();
+
+            ResultSet rs = DBUtils.executeInsert(conn,stmt,cmd);
 
             if (rs.next()) {
                 jobId = rs.getInt(1);
@@ -127,7 +127,7 @@ public class UploadDataset extends HttpServlet {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '" + dataName + "' AND url = '" + hdfsURL + "'";
-            rset = stmt.executeQuery(cmd);
+            rset = DBUtils.executeQuery(conn,stmt,cmd);
             if (rset.next()) {
                 logger.severe("Error: Dataset already exists in database");
                 status = -1;
@@ -144,9 +144,7 @@ public class UploadDataset extends HttpServlet {
                         cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url) VALUES (\"" +
                                 dataName + "\",\"" + hdfsURL+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\")";
 
-                        stmt.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
-
-                        rset = stmt.getGeneratedKeys();
+                        rset = DBUtils.executeInsert(conn,stmt,cmd);
                         if(rset.next()){
                             int datasetId = rset.getInt(1);
                             logger.info("STARTING IMAGE CREATION PROCESS");
@@ -169,8 +167,8 @@ public class UploadDataset extends HttpServlet {
                                         "\",\"" + ncDir.getUnits().get(j) + "\"," +
                                         minmax.max + "," + minmax.min+")";
                                 Statement stmt1 = conn.createStatement();
-                                stmt1.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
-                                ResultSet rset1 = stmt.getGeneratedKeys();
+                                ResultSet rset1 = DBUtils.executeInsert(conn,stmt1,cmd);
+
                                 int fieldId = -1;
                                 if(rset1.next())
                                     fieldId = rset1.getInt(1);
@@ -189,7 +187,7 @@ public class UploadDataset extends HttpServlet {
                                     //datasetId, fieldId, timeindex, timestamp, imgLocation
                                     cmd = "INSERT INTO netcdf_dataset_images (dataset_id, field_id, time_index,timestamp, img_location)"+
                                            "VALUES("+ datasetId +","+fieldId+","+i+",\""+netcdfDir.getDateFromIndex(i)+"\",\""+imgLocation+"\")";
-                                    stmt1.executeUpdate(cmd);
+                                    DBUtils.executeUpdate(conn,stmt1,cmd);
                                 }
                                 status = 1;
                             }
@@ -223,7 +221,7 @@ public class UploadDataset extends HttpServlet {
             }else{
                 cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED' where jobId=" + jobId;
             }
-            stmt.executeUpdate(cmd);
+            DBUtils.executeUpdate(conn,stmt,cmd);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Message", e);
         }
