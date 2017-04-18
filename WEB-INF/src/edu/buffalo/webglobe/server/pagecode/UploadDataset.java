@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.utils.NetcdfDirNoVar;
 import java.util.logging.Logger;
@@ -53,11 +54,11 @@ public class UploadDataset extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         logger = Logger.getLogger("WEBGLOBE.LOGGER");
-
-        String hdfsURL = request.getParameter("hdfsURL");
-        String dataName = request.getParameter("dataName");
-        String dataInfo = request.getParameter("dataInfo");
-        String dataInfoURL = request.getParameter("dataInfoURL");
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+        String hdfsURL = data.get("hdfsURL").getAsString();
+        String dataName = data.get("dataName").getAsString();
+        String dataInfo = data.get("dataInfo").getAsString();
+        String dataInfoURL = data.get("dataInfoURL").getAsString();
         Map<String, String> responseData = new HashMap<String, String>();
         String userName = request.getUserPrincipal().getName();
 
