@@ -91,6 +91,7 @@ public class NetCDFUtils {
 	 *            Directory path on HDFS
 	 */
 	public static ArrayList<String> listPaths(String dfsuri, String dir) throws IOException, URISyntaxException {
+
 		FileSystem fs = FileSystem.get(new URI(dfsuri), new Configuration());
 		Path dirPath = new Path(dir);
 		FileStatus[] fstatus = fs.listStatus(dirPath);
@@ -118,4 +119,12 @@ public class NetCDFUtils {
 		return dimLens;
 	}
 
+    public static String[] parseHDFSURL(String hdfsuri) throws Exception{
+
+        String [] tokens = new String[2];
+        String s1 = hdfsuri.substring(hdfsuri.indexOf("://") + 3, hdfsuri.length());
+        tokens[0] = s1.substring(s1.indexOf('/'), s1.length());
+        tokens[1] = s1.substring(0, s1.indexOf('/'));
+        return tokens;
+    }
 }

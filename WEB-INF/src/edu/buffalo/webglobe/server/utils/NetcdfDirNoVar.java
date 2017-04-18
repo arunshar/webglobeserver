@@ -44,14 +44,17 @@ public class NetcdfDirNoVar implements Serializable {
 
     public NetcdfDirNoVar(String hdfsuri) throws Exception {
         this.logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        this.hdfsuri = hdfsuri;
-        logger.warning("@@@@@@@@@ "+hdfsuri);
-        this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
+        String [] tokens = NetCDFUtils.parseHDFSURL(hdfsuri);
+        this.hdfsuri = tokens[0];
+        this.dir = tokens[1];
+
+        logger.warning("@@@@@@@@@ "+this.hdfsuri);
         logger.warning("*********"+this.dir);
+
         this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 
         // get dimension's length
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filepaths.get(0), 3000);
+        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.hdfsuri, filepaths.get(0), 3000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
