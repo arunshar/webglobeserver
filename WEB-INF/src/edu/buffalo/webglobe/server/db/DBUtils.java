@@ -26,7 +26,7 @@ public class DBUtils {
 
     public static ResultSet executeQuery(Connection conn, Statement stmt, String query) throws SQLException {
         logger.info("Executing "+query);
-        stmt.executeUpdate(query);
+        stmt.executeQuery(query);
         ResultSet resultSet = stmt.getResultSet();
         return resultSet;
     }

@@ -217,9 +217,9 @@ public class UploadDataset extends HttpServlet {
             stmt = conn.createStatement();
             String cmd;
             if(status == 1){
-                cmd = "UPDATE submitted_image_creation_jobs SET status='DONE' where jobId=" + jobId;
+                cmd = "UPDATE submitted_image_creation_jobs SET status='DONE' where id=" + jobId;
             }else{
-                cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED' where jobId=" + jobId;
+                cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED' where id=" + jobId;
             }
             DBUtils.executeUpdate(conn,stmt,cmd);
         } catch (SQLException e) {
