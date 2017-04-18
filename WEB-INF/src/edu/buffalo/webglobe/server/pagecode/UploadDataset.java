@@ -61,7 +61,7 @@ public class UploadDataset extends HttpServlet {
         Map<String, String> responseData = new HashMap<String, String>();
         String userName = request.getUserPrincipal().getName();
 
-        responseData = this.uploadDataset(userName,hdfsURL,dataName,dataInfo,dataInfoURL,responseData);
+        responseData = this.uploadDataset(userName,dataName,hdfsURL,dataInfo,dataInfoURL,responseData);
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -79,7 +79,7 @@ public class UploadDataset extends HttpServlet {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '"+dataName+"' AND url = '"+hdfsURL+"'";
-
+            logger.warning(cmd);
             rset = stmt.executeQuery(cmd);
             while(rset.next()){
                 message = "Error: Dataset already exists in database";
