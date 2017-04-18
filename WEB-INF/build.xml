@@ -5,13 +5,14 @@
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="classes"/>
-  <property name="tomcatlib" location="/Library/Tomcat/lib"/>
+  <property name="tomcatlib" location="/home/ubuntu/apache-tomcat-8.0.36/lib"/>
 
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
+    <mkdir dir="${build}/config"/>
   </target>
 
   <target name="compile" depends="init"
@@ -28,8 +29,8 @@
 	</fileset>
       </classpath>
     </javac>
-      <copy todir="${build}">
-          <fileset dir="config"/>
+      <copy todir="${build}/config">
+          <fileset dir="${src}/config"/>
       </copy>
   </target>
 
