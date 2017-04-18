@@ -85,8 +85,8 @@ public class UploadDataset extends HttpServlet {
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String curDate = dt.format(new Date());
             String cmd = "INSERT INTO submitted_image_creation_jobs (user_name,dataset_url,dataset_name,status,submission_time,finish_time,priority) VALUES (\"" +
-                    userName + "\"," +
-                    hdfsURL + ",\"" +
+                    userName + "\",\"" +
+                    hdfsURL + "\",\"" +
                     dataName + "\",\"" +
                     "RUNNING" + "\",\"" +
                     curDate + "\"," +
