@@ -7,11 +7,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
 public class Utils {
+    private final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
     public static File[] createImages(NetcdfDir netcdfDir, String saveDir, String from, String to){
 
@@ -41,7 +43,7 @@ public class Utils {
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;
 		int numLongitudes = data[0].length;
-		
+		Utils.logger.info("Size is "+numLatitudes+" and "+numLongitudes);
 		NetcdfColorMap ncColormap;
 		try {
 			ncColormap = NetcdfColorMap.createColorMap("rgb_", min, max,
