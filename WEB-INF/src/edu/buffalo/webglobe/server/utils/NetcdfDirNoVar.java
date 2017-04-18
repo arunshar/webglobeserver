@@ -45,11 +45,12 @@ public class NetcdfDirNoVar implements Serializable {
     public NetcdfDirNoVar(String hdfsuri) throws Exception {
         this.logger = Logger.getLogger("WEBGLOBE.LOGGER");
         String [] tokens = NetCDFUtils.parseHDFSURL(hdfsuri);
+        if(tokens == null){
+            return;
+        }
+
         this.hdfsuri = tokens[0];
         this.dir = tokens[1];
-
-        logger.warning("@@@@@@@@@ "+this.hdfsuri);
-        logger.warning("*********"+this.dir);
 
         this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 

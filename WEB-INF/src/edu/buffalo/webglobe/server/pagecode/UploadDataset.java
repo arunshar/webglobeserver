@@ -1,5 +1,6 @@
 package edu.buffalo.webglobe.server.pagecode;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,7 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
+import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import edu.buffalo.webglobe.server.utils.NetcdfDirNoVar;
+import edu.buffalo.webglobe.server.utils.Utils;
+import ucar.ma2.Array;
+import ucar.ma2.MAMath;
+
 import java.util.logging.Logger;
 /**
  * @author chandola
@@ -71,16 +78,15 @@ public class UploadDataset extends HttpServlet {
 
     public Map<String,String> uploadDataset(String userName, String dataName, String hdfsURL, String dataInfo, String dataInfoURL, Map<String, String> responseData){
         // query database
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rset = null;
-        String message = null;
-        String status = "-1";
+        Connection conn;
+        Statement stmt;
+        ResultSet rset;
+        String message;
+        String status;
         try {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '"+dataName+"' AND url = '"+hdfsURL+"'";
-            logger.warning(cmd);
             rset = stmt.executeQuery(cmd);
             while(rset.next()){
                 message = "Error: Dataset already exists in database";
@@ -93,14 +99,50 @@ public class UploadDataset extends HttpServlet {
 
             NetcdfDirNoVar ncDir = null;
             try {
-                logger.warning("In HERE -- Entering constructor **********************"+userName);
                 ncDir = new NetcdfDirNoVar(hdfsURL);
-                logger.warning("Out HERE -- Exiting constructor **********************"+userName);
+                if(ncDir.getVariables() == null){
+                    message = "Error: Unable to parse server address.";
+                    status = "-1";
+                    responseData.put("message", message);
+                    responseData.put("status", status);
+                    return responseData;
+                }
+                for(String variable: ncDir.getVariables()){
+                    NetcdfDir netcdfDir = new NetcdfDir(hdfsURL,variable);
+                    String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
+                    File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
+                    folder.mkdirs();
+                    logger.info("STARTING PROCESS");
+                    int startIndex = 0;
+                    int endIndex = netcdfDir.getFilepaths().size()*netcdfDir.getTimeLen()-1;
+                    for (int i = startIndex; i <= endIndex; ++i) {
+                        Array src = netcdfDir.getData(i);
+                        float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
+                        MAMath.MinMax minmax;
+                        //TODO - Change this to accept minmax ranges from the user
+                        if (netcdfDir.getVariableName().equals("tasmax")) {
+                            minmax = new MAMath.MinMax(200, 373);
+                        } else if (netcdfDir.getVariableName().equals("ChangeDetection")) {
+                            minmax = new MAMath.MinMax(-1, 2);
+                        } else {
+                            minmax = MAMath.getMinMax(src);
+                        }
+
+                        logger.info("Creating image with index = "+i+ "in "+Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i)+".png");
+                        Utils.createImage(data, (float) minmax.min, (float) minmax.max, Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
+                        logger.info("Created image with index = "+i+ "in "+Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i)+".png");
+
+                    }
+                    logger.info("ENDED PROCESS");
+                    // create Images
+
+                }
             }catch(Exception e){
                 message = "Error: Unable to open HDFS file.";
                 status = "-1";
                 responseData.put("message", message);
                 responseData.put("status", status);
+                return responseData;
             }
             responseData.put("message","Found "+ncDir.getVariables().size()+" variables.");
             responseData.put("status","1");

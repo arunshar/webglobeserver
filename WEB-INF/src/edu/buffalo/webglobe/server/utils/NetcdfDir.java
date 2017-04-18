@@ -32,9 +32,13 @@ public class NetcdfDir implements Serializable {
 	private CalendarDate startDate;
 	private CalendarDate endDate;
 
-	public NetcdfDir(String hdfsuri, String varName) {
-		this.hdfsuri = hdfsuri;
-		this.dir = hdfsuri.substring(hdfsuri.indexOf("/user"), hdfsuri.length());
+	public NetcdfDir(String hdfsuri, String varName){
+        String [] tokens = NetCDFUtils.parseHDFSURL(hdfsuri);
+        if(tokens == null){
+            return;
+        }
+        this.hdfsuri = tokens[0];
+        this.dir = tokens[1];
 		try {
 			this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 
