@@ -138,6 +138,7 @@ public class UploadDataset extends HttpServlet {
 
                 }
             }catch(Exception e){
+                logger.severe(e.getMessage());
                 message = "Error: Unable to open HDFS file.";
                 status = "-1";
                 responseData.put("message", message);
