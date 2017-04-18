@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,21 +46,19 @@ public class UploadDataset extends HttpServlet {
     private String hdfsURL;
     private String dataInfo;
     private String dataInfoURL;
-    private String responseData;
+    private int jobId = -1;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public UploadDataset() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
         response.getWriter().append("Served at: ").append(request.getContextPath());
     }
 
@@ -75,16 +75,42 @@ public class UploadDataset extends HttpServlet {
         this.dataInfoURL = data.get("dataInfoURL").getAsString();
         Map<String, String> responseData = new HashMap<String, String>();
         this.userName = request.getUserPrincipal().getName();
-        //TODO - add submitted job info to database
-        //get a current job id
-        Thread loadingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                uploadDataset();
+
+        Connection conn;
+        Statement stmt;
+        try {
+            conn = DBUtils.getConnection();
+            stmt = conn.createStatement();
+
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String curDate = dt.format(new Date());
+            String cmd = "INSERT INTO submitted_image_creation_jobs (user_name,dataset_url,dataset_name,status,submission_time,finish_time,priority) VALUES (\"" +
+                    userName + "\"," +
+                    hdfsURL + ",\"" +
+                    dataName + "\",\"" +
+                    "RUNNING" + "\",\"" +
+                    curDate + "\"," +
+                    "NULL" + ",\"1\")";
+
+            stmt.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
+
+            ResultSet rs = stmt.getGeneratedKeys();
+
+            if (rs.next()) {
+                jobId = rs.getInt(1);
             }
-        });
-        loadingThread.start();
-        responseData.put("message", "Loading job started. Status of job is available under the user information panel. On success, the data set will be available under the climate data sets panel.");
+            Thread loadingThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    uploadDataset();
+                }
+            });
+            loadingThread.start();
+            responseData.put("message", "Loading job started. Status of job is available under the user information panel. On success, the data set will be available under the climate data sets panel.");
+
+        }catch(SQLException e){
+            responseData.put("message", "Error starting job");
+        }
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -96,75 +122,111 @@ public class UploadDataset extends HttpServlet {
         Connection conn;
         Statement stmt;
         ResultSet rset;
-        String message;
         int status = 0;
         try {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '" + dataName + "' AND url = '" + hdfsURL + "'";
             rset = stmt.executeQuery(cmd);
-            while (rset.next()) {
-                message = "Error: Dataset already exists in database";
+            if (rset.next()) {
+                logger.severe("Error: Dataset already exists in database");
                 status = -1;
-                break;
             }
             //open netcdfdata directory and find all Geogrid variables
             if (status != -1) {
-                NetcdfDirNoVar ncDir = null;
+                NetcdfDirNoVar ncDir;
                 try {
                     ncDir = new NetcdfDirNoVar(hdfsURL);
                     if (ncDir.getVariables() == null) {
-                        message = "Error: Unable to parse server address.";
+                        logger.severe("Error: Unable to parse server address.");
                         status = -1;
                     } else {
-                        for (String variable : ncDir.getVariables()) {
-                            NetcdfDir netcdfDir = new NetcdfDir(hdfsURL, variable);
-                            String saveDir = netcdfDir.getDir() + "/variable/" + netcdfDir.getVariableName();
-                            File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
-                            folder.mkdirs();
+                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url) VALUES (\"" +
+                                dataName + "\",\"" + hdfsURL+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\")";
+
+                        stmt.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
+
+                        rset = stmt.getGeneratedKeys();
+                        if(rset.next()){
+                            int datasetId = rset.getInt(1);
                             logger.info("STARTING IMAGE CREATION PROCESS");
-                            int startIndex = 0;
-                            int endIndex = netcdfDir.getFilepaths().size() * netcdfDir.getTimeLen() - 1;
-                            for (int i = startIndex; i <= endIndex; ++i) {
-                                Array src = netcdfDir.getData(i);
-                                float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
+                            for (int j = 0; j < ncDir.getVariables().size(); j++) {
+                                String variable = ncDir.getVariables().get(j);
+                                NetcdfDir netcdfDir = new NetcdfDir(hdfsURL, variable);
+                                //get minmax values
                                 MAMath.MinMax minmax;
                                 //TODO - Change this to accept minmax ranges from the user
-                                if (netcdfDir.getVariableName().equals("tasmax")) {
+                                if (variable.equals("tasmax")) {
                                     minmax = new MAMath.MinMax(200, 373);
-                                } else if (netcdfDir.getVariableName().equals("ChangeDetection")) {
+                                } else if (variable.equals("ChangeDetection")) {
                                     minmax = new MAMath.MinMax(-1, 2);
                                 } else {
-                                    minmax = MAMath.getMinMax(src);
+                                    Array src1 = netcdfDir.getData(0);
+                                    minmax = MAMath.getMinMax(src1);
                                 }
+                                cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,field_description,units,max_value,min_value) VALUES (" +
+                                        datasetId + ",\"" + variable + "\",\"" + ncDir.getDescriptions().get(j) +
+                                        "\",\"" + ncDir.getUnits().get(j) + "\"," +
+                                        minmax.max + "," + minmax.min+")";
+                                Statement stmt1 = conn.createStatement();
+                                stmt1.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
+                                ResultSet rset1 = stmt.getGeneratedKeys();
+                                int fieldId = -1;
+                                if(rset1.next())
+                                    fieldId = rset1.getInt(1);
+                                String saveDir = netcdfDir.getDir() + "/variable/" + variable;
+                                File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
+                                folder.mkdirs();
 
-                                logger.info("Creating image with index = " + i + "in " + Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
-                                Utils.createImage(data, (float) minmax.min, (float) minmax.max, Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
-                                logger.info("Created image with index = " + i + "in " + Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
-
+                                int startIndex = 0;
+                                int endIndex = netcdfDir.getFilepaths().size() * netcdfDir.getTimeLen() - 1;
+                                for (int i = startIndex; i <= endIndex; ++i) {
+                                    Array src = netcdfDir.getData(i);
+                                    float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
+                                    String imgLocation = Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png";
+                                    Utils.createImage(data, (float) minmax.min, (float) minmax.max, imgLocation);
+                                    //create an entry in the database
+                                    //datasetId, fieldId, timeindex, timestamp, imgLocation
+                                    cmd = "INSERT INTO netcdf_dataset_images (dataset_id, field_id, time_index,timestamp, img_location)"+
+                                           "VALUES("+ datasetId +","+fieldId+","+i+",\""+netcdfDir.getDateFromIndex(i)+"\",\""+imgLocation+"\")";
+                                    stmt1.executeUpdate(cmd);
+                                }
+                                status = 1;
                             }
                             logger.info("ENDED IMAGE CREATION PROCESS");
-                            message = "Data registration and Image loading successful";
-                            status = 1;
-                            //TODO - update netcdfdatasets and netcdfdataset_fields table
-                            //TODO - update netcdfdataset_images table
+
+                        }else{
+                            logger.severe("Error: Could not create a new dataset record.");
+                            status = -1;
                         }
                     }
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Message", e);
-                    message = "Error: Unable to open HDFS file.";
+                    logger.severe("Error: Unable to open HDFS file.");
                     status = -1;
                 }
-
             }
+            stmt.close();
+            conn.close();
         }
         catch(SQLException e){
-            message = "Error: Unable to connect to the database";
+            logger.log(Level.SEVERE, "Message", e);
+            logger.severe("Error: Unable to connect to the database");
             status = -1;
         }
-        //TODO - update submitted jobs table using message and status
-
+        conn = DBUtils.getConnection();
+        try {
+            stmt = conn.createStatement();
+            String cmd;
+            if(status == 1){
+                cmd = "UPDATE submitted_image_creation_jobs SET status='DONE' where jobId=" + jobId;
+            }else{
+                cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED' where jobId=" + jobId;
+            }
+            stmt.executeUpdate(cmd);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Message", e);
+        }
     }
-
 }
 

@@ -61,7 +61,7 @@ public class GetSubmittedJobsInfo extends HttpServlet {
             conn = DBUtils.getConnection();
 
 			stmt = conn.createStatement();
-			String cmd = "select J.id as id,J.dataset_id as dataset_id,J.analysis as analysis,J.field as field,J.status as status,J.submission_time as submission_time, J.finish_time as finish_time, J.result_loc as result_loc, J.priority as priority, N.name as name from submitted_jobs J, netcdf_datasets N where J.dataset_id = N.id and J.user_name = \""
+			String cmd = "select J.id as id,J.dataset_id as dataset_id,J.analysis as analysis,J.field as field,J.status as status,J.submission_time as submission_time, J.finish_time as finish_time, J.result_loc as result_loc, J.priority as priority, N.name as name from submitted_analysis_jobs J, netcdf_datasets N where J.dataset_id = N.id and J.user_name = \""
 					+ userName + "\" order by J.submission_time";
 			rset = stmt.executeQuery(cmd);
 			int i = 0;

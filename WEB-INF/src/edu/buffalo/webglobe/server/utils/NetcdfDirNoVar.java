@@ -38,6 +38,8 @@ public class NetcdfDirNoVar implements Serializable {
     private int latLen;
     private int longLen;
     private ArrayList<String> variables = null;
+    private ArrayList<String> units = null;
+    private ArrayList<String> descriptions = null;
     private CalendarDate startDate;
     private CalendarDate endDate;
     private Logger logger;
@@ -60,10 +62,13 @@ public class NetcdfDirNoVar implements Serializable {
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         variables = new ArrayList<String>();
-
+        units = new ArrayList<String>();
+        descriptions = new ArrayList<String>();
         for(int i = 0; i < grids.size(); i++){
             GeoGrid g = (GeoGrid) grids.get(i);
             variables.add(g.getName());
+            units.add(g.getUnitsString());
+            descriptions.add(g.getDescription());
         }
 
         List<Dimension> dims = cdfFile.getDimensions();
@@ -110,6 +115,14 @@ public class NetcdfDirNoVar implements Serializable {
 
     public ArrayList<String> getFilepaths() {
         return filepaths;
+    }
+
+    public ArrayList<String> getUnits(){
+        return units;
+    }
+
+    public ArrayList<String> getDescriptions(){
+        return descriptions;
     }
 
     public int getIndexFromDate(String dateStr) {

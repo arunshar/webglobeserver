@@ -61,10 +61,10 @@ public class RunJob extends HttpServlet {
 			conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
 			
-			//add an entry to the submitted_jobs table
+			//add an entry to the submitted_analysis_jobs table
 			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			String curDate = dt.format(new Date()).toString();
-			String cmd = "INSERT INTO submitted_jobs (user_name,dataset_id,analysis,field,status,submission_time,finish_time,result_loc,priority) VALUES (\"" +
+			String cmd = "INSERT INTO submitted_analysis_jobs (user_name,dataset_id,analysis,field,status,submission_time,finish_time,result_loc,priority) VALUES (\"" +
 						userName + "\"," +
 						datasetid + ",\"" +
 						analysisname + "\",\"" +
@@ -128,7 +128,7 @@ public class RunJob extends HttpServlet {
 				
 				RunSparkJob.terminateCluster("/home/centos/bash-scripts/terminatecluster.sh", outputs[0]);
 			    
-				cmd = "UPDATE submitted_jobs SET status='DONE' where id=" + id;
+				cmd = "UPDATE submitted_analysis_jobs SET status='DONE' where id=" + id;
 				stmt.executeUpdate(cmd);
 				
 				cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url) VALUES (\"" +
