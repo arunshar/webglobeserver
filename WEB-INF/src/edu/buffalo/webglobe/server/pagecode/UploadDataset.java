@@ -25,6 +25,7 @@ import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.ma2.MAMath;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
  * @author chandola
@@ -138,7 +139,7 @@ public class UploadDataset extends HttpServlet {
 
                 }
             }catch(Exception e){
-                logger.severe(e.getMessage());
+                logger.log(Level.SEVERE,"Message",e);
                 message = "Error: Unable to open HDFS file.";
                 status = "-1";
                 responseData.put("message", message);
