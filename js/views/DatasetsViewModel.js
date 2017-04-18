@@ -395,12 +395,7 @@ alert(self.selectedDataset.variableAddress);
 	    }),
 	    success: function (data) {
 		var message = data.message;
-		var status = data.status;
-		if(status == "-1"){
-		  logger.log(message,'alert-danger');
-		}else{
-		  logger.log(message,'info');
-		}
+		logger.log(message,'info');
 
 	    }
 	  }).fail(function (xhr, textStatus, err) {
