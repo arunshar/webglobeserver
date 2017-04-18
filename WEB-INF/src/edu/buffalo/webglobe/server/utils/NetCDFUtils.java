@@ -123,8 +123,8 @@ public class NetCDFUtils {
 
         String [] tokens = new String[2];
         String s1 = hdfsuri.substring(hdfsuri.indexOf("://") + 3, hdfsuri.length());
-        tokens[0] = "hdfs://"+s1.substring(s1.indexOf('/'), s1.length());
-        tokens[1] = s1.substring(0, s1.indexOf('/'));
+        tokens[0] = "hdfs://"+s1.substring(0, s1.indexOf('/'));
+        tokens[1] = s1.substring(s1.indexOf('/'), s1.length());
         return tokens;
     }
 }
