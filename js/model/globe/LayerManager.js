@@ -17,7 +17,8 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/Netcdf
     function (ko,
               config,
               constants,
-              ww) {
+              ww,
+	      netcdflayer) {
         "use strict";
         /**
          *

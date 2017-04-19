@@ -5,7 +5,6 @@
  */
 
 /**
- * Projection content module
  *
  * @param {type} ko
  * @param {type} $
@@ -17,8 +16,6 @@ define(['knockout',
     function (ko, $, constants) {
 
       /**
-       * The projection switching model
-       * @param {Globe} globe The globe that provides the supported projections
        * @constructor
        */
       function AccountManagerModel(logger) {
