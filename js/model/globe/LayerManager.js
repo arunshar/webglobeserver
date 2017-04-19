@@ -13,12 +13,12 @@
  * @param {WorldWind} ww
  * @returns {LayerManager}
  */
-define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/NetcdfLayer'],
+define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
     function (ko,
               config,
               constants,
-              ww,
-	      netcdflayer) {
+              ww
+	      ) {
         "use strict";
         /**
          *
@@ -385,8 +385,8 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/Netcdf
          * @returns {LayerManager_L17.LayerManager.prototype.createOverlayLayer.datasetLayer}
          */
         LayerManager.prototype.createDatasetLayer = function (layerName) {
-            //var datasetLayer = new WorldWind.RenderableLayer(layerName);
-            var datasetLayer = new NetcdfLayer(layerName);
+            var datasetLayer = new WorldWind.RenderableLayer(layerName);
+            //var datasetLayer = new NetcdfLayer(layerName);
 
             var index = this.backgroundLayers().length + this.baseLayers().length + this.overlayLayers().length;
 
