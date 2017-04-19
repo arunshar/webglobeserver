@@ -1,4 +1,4 @@
-require(['knockout', 'jquery', 'bootstrap', 'worldwind'],
+require(['worldwind'],
     function (RenderableLayer,
               Sector,
               SurfaceImage,
