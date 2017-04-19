@@ -60,7 +60,7 @@ public class LoadNetcdfDataset extends HttpServlet {
         try {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
-            String cmd = "select f.id as field_id from netcdf_datasets as d and netcdf_dataset_fields as f where f.dataset_id="+id+" and f.fieldname = \""+variableName+"\"";
+            String cmd = "select id as field_id from netcdf_dataset_fields where dataset_id="+id+" and field_name = \""+variableName+"\"";
             rset = DBUtils.executeQuery(conn,stmt,cmd);
             if(rset.next()){
                 CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
