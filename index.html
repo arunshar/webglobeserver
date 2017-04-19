@@ -129,16 +129,6 @@
 	    </form>
 	    <div id="selectTimePanel" style="display: none;">
                 <div class="input-group" align="center">
-                    <label for="create-start-date">From:</label>
-                    <input type="date" id="create-start-date"/>
-                    <label for="create-end-date">To:</label>
-                    <input type="date" id="create-end-date"/>
-                    <button type="button" class="btn btn-primary btn-sm" id="create-images" 
-                    		data-bind="click: $root.createImages">
-                        Create Images
-                    </button>                                      
-                </div>
-                <div class="input-group" align="center">
                     <label for="load-start-date">From:</label>
                     <input type="date" id="load-start-date"/>
                     <label for="load-end-date">To:</label>
@@ -157,34 +147,6 @@
                 	</div>
             	</div>
          </div>	    
-	      <div class="input-group" align="center">
-		<label for="create-start-date">From:</label>
-		<input type="date" id="create-start-date"/>
-		<label for="create-end-date">To:</label>
-		<input type="date" id="create-end-date"/>
-		<button type="button" class="btn btn-primary btn-sm" id="create-images" 
-						       data-bind="click: $root.createImages">
-		  Create Images
-		</button>                                      
-	      </div>
-	      <div class="input-group" align="center">
-		<label for="load-start-date">From:</label>
-		<input type="date" id="load-start-date"/>
-		<label for="load-end-date">To:</label>
-		<input type="date" id="load-end-date"/>
-		<button type="button" class="btn btn-primary btn-sm" id="create-images"
-						       data-bind="click: $root.loadImages">
-		  Load Images
-		</button>                                      
-	      </div>
-	      <div class="well"> 
-		<input type="range"
-	 id="index-of-show-date"
-  data-bind="event: {change: $root.onInputShowDate}"/>                    
-		<div align="center">
-		  <input type="text" id="show-date"/>
-		</div>
-	      </div>
 	    </div>	    
 	  </div>
 	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
