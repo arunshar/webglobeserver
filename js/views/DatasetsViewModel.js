@@ -184,6 +184,7 @@ define(
 
 	self.loadImages = function() {
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  alert("skjhkfjsdhfkjshdkf");
 
 	  if (self.selectedDataset.imagesAddress  !== "") {
 	    var id = self.selectedDataset.id;
