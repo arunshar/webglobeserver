@@ -92,7 +92,6 @@ define(
 			'enabled' : false,
 			'layer' : datasetLayer,
 			'images': ko.observableArray(),
-			'imagesAddress': "",
 			'variableAddress' : ""
 		      });
 		    }
@@ -111,9 +110,7 @@ define(
 
 
 	self.showDatasetPanel = function(dataset) {
-	  alert('Coming here in ');
 	  if (!self.openActive) {
-	    alert('Coming here');
 	    self.selectedDataset = dataset;
 	    for (var i = 0; i < dataset.fields.length; i++) {
 	      self.fields.push(dataset.fields[i]);
@@ -186,49 +183,44 @@ define(
 	self.loadImages = function() {
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
-	  if (self.selectedDataset.imagesAddress  !== "") {
-	    var id = self.selectedDataset.id;
-	    var fieldname = $("#fieldSelect :selected").text();
-	    alert(id);
-	    alert(fieldname);
+	  var id = self.selectedDataset.id;
+	  var fieldname = $("#fieldSelect :selected").text();
+	  alert(id);
+	  alert(fieldname);
 
-	    $.ajax({
-	      url: webGlobeServer + 'LoadImages',
-	      cache: false,
-	      type: 'POST',
-	      data: {
-		datasetId: id,
-		fieldname: fieldname,
-		from: $('#load-start-date').val(),
-		to: $('#load-end-date').val()
-	      },
-	      success: function (data) {
-		alert('Comin in here');
-		var imageUrls = data.imageUrls;
-		var imageDates = data.imageDates;
+	  $.ajax({
+	    url: webGlobeServer + 'LoadImages',
+	    cache: false,
+	    type: 'POST',
+	    data: {
+	      datasetId: id,
+	      fieldname: fieldname,
+	      from: $('#load-start-date').val(),
+	      to: $('#load-end-date').val()
+	    },
+	    success: function (data) {
+	      var imageUrls = data.imageUrls;
+	      var imageDates = data.imageDates;
 
-		var len = imageUrls.length - 1;
+	      var len = imageUrls.length - 1;
 
-		self.selectedDataset.images.removeAll();
-		for (var i = 0; i < len; ++i) {
-		  self.selectedDataset.images.push(new WorldWind.SurfaceImage(
-			new WorldWind.Sector(-90, 90, -180,180),imageUrls[i]));
-		}
-
-		$('#index-of-show-date').attr({
-		  "max" : len-1,
-		  "min" : 0
-		});
-
-		$('#index-of-show-date').val(0);
-		$('#index-of-show-date').change();
+	      self.selectedDataset.images.removeAll();
+	      for (var i = 0; i < len; ++i) {
+		self.selectedDataset.images.push(new WorldWind.SurfaceImage(
+		      new WorldWind.Sector(-90, 90, -180,180),imageUrls[i]));
 	      }
-	    }).fail(function (xhr, textStatus, err) {
-	      logger.log(err,"alert-danger");
-	    });                            
-	  } else{
-	    logger.log('No URL entered.',"alert-danger");
-	  }
+
+	      $('#index-of-show-date').attr({
+		"max" : len-1,
+		"min" : 0
+	      });
+
+	      $('#index-of-show-date').val(0);
+	      $('#index-of-show-date').change();
+	    }
+	  }).fail(function (xhr, textStatus, err) {
+	    logger.log(err,"alert-danger");
+	  });                            
 
 	}
 
