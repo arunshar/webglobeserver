@@ -201,8 +201,6 @@ define(
 	      var imageDates = data.imageDates;
 
 	      var len = imageUrls.length - 1;
-	      alert(imageUrls);
-
 	      self.selectedDataset.images.removeAll();
 	      for (var i = 0; i < len; ++i) {
 		self.selectedDataset.images.push(new WorldWind.SurfaceImage(
@@ -232,27 +230,6 @@ define(
 	  self.selectedDataset.layer.addRenderable(self.selectedDataset.images()[index]);
 	  globe.redraw();					
 	}
-
-	//				self.loadDataset = function() {
-	//					if (self.downloading) {
-	//						logger
-	//								.log(
-	//										"Please wait till the current download completes.",
-	//										"alert-warning")
-	//						return;
-	//					}
-	//					var fieldname = $("#fieldSelect :selected").text();
-	//					var url = self.selectedDataset.url;
-	//					logger.log("Loading <a href=\"" + url + "\">"
-	//							+ self.selectedDataset.name + ":" + fieldname
-	//							+ "</a>", "alert-info");
-	//					self.downloading = true;
-	//					$("#selectTimePanel").show();
-	//					// start downloading
-	//					// DINH -- Add your downloading code here
-	//					// finish downloading
-	//					// self.downloading=false;
-	//				}
 
 	self.analyzeDataset = function() {
 	  if (self.submitting) {
