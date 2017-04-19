@@ -66,7 +66,10 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 					+ userName + "\" order by J.submission_time";
 			rset = DBUtils.executeQuery(conn, stmt, cmd);
 			int i = 0;
+            Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+            logger.info("Coming here");
 			while (rset.next()) {
+                logger.info("Going in");
 				Map<String, String> submittedJobInfo = new HashMap<String, String>();
 				int id = rset.getInt("id");
 				String analysis = rset.getString("analysis");
@@ -89,8 +92,7 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 				submittedJobInfo.put("name", name);
 				responseData.put((new Integer(i)).toString(), submittedJobInfo);
 				i++;
-                Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-                logger.info("Coming here");
+
 			}
 			rset.close();
 			stmt.close();
