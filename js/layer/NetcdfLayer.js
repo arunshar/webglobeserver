@@ -1,8 +1,4 @@
 define([
-        '../layer/RenderableLayer',
-        '../geom/Sector',
-        '../shapes/SurfaceImage',
-        '../util/WWUtil'
     ],
     function (RenderableLayer,
               Sector,
