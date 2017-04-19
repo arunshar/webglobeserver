@@ -128,12 +128,51 @@
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.displayTimePanel"></span>
 	    </form>
 	    <div id="selectTimePanel" style="display: none;">
+                <div class="input-group" align="center">
+                    <label for="create-start-date">From:</label>
+                    <input type="date" id="create-start-date"/>
+                    <label for="create-end-date">To:</label>
+                    <input type="date" id="create-end-date"/>
+                    <button type="button" class="btn btn-primary btn-sm" id="create-images" 
+                    		data-bind="click: $root.createImages">
+                        Create Images
+                    </button>                                      
+                </div>
+                <div class="input-group" align="center">
+                    <label for="load-start-date">From:</label>
+                    <input type="date" id="load-start-date"/>
+                    <label for="load-end-date">To:</label>
+                    <input type="date" id="load-end-date"/>
+                    <button type="button" class="btn btn-primary btn-sm" id="load-images"
+                    		data-bind="click: $root.loadImages">
+                        Load Images
+                    </button>                                      
+                </div>
+                <div class="well"> 
+                    <input type="range"
+                    	   id="index-of-show-date"
+                           data-bind="event: {change: $root.onInputShowDate}"/>                    
+                	<div align="center">
+                    	<input type="text" id="show-date"/>
+                	</div>
+            	</div>
+         </div>	    
+	      <div class="input-group" align="center">
+		<label for="create-start-date">From:</label>
+		<input type="date" id="create-start-date"/>
+		<label for="create-end-date">To:</label>
+		<input type="date" id="create-end-date"/>
+		<button type="button" class="btn btn-primary btn-sm" id="create-images" 
+						       data-bind="click: $root.createImages">
+		  Create Images
+		</button>                                      
+	      </div>
 	      <div class="input-group" align="center">
 		<label for="load-start-date">From:</label>
 		<input type="date" id="load-start-date"/>
 		<label for="load-end-date">To:</label>
 		<input type="date" id="load-end-date"/>
-		<button type="button" class="btn btn-primary btn-sm" id="load-images"
+		<button type="button" class="btn btn-primary btn-sm" id="create-images"
 						       data-bind="click: $root.loadImages">
 		  Load Images
 		</button>                                      
@@ -147,93 +186,92 @@
 		</div>
 	      </div>
 	    </div>	    
-	  </div>	    
-	</div>
-	<div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
-	  <form role="form" id="analysisForm">
-	    <label for="fieldAnalysisSelect">Field</label>
-	    <select name="fieldAnalysisSelect" data-bind="options: analysisFields" id="fieldAnalysisSelect"></select>
-	    <label for="analysisSelect">Analysis</label>
-	    <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
-	    <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.analyzeDataset"></span>	      
-	  </form>
-	</div>
-      </div>
-    </div>
-    <div id="account" class="col-sm-12 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 12px !important;width: 35%;  padding-bottom: 25% !important;">
-      <h4 style="text-align:center;">Welcome <span data-bind="text: userName"></span></h4>	
-      <hr/>
-      <div class="panel panel-default">
-	<div class="panel-heading">
-	  <div style="text-align:center;">Status of submitted analysis jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedAnalysisJobs"></span></div>
-	</div>
-	<div class="panel-body">
-	  <h4 style="text-align:center;">Analysis Jobs</h4>
-	  <table class="table-bordered table-striped table-hover table-sm" style="font-size: 10px; text-align: center;">
-	    <thead>
-	      <tr><th></th><th>Dataset</th><th>Analysis</th><th>Submitted</th><th>Finished</th><th>Status</th></tr>
-	    </thead>
-	    <tbody data-bind="foreach: submittedAnalysisJobs">
-	      <tr>
-		<td data-bind="text: $data.index"></td>
-		<td data-bind="text: $data.name"></td>
-		<td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
-		<td data-bind="text: $data.submission_time"></td>
-		<td data-bind="text: $data.finish_time"></td>
-		<td data-bind="text: $data.status"></td>
-	      </tr>
-	    </tbody>
-	  </table>
-	</div>
-	<div class="panel-heading">
-	  <div style="text-align:center;">Status of submitted upload jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedUploadJobs"></span></div>
-	</div>
-	<div class="panel-body">
-	  <h4 style="text-align:center;">Data Upload Jobs</h4>
-	  <table class="table-bordered table-striped table-hover table-sm" style="font-size: 10px; text-align: center;">
-	    <thead>
-	      <tr><th></th><th>Dataset</th><th>Submitted</th><th>Finished</th><th>Status</th></tr>
-	    </thead>
-	    <tbody data-bind="foreach: submittedUploadJobs">
-	      <tr>
-		<td data-bind="text: $data.index"></td>
-		<td data-bind="text: $data.dataset_name"></td>
-		<td data-bind="text: $data.submission_time"></td>
-		<td data-bind="text: $data.finish_time"></td>
-		<td data-bind="text: $data.status"></td>
-	      </tr>
-	    </tbody>
-	  </table>
+	  </div>
+	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
+	    <form role="form" id="analysisForm">
+	      <label for="fieldAnalysisSelect">Field</label>
+	      <select name="fieldAnalysisSelect" data-bind="options: analysisFields" id="fieldAnalysisSelect"></select>
+	      <label for="analysisSelect">Analysis</label>
+	      <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
+	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.analyzeDataset"></span>	      
+	    </form>
+	  </div>
 	</div>
       </div>
-    </div>
-    <div id="upload" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
-      <div class="panel panel-default">
-	<div class="panel-body">
-	  <form>
-	    <div class="form-group">
-	      <div class="input-group-addon"><span>HDFS URL</span></div>
-	      <input type="text" class="form-control form-control-sm" id="hdfsURL"/>
-	    </div>
-	    <div class="form-group">
-	      <div class="input-group-addon"><span>Dataset Name</span></div>
-	      <input type="text" class="form-control form-control-sm" id="dataName"/>
-	    </div>
-	    <div class="form-group">
-	      <div class="input-group-addon"><i class="fa fa-info" aria-hidden="true"></i><span> Data set Description</span></div>
-	      <textarea class="form-control" id="dataInfo" rows="3"></textarea>
-	    </div>
-	    <div class="form-group">
-	      <div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i><span> URL for More Information</span></div>
-	      <input type="text" class="form-control form-control-sm" id="dataInfoURL"/>
-	    </div>
-	    <button type="button" class="btn btn-primary btn-sm" id="upload-data" data-bind="click: $root.uploadData">Upload</button>       
-	  </form>                               
+      <div id="account" class="col-sm-12 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 12px !important;width: 35%;  padding-bottom: 25% !important;">
+	<h4 style="text-align:center;">Welcome <span data-bind="text: userName"></span></h4>	
+	<hr/>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <div style="text-align:center;">Status of submitted analysis jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedAnalysisJobs"></span></div>
+	  </div>
+	  <div class="panel-body">
+	    <h4 style="text-align:center;">Analysis Jobs</h4>
+	    <table class="table-bordered table-striped table-hover table-sm" style="font-size: 10px; text-align: center;">
+	      <thead>
+		<tr><th></th><th>Dataset</th><th>Analysis</th><th>Submitted</th><th>Finished</th><th>Status</th></tr>
+	      </thead>
+	      <tbody data-bind="foreach: submittedAnalysisJobs">
+		<tr>
+		  <td data-bind="text: $data.index"></td>
+		  <td data-bind="text: $data.name"></td>
+		  <td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
+		  <td data-bind="text: $data.submission_time"></td>
+		  <td data-bind="text: $data.finish_time"></td>
+		  <td data-bind="text: $data.status"></td>
+		</tr>
+	      </tbody>
+	    </table>
+	  </div>
+	  <div class="panel-heading">
+	    <div style="text-align:center;">Status of submitted upload jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedUploadJobs"></span></div>
+	  </div>
+	  <div class="panel-body">
+	    <h4 style="text-align:center;">Data Upload Jobs</h4>
+	    <table class="table-bordered table-striped table-hover table-sm" style="font-size: 10px; text-align: center;">
+	      <thead>
+		<tr><th></th><th>Dataset</th><th>Submitted</th><th>Finished</th><th>Status</th></tr>
+	      </thead>
+	      <tbody data-bind="foreach: submittedUploadJobs">
+		<tr>
+		  <td data-bind="text: $data.index"></td>
+		  <td data-bind="text: $data.dataset_name"></td>
+		  <td data-bind="text: $data.submission_time"></td>
+		  <td data-bind="text: $data.finish_time"></td>
+		  <td data-bind="text: $data.status"></td>
+		</tr>
+	      </tbody>
+	    </table>
+	  </div>
 	</div>
       </div>
-    </div>
-    <script type="text/html" id="layer-template">
-<div class="btn-group btn-block">
+      <div id="upload" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
+       <div class="panel panel-default">
+        <div class="panel-body">
+<form>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-folder" aria-hidden="true"></i><span> HDFS URL</span></div>
+	<input type="text" class="form-control form-control-sm" id="hdfsURL"/>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><span>Dataset Name</span></div>
+	<input type="text" class="form-control form-control-sm" id="dataName"/>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-info" aria-hidden="true"></i><span> Data set Description</span></div>
+    <textarea class="form-control" id="dataInfo" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+	<div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i><span> URL for More Information</span></div>
+	<input type="text" class="form-control form-control-sm" id="dataInfoURL"/>
+  </div>
+	<button type="button" class="btn btn-primary btn-sm" id="upload-data" data-bind="click: $root.uploadData">Upload</button>       
+	</form>                               
+	</div>
+	</div>
+	</div>
+	<script type="text/html" id="layer-template">
+	<div class="btn-group btn-block">
 	<div class="panel panel-default">
 	  <div class="panel-body">
 	    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
@@ -260,8 +298,8 @@
 	</div>
       </script>
       <script type="text/html" id="dataset-template">
-<div data-bind="style: { background: 'white' }" class="panel panel-info" style="padding:1px;">
-	<span class="dataset" data-bind="text: $data.shortName"></span>
+<div data-bind="style: { background: $data.user_data ? '#C3D9FF' : 'white' }" class="panel panel-info" style="padding:1px;">
+	<span class="dataset" data-bind="text: $data.name"></span>
 	<a href="#" data-bind="click: $root.showInfo" class="dataset-action"><span class="glyphicon glyphicon-info-sign"></span></a>
 	<a href="#" data-bind="click: $root.showDatasetPanel" class="dataset-action"><span class="glyphicon glyphicon-eye-open"></span></a>
 	<a href="#" data-bind="click: $root.showAnalysisPanel" class="dataset-action"><span class="glyphicon glyphicon-wrench"></span></a>
