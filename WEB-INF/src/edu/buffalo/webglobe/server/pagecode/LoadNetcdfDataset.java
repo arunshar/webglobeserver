@@ -67,13 +67,13 @@ public class LoadNetcdfDataset extends HttpServlet {
 
                 int fieldId = rset.getInt("field_id");
                 cmd = "select timestamp from netcdf_dataset_images where dataset_id="+id+
-                        " and field_id="+fieldId+"and time_index = (select min(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
+                        " and field_id="+fieldId+" and time_index = (select min(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
                 rset = DBUtils.executeQuery(conn,stmt,cmd);
                 rset.next();
                 String tsmin = rset.getString(1);
 
                 cmd = "select timestamp from netcdf_dataset_images where dataset_id="+id+
-                        " and field_id="+fieldId+"and time_index = (select max(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
+                        " and field_id="+fieldId+" and time_index = (select max(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
                 rset = DBUtils.executeQuery(conn,stmt,cmd);
                 rset.next();
                 String tsmax = rset.getString(1);
