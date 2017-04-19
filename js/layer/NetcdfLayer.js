@@ -26,7 +26,8 @@ define(['worldwind'],
 	        layer.addRenderable(surfaceImage);	
 		this.layers.add(layer);
 	      }
-	    };
+	    }
+	};
 
         NetcdfLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
 
