@@ -186,18 +186,23 @@ define(
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	  if (self.selectedDataset.imagesAddress  !== "") {
+	    var id = self.selectedDataset.id;
+	    var fieldname = $("#fieldSelect :selected").text();
 
 	    $.ajax({
 	      url: webGlobeServer + 'LoadImages',
 	      cache: false,
 	      type: 'POST',
 	      data: {
-		url: self.selectedDataset.imagesAddress,
+		datasetId: id,
+		fieldname: fieldname,
 		from: $('#load-start-date').val(),
 		to: $('#load-end-date').val()
 	      },
 	      success: function (data) {
-		var imageUrls = data.split(",");
+		alert('Comin in here');
+		var imageUrls = data.imageUrls;
+		var imageDates = data.imageDates;
 
 		var len = imageUrls.length - 1;
 
