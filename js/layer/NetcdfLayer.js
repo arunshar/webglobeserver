@@ -1,4 +1,4 @@
-define(['WorldWind'],
+define(['worldwind'],
     function (ww) {
         "use strict";
 
