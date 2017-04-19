@@ -56,8 +56,8 @@ public class LoadImages extends HttpServlet {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		HashMap<String, ArrayList<String>> responseData = new HashMap<String, ArrayList<String>>();
 		try {
-			Date startDate = dateFormatter.parse(from);
-			Date endDate = dateFormatter.parse(to);
+			String startDate = dateFormatter.parse(from).toString();
+			String endDate = dateFormatter.parse(to).toString();
 			Connection conn = DBUtils.getConnection();
             Statement stmt = conn.createStatement();
             String cmd = "SELECT D.timestamp,D.time_index from netcdf_dataset_images as D and netcdf_dataset_fields as F where D.dataset_id = "+
