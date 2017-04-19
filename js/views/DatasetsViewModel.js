@@ -148,9 +148,9 @@ define(
 	}
 
 	self.displayTimePanel = function() {
+	  var id = self.selectedDataset.id;
 	  var fieldname = $("#fieldSelect :selected").text();
 	  self.selectedDataset.fieldname = fieldname;
-	  var url1 = self.selectedDataset.url;
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	  $.ajax({
@@ -159,25 +159,10 @@ define(
 	    type: 'POST',
 	    contentType: 'application/json; charset=utf-8',
 	    data: JSON.stringify({
-	      url: url1,
+	      id: id,
 	      fieldname: fieldname
 	    }),
 	    success: function (dataJSON) {
-	      self.selectedDataset.imagesAddress = dataJSON.variable.imagesAddress;
-	      self.selectedDataset.variableAddress = dataJSON.variable.address;
-
-	      $('#create-start-date').attr({
-		"max" : dataJSON.variable.maxDate,
-		"min" : dataJSON.variable.minDate
-	      });
-	      $('#create-start-date').val(dataJSON.variable.minDate);
-
-	      $('#create-end-date').attr({
-		"max" : dataJSON.variable.maxDate,
-		"min" : dataJSON.variable.minDate
-	      });
-	      $('#create-end-date').val(dataJSON.variable.maxDate);                        	
-
 	      $('#load-start-date').attr({
 		"max" : dataJSON.variable.imageMaxDate,
 		"min" : dataJSON.variable.imageMinDate
@@ -189,66 +174,12 @@ define(
 		"min" : dataJSON.variable.imageMinDate
 	      });
 	      $('#load-end-date').val(dataJSON.variable.imageMaxDate);
-
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");
 	  });
 
 	  $("#selectTimePanel").show();
-	}
-
-	self.createImages = function() {
-	  if (self.downloading) {
-	    logger.log(
-		  "Please wait till the current creating images job completes.",
-		  "alert-warning")
-	      return;
-	  }
-
-	  if (self.selectedDataset.variableAddress  !== "") { 
-	    var webGlobeServer = constants.WEBGLOBE_SERVER;
-alert(self.selectedDataset.variableAddress);
-	    self.downloading = true;
-	    logger.log("Creating images for <a href=\"" + self.selectedDataset.url + "\">"
-		+ self.selectedDataset.name + ":" + self.selectedDataset.fieldname
-		+ "</a>", "alert-info");
-
-	    $.ajax({
-	      url: webGlobeServer + 'CreateImages',
-	      cache: false,
-	      contentType: 'application/json; charset=utf-8',
-	      type: 'POST',
-	      data: JSON.stringify({
-		url: self.selectedDataset.variableAddress,
-		fieldname: self.selectedDataset.fieldname,
-		from: $('#create-start-date').val(),
-		to: $('#create-end-date').val()
-	      }),
-	      success: function (data) {
-		self.selectedDataset.imagesAddress = data.imagesAddress;
-
-		$('#load-start-date').attr({
-		  "max" : data.imageMaxDate,
-		  "min" : data.imageMinDate
-		});
-		$('#load-start-date').val(data.imageMinDate);
-
-		$('#load-end-date').attr({
-		  "max" : data.imageMaxDate,
-		  "min" : data.imageMinDate
-		});
-		$('#load-end-date').val(data.imageMaxDate);
-		self.downloading = false;
-		logger.log("Completed the creating images job.", "alert-info");                               
-	      }
-	    }).fail(function (xhr, textStatus, err) {
-	      logger.log(err,"alert-danger");
-	    });                            
-	  } else{
-	    logger.log('No URL entered.',"alert-danger");
-	  }
-
 	}
 
 	self.loadImages = function() {

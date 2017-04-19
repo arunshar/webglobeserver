@@ -105,7 +105,7 @@ public class NetcdfDir implements Serializable {
 	
 	public String getDateFromIndex(int i) {
 		CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
-		
+
 		return dateFormatter.toString(startDate.add(i , CalendarPeriod.Field.Day));
 	}
 
