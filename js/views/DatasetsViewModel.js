@@ -79,7 +79,7 @@ define(
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
 		      var n = 25
-		      var shortName = (name.length<n) ? ' '.repeat(n-name.length)+name : name.substring(0,n-1);
+		      var shortName = (name.length<n) ? '-'.repeat(n-name.length)+name : name.substring(0,n-1);
 
 		      self.availableDatasets.push({
 			'id' : id,
