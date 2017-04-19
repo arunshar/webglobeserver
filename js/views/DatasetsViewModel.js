@@ -78,11 +78,13 @@ define(
 			fields.push(fieldName);
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
+		      var shortName = (name.length<15) ? ' '.repeat(20-name.length)+name : name;
 
 		      self.availableDatasets.push({
 			'id' : id,
 			'url' : url,
 			'name' : name,
+			'shortName' : shortName,
 			'user_data' : user_data,
 			'info' : info,
 			'info_url' : info_url,
@@ -364,7 +366,7 @@ alert(self.selectedDataset.variableAddress);
 
 	self.showInfo = function(dataset) {
 	  if (!self.infoActive) {
-	    $("#datasetInfo").show().html(dataset.info);
+	    $("#datasetInfo").show().html('<h4>'+dataset.name+'</h4>\n<hr/>'+dataset.info);
 	    self.infoActive = true;
 	  } else {
 	    $("#datasetInfo").hide();
