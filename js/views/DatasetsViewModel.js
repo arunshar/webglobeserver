@@ -78,7 +78,7 @@ define(
 			fields.push(fieldName);
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
-		      var shortName = (name.length<15) ? ' '.repeat(20-name.length)+name : name;
+		      var shortName = (name.length<15) ? ' '.repeat(20-name.length)+name : name.substring(0,14)/;
 
 		      self.availableDatasets.push({
 			'id' : id,
