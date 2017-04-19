@@ -57,13 +57,13 @@ public class LoadImages extends HttpServlet {
 		try {
 			Connection conn = DBUtils.getConnection();
             Statement stmt = conn.createStatement();
-            String cmd = "SELECT D.timestamp,D.time_index from netcdf_dataset_images as D, netcdf_dataset_fields as F where D.dataset_id = "+
+            String cmd = "SELECT D.timestamp,D.img_location from netcdf_dataset_images as D, netcdf_dataset_fields as F where D.dataset_id = "+
                     datasetId+" and D.field_id = F.id and F.field_name=\""+fieldName+
                     "\" and str_to_date(D.timestamp,'%Y-%m-%d') >= \""+from+"\" and str_to_date(D.timestamp,'%Y-%m-%d') <= \""+to+"\"";
             ResultSet rset = DBUtils.executeQuery(conn,stmt,cmd);
             while(rset.next()){
                 imageDates.add(rset.getDate(1).toString());
-                imageUrls.add((new Integer(rset.getInt(2))).toString());
+                imageUrls.add(rset.getString(2));
             }
             responseData.put("imageUrls",imageUrls);
             responseData.put("imageDates",imageDates);
