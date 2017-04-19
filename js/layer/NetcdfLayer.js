@@ -1,5 +1,4 @@
-define([
-    ],
+require(['knockout', 'jquery', 'bootstrap', 'worldwind'],
     function (RenderableLayer,
               Sector,
               SurfaceImage,
