@@ -185,6 +185,7 @@ define(
 
 	  var id = self.selectedDataset.id;
 	  var fieldname = $("#fieldSelect :selected").text();
+	  alert(fieldname);
 
 	  $.ajax({
 	    url: webGlobeServer + 'LoadImages',
