@@ -8,7 +8,9 @@ define(['worldwind'],
          * @augments RenderableLayer
          * @classdesc Displays a netcdf data set. 
          */
-        var NetcdfLayer = function () {
+        //var NetcdfLayer = function () {
+        function NetcdfLayer() {
+	  var self = this;
             WorldWind.RenderableLayer.call(this, "NetcdfLayer");
 
             //var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,
@@ -27,7 +29,7 @@ define(['worldwind'],
 		this.layers.add(layer);
 	      }
 	    }
-	};
+	}
 
         NetcdfLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);
 
