@@ -199,7 +199,7 @@ define(
 	    success: function (data) {
 	      var imageUrls = data.imageUrls;
 	      var imageDates = data.imageDates;
-
+		/*
 	      var len = imageUrls.length - 1;
 	      self.selectedDataset.images.removeAll();
 	      for (var i = 0; i < len; ++i) {
@@ -214,6 +214,8 @@ define(
 
 	      $('#index-of-show-date').val(0);
 	      $('#index-of-show-date').change();
+	      */
+	      self.selectedDataset.layer.populate(imageUrls);
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");
