@@ -54,10 +54,6 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/Netcdf
             this.servers = ko.observableArray();
 
             /**
-             * A collection of netcdfdatasets added to the layer manager by the user.
-             */
-            this.netcdfDatasets = ko.observableArray();
-            /**
              * Toggles a layer on and off.
              *
              * @param {WorldWind.Layer} layer The layer to be toggled on or off.
@@ -347,21 +343,8 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/Netcdf
 
             request.send(null);
         };
-        /**
-         * 
-         * @param {type} netcdfDatasetAddress
-         * @returns {undefined}
-         */
-//        LayerManager.prototype.addNetcdfDataset = function (netcdfDatasetAddress) {
-//            var self = this;
-//            
-//            var netcdfDataset = self.loadNetcdfDatasetCapabilities(netcdfDatasetAddress);
-//            
-//            self.netcdfDatasets.push(netcdfDataset);
-//        };
         
         LayerManager.nextServerId = 0;
-        LayerManager.nextNetcdfDatasetId = 0;
         
         /*
          * 

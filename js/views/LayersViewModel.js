@@ -39,8 +39,6 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants'],
                  */
                 this.servers = layerManager.servers;
                 self.serverAddress = ko.observable("http://neowms.sci.gsfc.nasa.gov/wms/wms");
-                this.netcdfDatasets = layerManager.netcdfDatasets;
-                self.netcdfDatasetAddress = ko.observable("http://www.cse.buffalo.edu/mlds/air.mon.mean.nc");
                 /**
                  * Toggles the selected layer's visibility on/off
                  * @param {Object} layer The selected layer in the layer collection
@@ -103,28 +101,10 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants'],
                     return true;
                 };
                 
-                self.onAddNetcdfDataset = function() {
-                    layerManager.addNetcdfDataset(self.netcdfDatasetAddress());
-                    return true;
-                };
-                
                 /**
                  * Add the supplied layer from the server's capabilities to the active layers
                  */
                 this.onServerLayerClicked = function(layerNode, event){
-                    if (!layerNode.isChecked()) {
-                        // TODO: Open dialog to select a layer category
-                        layerManager.addLayerFromCapabilities(layerNode.layerCaps, constants.LAYER_CATEGORY_OVERLAY);
-                    } else {
-                        layerManager.removeLayer(layerNode.layerCaps);
-                    }
-                    return true;
-                };
-                
-                /**
-                 * Add the supplied layer from the server's capabilities to the active layers
-                 */
-                this.onNetcdfDatasetLayerClicked = function(layerNode, event){
                     if (!layerNode.isChecked()) {
                         // TODO: Open dialog to select a layer category
                         layerManager.addLayerFromCapabilities(layerNode.layerCaps, constants.LAYER_CATEGORY_OVERLAY);
