@@ -26,7 +26,7 @@ define(['worldwind'],
 		var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,imgUrls[i]);
 		var layer = new WorldWind.RenderableLayer("NETCDFLAYER");
 	        layer.addRenderable(surfaceImage);	
-		self.layers.add(layer);
+		self.layers.push(layer);
 	      }
 	    }
 	}
