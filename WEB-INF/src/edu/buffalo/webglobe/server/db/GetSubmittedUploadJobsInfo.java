@@ -71,7 +71,10 @@ public class GetSubmittedUploadJobsInfo extends HttpServlet {
 				submittedJobInfo.put("id", (new Integer(id)).toString());
 				submittedJobInfo.put("status", status);
 				submittedJobInfo.put("submission_time", submission_time.toString());
-                submittedJobInfo.put("finish_time", finish_time.toString());
+                if(finish_time == null)
+                    submittedJobInfo.put("finish_time", "");
+                else
+                    submittedJobInfo.put("finish_time", finish_time.toString());
 				submittedJobInfo.put("priority", priority);
 				submittedJobInfo.put("dataset_name", name);
 				responseData.put((new Integer(i)).toString(), submittedJobInfo);

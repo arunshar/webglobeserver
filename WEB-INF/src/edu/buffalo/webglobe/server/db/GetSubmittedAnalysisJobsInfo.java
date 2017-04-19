@@ -87,8 +87,11 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 				submittedJobInfo.put("analysis", analysis);
 				submittedJobInfo.put("field", field);
 				submittedJobInfo.put("status", status);
-				submittedJobInfo.put("submission_time", submission_time.toString());
-                submittedJobInfo.put("finish_time", finish_time.toString());
+                submittedJobInfo.put("submission_time", submission_time.toString());
+                if(finish_time == null)
+                    submittedJobInfo.put("finish_time", "");
+                else
+                    submittedJobInfo.put("finish_time", finish_time.toString());
 				submittedJobInfo.put("result_loc", result_loc);
 				submittedJobInfo.put("priority", priority);
 				submittedJobInfo.put("name", name);
