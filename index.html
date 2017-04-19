@@ -123,15 +123,16 @@
 	  </div>
 	  <div id="datasetOpenPanel" style="display: none;" class="alert alert-success alert-dismissible">
 	    <form role="form" id="showDatasetForm">
-	      <label for="fieldSelect">Field</label>
+	      <label for="fieldSelect">Variable</label>
 	      <select name="fieldSelect" data-bind="options: fields" id="fieldSelect"></select>
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.displayTimePanel"></span>
 	    </form>
 	    <div id="selectTimePanel" style="display: none;">
                 <div class="input-group" align="center">
-                    <label for="load-start-date">From:</label>
+                    <label style="width:20px;float:left" for="load-start-date">From:</label>
                     <input type="date" id="load-start-date"/>
-                    <label for="load-end-date">To:</label>
+		    <br/>
+                    <label style="width:20px;float:left" for="load-end-date">To:</label>
                     <input type="date" id="load-end-date"/>
                     <button type="button" class="btn btn-primary btn-sm" id="load-images"
                     		data-bind="click: $root.loadImages">
