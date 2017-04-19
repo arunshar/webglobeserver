@@ -13,7 +13,7 @@
  * @param {WorldWind} ww
  * @returns {LayerManager}
  */
-define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
+define(['knockout', 'model/Config', 'model/Constants', 'worldwind','layer/NetcdfLayer'],
     function (ko,
               config,
               constants,
@@ -71,8 +71,6 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
                 self.globe.redraw();
             };
             
-            // address of the webglobe server
-            this.webGlobeServer = 'http://128.205.11.115/';
         };
 
         /**
@@ -403,10 +401,8 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
          * @returns {LayerManager_L17.LayerManager.prototype.createOverlayLayer.datasetLayer}
          */
         LayerManager.prototype.createDatasetLayer = function (layerName) {
-            //*****  FOR DINH -- THIS NEEDS TO BE CHANGED ****//
-            //connect to the JSP server to get capabilities
-            // Determine the index of this layer within the WorldWindow
-            var datasetLayer = new WorldWind.RenderableLayer(layerName);
+            //var datasetLayer = new WorldWind.RenderableLayer(layerName);
+            var datasetLayer = new NetcdfLayer(layerName);
 
             var index = this.backgroundLayers().length + this.baseLayers().length + this.overlayLayers().length;
 
@@ -417,72 +413,6 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
             return datasetLayer;
         };
 
-//        /*
-//         * 
-//         * @param {String} netcdfDatasetAddress
-//         * @returns {LayerManager_L17.LayerManager.prototype.loadNetcdfDatasetCapabilities.netcdfDataset}
-//         */
-//        LayerManager.prototype.loadNetcdfDatasetCapabilities = function (netcdfDatasetAddress) {
-//            //*****  FOR DINH -- THIS NEEDS TO BE CHANGED ****//
-//            //connect to the JSP server to get capabilities
-//            if (netcdfDatasetAddress  !== "") {
-//                var self = this;
-//                var netcdfDataset = null;
-//                
-//                $.ajax({
-//                    url: self.webGlobeServer + 'LoadNetcdfDataset',
-//                    cache: false,
-//                    type: 'POST',
-//                    contentType: 'application/json; charset=utf-8',
-//                    data: JSON.stringify({
-//                        url: netcdfDatasetAddress
-//                    }),
-//                    success: function (dataJSON) {
-//        
-//                        // Determine the index of this layer within the WorldWindow
-//                        var variableLayer = new WorldWind.RenderableLayer(dataJSON.variable.name + " varibale");
-//
-//                        var index = self.backgroundLayers().length + self.baseLayers().length + self.overlayLayers().length;
-//
-//                        LayerManager.applyOptionsToLayer(variableLayer, {enable: false}, constants.LAYER_CATEGORY_OVERLAY);
-//
-//                        self.globe.wwd.insertLayer(index, variableLayer);
-//
-//                        // Add a proxy for this layer to the list of overlays
-//                        var variableLayerViewModel = LayerManager.createLayerViewModel(variableLayer);
-//
-//                        var variable = {
-//                                name: dataJSON.variable.name,
-//                                minDate: dataJSON.variable.minDate,
-//                                maxDate: dataJSON.variable.maxDate,
-//                                imageMinDate: dataJSON.variable.imageMinDate,
-//                                imageMaxDate: dataJSON.variable.imageMaxDate,
-//                                layer: variableLayer,
-//                                layerview: variableLayerViewModel,
-//                                address: dataJSON.variable.address,
-//                                imagesAddress: dataJSON.variable.imagesAddress,
-//                                images: ko.observableArray()
-//                        };
-//
-//                        netcdfDataset = {
-//                                id: LayerManager.nextNetcdfDatasetId++,
-//                                address: netcdfDatasetAddress,
-//                                title: netcdfDatasetAddress,
-//                                layers: ko.observableArray(),
-//                                variable: variable,
-//                            };
-//                            
-//                        self.netcdfDatasets.push(netcdfDataset);
-//                    }
-//                }).fail(function (xhr, textStatus, err) {
-//                    alert(err);
-//                });
-//            } else {
-//                alert('No URL entered.');
-//            }
-//            
-//        };
-        
         
         /**
          *
