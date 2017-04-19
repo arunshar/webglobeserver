@@ -216,10 +216,12 @@ public class UploadDataset extends HttpServlet {
         try {
             stmt = conn.createStatement();
             String cmd;
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String curDate = dt.format(new Date());
             if(status == 1){
-                cmd = "UPDATE submitted_image_creation_jobs SET status='DONE' where id=" + jobId;
+                cmd = "UPDATE submitted_image_creation_jobs SET status='DONE', finish_time= \""+curDate+"\" where id=" + jobId;
             }else{
-                cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED' where id=" + jobId;
+                cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED', finish_time= \""+curDate+"\"  where id=" + jobId;
             }
             DBUtils.executeUpdate(conn,stmt,cmd);
         } catch (SQLException e) {
