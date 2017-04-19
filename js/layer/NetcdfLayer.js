@@ -1,4 +1,4 @@
-require(['WorldWind'],
+define(['WorldWind'],
     function (ww) {
         "use strict";
 
