@@ -48,7 +48,7 @@ public class LoadImages extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {				
 		int datasetId = Integer.parseInt(request.getParameter("datasetId"));
-        String fieldName = request.getParameter("fieldName");
+        String fieldName = request.getParameter("fieldname");
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
 		ArrayList<String> imageUrls = new ArrayList<String>();
