@@ -128,26 +128,30 @@
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.displayTimePanel"></span>
 	    </form>
 	    <div id="selectTimePanel" style="display: none;">
-                <div class="input-group" align="center">
-                    <label style="width:20px;float:left" for="load-start-date">From:</label>
-                    <input type="date" id="load-start-date"/>
-		    <br/>
-                    <label style="width:20px;float:left" for="load-end-date">To:</label>
-                    <input type="date" id="load-end-date"/>
-                    <button type="button" class="btn btn-primary btn-sm" id="load-images"
-                    		data-bind="click: $root.loadImages">
-                        Load Images
-                    </button>                                      
-                </div>
-                <div class="well"> 
-                    <input type="range"
-                    	   id="index-of-show-date"
-                           data-bind="event: {change: $root.onInputShowDate}"/>                    
-                	<div align="center">
-                    	<input type="text" id="show-date"/>
-                	</div>
-            	</div>
-         </div>	    
+	      <div class="input-group" align="center">
+		<form>
+		  <div class="form-group">
+		    <div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i>
+		      <input type="date" id="load-start-date"/></div>
+		  </div>
+		  <div class="form-group">
+		    <div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i>
+		      <input type="date" id="load-end-date"/></div>
+		  </div>
+		  <button type="button" class="btn btn-primary btn-sm" id="load-images"
+							 data-bind="click: $root.loadImages">
+		    Load Images
+		  </button>                                      
+		</form>                               
+		<div class="well"> 
+		  <input type="range"
+	   id="index-of-show-date"
+    data-bind="event: {change: $root.onInputShowDate}"/>                    
+		  <div align="center">
+		    <input type="text" id="show-date"/>
+		  </div>
+		</div>
+	      </div>	    
 	    </div>	    
 	  </div>
 	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
@@ -209,32 +213,32 @@
 	</div>
       </div>
       <div id="upload" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
-       <div class="panel panel-default">
-        <div class="panel-body">
-<form>
-  <div class="form-group">
-	<div class="input-group-addon"><i class="fa fa-folder" aria-hidden="true"></i><span> HDFS URL</span></div>
-	<input type="text" class="form-control form-control-sm" id="hdfsURL"/>
-  </div>
-  <div class="form-group">
-	<div class="input-group-addon"><span>Dataset Name</span></div>
-	<input type="text" class="form-control form-control-sm" id="dataName"/>
-  </div>
-  <div class="form-group">
-	<div class="input-group-addon"><i class="fa fa-info" aria-hidden="true"></i><span> Data set Description</span></div>
-    <textarea class="form-control" id="dataInfo" rows="3"></textarea>
-  </div>
-  <div class="form-group">
-	<div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i><span> URL for More Information</span></div>
-	<input type="text" class="form-control form-control-sm" id="dataInfoURL"/>
-  </div>
-	<button type="button" class="btn btn-primary btn-sm" id="upload-data" data-bind="click: $root.uploadData">Upload</button>       
-	</form>                               
-	</div>
-	</div>
+	<div class="panel panel-default">
+	  <div class="panel-body">
+	    <form>
+	      <div class="form-group">
+		<div class="input-group-addon"><i class="fa fa-folder" aria-hidden="true"></i><span> HDFS URL</span></div>
+		<input type="text" class="form-control form-control-sm" id="hdfsURL"/>
+	      </div>
+	      <div class="form-group">
+		<div class="input-group-addon"><span>Dataset Name</span></div>
+		<input type="text" class="form-control form-control-sm" id="dataName"/>
+	      </div>
+	      <div class="form-group">
+		<div class="input-group-addon"><i class="fa fa-info" aria-hidden="true"></i><span> Data set Description</span></div>
+		<textarea class="form-control" id="dataInfo" rows="3"></textarea>
+	      </div>
+	      <div class="form-group">
+		<div class="input-group-addon"><i class="fa fa-firefox" aria-hidden="true"></i><span> URL for More Information</span></div>
+		<input type="text" class="form-control form-control-sm" id="dataInfoURL"/>
+	      </div>
+	      <button type="button" class="btn btn-primary btn-sm" id="upload-data" data-bind="click: $root.uploadData">Upload</button>       
+	    </form>                               
+	  </div>
 	</div>
       </div>
-      <script type="text/html" id="layer-template">
+    </div>
+    <script type="text/html" id="layer-template">
 <div class="btn-group btn-block">
 	<!--Layer name and visibility button-->
 	<button type="button"
@@ -246,8 +250,8 @@
 	<span class="layer" data-bind="text: $data.name()"></span>
 	</button>
 	</div>
-      </script>
-      <script type="text/html" id="dataset-template">
+    </script>
+    <script type="text/html" id="dataset-template">
 <div data-bind="style: { background: $data.user_data ? '#C3D9FF' : 'white' }" class="panel panel-info" style="padding:1px;">
 	<span class="dataset" data-bind="text: $data.name"></span>
 	<a href="#" data-bind="click: $root.showInfo" class="dataset-action"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -255,22 +259,22 @@
 	<a href="#" data-bind="click: $root.showAnalysisPanel" class="dataset-action"><span class="glyphicon glyphicon-wrench"></span></a>
 	<a href="#" class="dataset-action"><span class="glyphicon glyphicon-trash"></span></a>
 	</div>
-      </script>
+    </script>
 
-      <!--Spin.js-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
-      <!--JQuery and JQuery UI-->
-      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-      <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-      <!--Bootstrap-->
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <!--Perfect Scrollbar-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.12/js/perfect-scrollbar.jquery.js"></script>
-      <!--Plotly.js-->
-      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-      <!--Require.js and main app-->
-      <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
-      <!--UI Controls-->
-      <script type="text/javascript" src="js/ui_controls.js"></script>
+    <!--Spin.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <!--JQuery and JQuery UI-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <!--Bootstrap-->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--Perfect Scrollbar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.12/js/perfect-scrollbar.jquery.js"></script>
+    <!--Plotly.js-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!--Require.js and main app-->
+    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+    <!--UI Controls-->
+    <script type="text/javascript" src="js/ui_controls.js"></script>
   </body>
 </html>
