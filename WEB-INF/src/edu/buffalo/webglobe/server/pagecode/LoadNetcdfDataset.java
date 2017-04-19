@@ -63,26 +63,26 @@ public class LoadNetcdfDataset extends HttpServlet {
             String cmd = "select f.id as field_id from netcdf_datasets as d and netcdf_dataset_fields as f where f.dataset_id="+id+" and f.fieldname = \""+variableName+"\"";
             rset = DBUtils.executeQuery(conn,stmt,cmd);
             if(rset.next()){
-                int fieldId = rset.getInt("field_id");
-                cmd = "select timestamp, time_index from netcdf_dataset_images where dataset_id="+id+
-                        " and field_id="+fieldId+"and (time_index = max(time_index) or time_index = min(time_index)";
-                rset = DBUtils.executeQuery(conn,stmt,cmd);
                 CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
+
+                int fieldId = rset.getInt("field_id");
+                cmd = "select timestamp from netcdf_dataset_images where dataset_id="+id+
+                        " and field_id="+fieldId+"and time_index = (select min(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
+                rset = DBUtils.executeQuery(conn,stmt,cmd);
                 rset.next();
-                int ind1 = rset.getInt(2);
-                String ts1 = rset.getString(1);
+                String tsmin = rset.getString(1);
+
+                cmd = "select timestamp from netcdf_dataset_images where dataset_id="+id+
+                        " and field_id="+fieldId+"and time_index = (select max(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
+                rset = DBUtils.executeQuery(conn,stmt,cmd);
                 rset.next();
-                int ind2 = rset.getInt(2);
-                String ts2 = rset.getString(1);
-                CalendarDate d1 = dateFormatter.parse(ts1);
-                CalendarDate d2 = dateFormatter.parse(ts2);
-                if(ind1 < ind2){
-                    variableInfo.put("minDate", dateFormatter.toString(d1));
-                    variableInfo.put("maxDate", dateFormatter.toString(d2));
-                }else{
-                    variableInfo.put("minDate", dateFormatter.toString(d2));
-                    variableInfo.put("maxDate", dateFormatter.toString(d1));
-                }
+                String tsmax = rset.getString(1);
+
+                CalendarDate d1 = dateFormatter.parse(tsmin);
+                CalendarDate d2 = dateFormatter.parse(tsmax);
+                variableInfo.put("minDate", dateFormatter.toString(d1));
+                variableInfo.put("maxDate", dateFormatter.toString(d2));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

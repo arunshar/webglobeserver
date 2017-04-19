@@ -298,7 +298,7 @@ define(
 
 	self.showInfo = function(dataset) {
 	  if (!self.infoActive) {
-	    $("#datasetInfo").show().html('<h4>'+dataset.name+'</h4>\n<hr/>'+dataset.info);
+	    $("#datasetInfo").show().html('<h4><a href="'+dataset.info_url+'">'+dataset.name+'</a></h4>\n<hr/>'+dataset.info);
 	    self.infoActive = true;
 	  } else {
 	    $("#datasetInfo").hide();
