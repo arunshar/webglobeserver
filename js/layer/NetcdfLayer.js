@@ -18,7 +18,7 @@ define(['worldwind'],
 
             this.pickEnabled = false;
             this.minActiveAltitude = 3e6;
-	    this.layers = [] 
+	    this.layers = []; 
 	    self.prepopulate = function(imgUrls){
 	      for(var i = 0; i < imgUrls.length; i++){
 		var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,imgUrls[i]);
