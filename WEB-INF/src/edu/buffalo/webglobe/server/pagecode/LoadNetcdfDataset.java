@@ -80,8 +80,8 @@ public class LoadNetcdfDataset extends HttpServlet {
 
                 CalendarDate d1 = dateFormatter.parse(tsmin);
                 CalendarDate d2 = dateFormatter.parse(tsmax);
-                variableInfo.put("minDate", dateFormatter.toString(d1));
-                variableInfo.put("maxDate", dateFormatter.toString(d2));
+                variableInfo.put("imageMinDate", dateFormatter.toString(d1));
+                variableInfo.put("imageMaxDate", dateFormatter.toString(d2));
 
             }
         } catch (SQLException e) {
