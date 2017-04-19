@@ -11,10 +11,10 @@ define(['worldwind'],
         var NetcdfLayer = function () {
             WorldWind.RenderableLayer.call(this, "NetcdfLayer");
 
-            var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,
-                "http://199.109.195.187:8000//user/ubuntu/BCSD/tasmax/variable/tasmax/2014-01-29.png");
+            //var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,
+            //    "http://199.109.195.187:8000//user/ubuntu/BCSD/tasmax/variable/tasmax/2014-01-29.png");
 
-            this.addRenderable(surfaceImage);
+            //this.addRenderable(surfaceImage);
 
             this.pickEnabled = false;
             this.minActiveAltitude = 3e6;
