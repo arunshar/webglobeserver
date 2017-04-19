@@ -69,14 +69,16 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
             Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
             logger.info("Coming here");
 			while (rset.next()) {
-                logger.info("Going in");
+
 				Map<String, String> submittedJobInfo = new HashMap<String, String>();
 				int id = rset.getInt("id");
 				String analysis = rset.getString("analysis");
 				String field = rset.getString("field");
 				String status = rset.getString("status");
 				Timestamp submission_time = rset.getTimestamp("submission_time");
+                logger.info("Going in");
 				Timestamp finish_time = rset.getTimestamp("finish_time");
+                logger.info("Going out");
 				String result_loc = rset.getString("result_loc");
 				String priority = rset.getString("priority");
 				String name = rset.getString("name");
