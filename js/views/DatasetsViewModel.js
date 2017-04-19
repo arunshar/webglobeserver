@@ -34,8 +34,7 @@ define(
 	self.selectedDatasetAnalysis = ko.observable();
 	self.fields = ko.observableArray([]);
 	self.analysisFields = ko.observableArray([]);
-	self.analysisMethods = ko
-	  .observableArray([ "Change Detection" ]);
+	self.analysisMethods = ko.observableArray([ "Change Detection" ]);
 	self.infoActive = false;
 	self.openActive = false;
 	self.openAnalysis = false;
@@ -113,6 +112,7 @@ define(
 
 	self.showDatasetPanel = function(dataset) {
 	  if (!self.openActive) {
+	    alert('Coming here');
 	    self.selectedDataset = dataset;
 	    for (var i = 0; i < dataset.fields.length; i++) {
 	      self.fields.push(dataset.fields[i]);
@@ -184,7 +184,6 @@ define(
 
 	self.loadImages = function() {
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  alert("skjhkfjsdhfkjshdkf");
 
 	  if (self.selectedDataset.imagesAddress  !== "") {
 	    var id = self.selectedDataset.id;
