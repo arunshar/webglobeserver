@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetSubmittedAnalysisJobsInfo
@@ -66,8 +65,6 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 					+ userName + "\" order by J.submission_time";
 			rset = DBUtils.executeQuery(conn, stmt, cmd);
 			int i = 0;
-            Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-            logger.info("Coming here");
 			while (rset.next()) {
 
 				Map<String, String> submittedJobInfo = new HashMap<String, String>();
@@ -76,9 +73,7 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 				String field = rset.getString("field");
 				String status = rset.getString("status");
 				Timestamp submission_time = rset.getTimestamp("submission_time");
-                logger.info("Going in");
 				Timestamp finish_time = rset.getTimestamp("finish_time");
-                logger.info("Going out");
 				String result_loc = rset.getString("result_loc");
 				String priority = rset.getString("priority");
 				String name = rset.getString("name");
