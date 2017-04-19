@@ -24,6 +24,7 @@ import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import edu.buffalo.webglobe.server.utils.NetcdfDirNoVar;
 import edu.buffalo.webglobe.server.utils.Utils;
+import scala.collection.immutable.Stream;
 import ucar.ma2.Array;
 import ucar.ma2.MAMath;
 
@@ -182,11 +183,12 @@ public class UploadDataset extends HttpServlet {
                                     Array src = netcdfDir.getData(i);
                                     float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
                                     String imgLocation = Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png";
+                                    String imgURL = Constants.PUBLIC_ADDRESS +"/" + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png";
                                     Utils.createImage(data, (float) minmax.min, (float) minmax.max, imgLocation);
                                     //create an entry in the database
                                     //datasetId, fieldId, timeindex, timestamp, imgLocation
                                     cmd = "INSERT INTO netcdf_dataset_images (dataset_id, field_id, time_index,timestamp, img_location)"+
-                                           "VALUES("+ datasetId +","+fieldId+","+i+",\""+netcdfDir.getDateFromIndex(i)+"\",\""+imgLocation+"\")";
+                                           "VALUES("+ datasetId +","+fieldId+","+i+",\""+netcdfDir.getDateFromIndex(i)+"\",\""+imgURL+"\")";
                                     DBUtils.executeUpdate(conn,stmt1,cmd);
                                 }
                                 status = 1;

@@ -202,7 +202,6 @@ define(
 
 	      var len = imageUrls.length - 1;
 
-	      alert(imageUrls);
 	      self.selectedDataset.images.removeAll();
 	      for (var i = 0; i < len; ++i) {
 		self.selectedDataset.images.push(new WorldWind.SurfaceImage(
