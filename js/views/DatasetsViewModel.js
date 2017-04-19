@@ -111,6 +111,7 @@ define(
 
 
 	self.showDatasetPanel = function(dataset) {
+	  alert('Coming here in ');
 	  if (!self.openActive) {
 	    alert('Coming here');
 	    self.selectedDataset = dataset;
