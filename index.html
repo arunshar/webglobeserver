@@ -294,8 +294,8 @@
 	</div>
       </script>
       <script type="text/html" id="dataset-template">
-<div data-bind="style: { background: $data.user_data ? '#C3D9FF' : 'white' }" class="panel panel-info" style="padding:1px;">
-	<span class="dataset" data-bind="text: $data.name"></span>
+<div data-bind="style: { background: 'white' }" class="panel panel-info" style="padding:1px;">
+	<span class="dataset" title="{$data.name}" data-bind="text: $data.name"></span>
 	<a href="#" data-bind="click: $root.showInfo" class="dataset-action"><span class="glyphicon glyphicon-info-sign"></span></a>
 	<a href="#" data-bind="click: $root.showDatasetPanel" class="dataset-action"><span class="glyphicon glyphicon-eye-open"></span></a>
 	<a href="#" data-bind="click: $root.showAnalysisPanel" class="dataset-action"><span class="glyphicon glyphicon-wrench"></span></a>
