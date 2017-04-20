@@ -18,7 +18,7 @@ define(['worldwind'],
 
             //this.addRenderable(surfaceImage);
 
-            this.pickEnabled = false;
+            this.pickEnabled = true;
             this.minActiveAltitude = 3e6;
 	    self.currentIndex = 0;
 	    self.images = []; 

@@ -78,7 +78,7 @@ define(
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
 		      var n = 25
-		      var shortName = (name.length<n) ? ' '.repeat(n-name.length)+name : name.substring(0,n-1);
+			var shortName = (name.length<n) ? ' '.repeat(n-name.length)+name : name.substring(0,n-1);
 
 		      self.availableDatasets.push({
 			'id' : id,
@@ -241,6 +241,17 @@ define(
 	  self.selectedDataset.layer.showLast();
 	  globe.redraw();
 	}
+
+	self.play = function() {
+	  var interval = window.setInterval(function () {
+	      window.clearInterval(interval);
+	      window.setInterval(function () {
+		  self.selectedDataset.layer.showNext();
+		  globe.redraw();
+	      }, 200);
+	  }, 200);
+	}
+
 	self.analyzeDataset = function() {
 	  if (self.submitting) {
 	    logger
@@ -272,8 +283,8 @@ define(
 	      analysisoutputname: analysisoutputname
 	    }),
 	    success: function (data) {
-		var message = data.message;
-		logger.log(message,'info');
+	      var message = data.message;
+	      logger.log(message,'info');
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");
@@ -296,10 +307,10 @@ define(
 	  var dataName = $('#dataName').val();
 	  var dataInfo = $('#dataInfo').val();
 	  var dataInfoURL = $('#dataInfoURL').val();
-  	  if (hdfsURL == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
-  	    logger.log('Insufficient arguments.','alert-danger');
+	  if (hdfsURL == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
+	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
-  	  }	
+	  }	
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  self.uploading = true;
 
@@ -314,8 +325,8 @@ define(
 	      dataInfoURL: dataInfoURL
 	    }),
 	    success: function (data) {
-		var message = data.message;
-		logger.log(message,'info');
+	      var message = data.message;
+	      logger.log(message,'info');
 
 	    }
 	  }).fail(function (xhr, textStatus, err) {
