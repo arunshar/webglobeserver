@@ -202,22 +202,6 @@ define(
 	    success: function (data) {
 	      var imageUrls = data.imageUrls;
 	      var imageDates = data.imageDates;
-		/*
-	      var len = imageUrls.length - 1;
-	      self.selectedDataset.images.removeAll();
-	      for (var i = 0; i < len; ++i) {
-		self.selectedDataset.images.push(new WorldWind.SurfaceImage(
-		      new WorldWind.Sector(-90, 90, -180,180),imageUrls[i]));
-	      }
-
-	      $('#index-of-show-date').attr({
-		"max" : len-1,
-		"min" : 0
-	      });
-
-	      $('#index-of-show-date').val(0);
-	      $('#index-of-show-date').change();
-	      */
 	      self.selectedDataset.layer.populate(imageUrls);
 	      self.selectedDataset.layer.enabled = true;
 	    }
@@ -227,19 +211,15 @@ define(
 
 	}
 
-	self.onInputShowDate = function() {
-	  self.selectedDataset.layer.showAt(0);
-	  /*
-	  var index = parseInt($('#index-of-show-date').val());
-	  var imagesource = self.selectedDataset.images()[index]._imageSource;
-	  $('#show-date').val(imagesource.substring(imagesource.lastIndexOf('/')+1));
-
-	  self.selectedDataset.layer.removeAllRenderables();
-	  self.selectedDataset.layer.addRenderable(self.selectedDataset.images()[index]);
-	  */
+	self.showNext = function() {
+	  self.selectedDataset.layer.showNext();
 	  globe.redraw();					
 	}
 
+	self.showPrevious = function() {
+	  self.selectedDataset.layer.showPrevious();
+	  globe.redraw();					
+	}
 	self.analyzeDataset = function() {
 	  if (self.submitting) {
 	    logger

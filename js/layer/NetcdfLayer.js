@@ -20,6 +20,7 @@ define(['worldwind'],
 
             this.pickEnabled = false;
             this.minActiveAltitude = 3e6;
+	    self.currentIndex = 0;
 	    self.images = []; 
 	    self.populate = function(imgUrls){
 	      for(var i = 0; i < imgUrls.length; i++){
@@ -30,10 +31,19 @@ define(['worldwind'],
 	    self.empty = function(){
 	      self.images = [];
 	    }
-	    self.showAt = function(index){
-	      alert('Comin in showat');
+	    self.showNext = function(){
 	      self.removeAllRenderables();
-	      self.addRenderable(self.images[index]);
+	      self.addRenderable(self.images[self.currentIndex]);
+	      self.currentIndex++;
+	      if(self.currentIndex == self.images.length)
+		self.currentIndex = 0;
+	    }
+	    self.showPrevious = function(){
+	      self.removeAllRenderables();
+	      self.addRenderable(self.images[self.currentIndex]);
+	      self.currentIndex--;
+	      if(self.currentIndex < 0)
+		self.currentIndex = self.images.length-1;;
 	    }
 	}
 
