@@ -33,7 +33,7 @@ public class NetcdfDir implements Serializable {
 	private CalendarDate endDate;
 
 	public NetcdfDir(String hdfsuri, String varName){
-        String [] tokens = NetCDFUtils.parseHDFSURL(hdfsuri);
+        String [] tokens = Utils.parseHDFSURL(hdfsuri);
         if(tokens == null){
             return;
         }
@@ -106,7 +106,7 @@ public class NetcdfDir implements Serializable {
 	public String getDateFromIndex(int i) {
 		CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
-		return dateFormatter.toString(startDate.add(i , CalendarPeriod.Field.Day));
+		return dateFormatter.toString(startDate.add(i, CalendarPeriod.Field.Day));
 	}
 
 	public Array getData(int i) {

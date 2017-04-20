@@ -251,14 +251,12 @@ define(
 	  }
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
 	  var analysisname = $("#analysisSelect :selected").text();
+	  var analysisoutputname = $("#analysisOutputName").val();
 	  var url = self.selectedDatasetAnalysis.url;
 	  logger.log("Submitting " + analysisname + " <a href=\""
 	      + url + "\">" + self.selectedDatasetAnalysis.name
 	      + ":" + fieldname + "</a>", "alert-info");
-	  // start submitting
-	  //DINH -- Add your analysis submission code here
-	  //add an entry to the submitted_jobs table
-	  //add dataset details to the netcdf_datasets table and netcdf_dataset_fields table
+
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	  $.ajax({
@@ -270,10 +268,12 @@ define(
 	      datasetname: self.selectedDatasetAnalysis.name,
 	      url: url,
 	      analysisname: analysisname,
-	      fieldname: fieldname
+	      fieldname: fieldname,
+	      analysisoutputname: analysisoutputname
 	    }),
 	    success: function (data) {
-
+		var message = data.message;
+		logger.log(message,'info');
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");

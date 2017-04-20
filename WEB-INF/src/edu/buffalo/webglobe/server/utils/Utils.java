@@ -43,7 +43,7 @@ public class Utils {
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;
 		int numLongitudes = data[0].length;
-		Utils.logger.info("Size is "+numLatitudes+" and "+numLongitudes);
+		Utils.logger.info("Size is " + numLatitudes + " and " + numLongitudes);
 		NetcdfColorMap ncColormap;
 		try {
 			ncColormap = NetcdfColorMap.createColorMap("rgb_", min, max,
@@ -94,4 +94,17 @@ public class Utils {
 
 		return false;
 	}
+
+    public static String[] parseHDFSURL(String hdfsuri){
+
+        try {
+            String[] tokens = new String[2];
+            String s1 = hdfsuri.substring(hdfsuri.indexOf("://") + 3, hdfsuri.length());
+            tokens[0] = "hdfs://" + s1.substring(0, s1.indexOf('/'));
+            tokens[1] = s1.substring(s1.indexOf('/'), s1.length());
+            return tokens;
+        }catch(Exception e) {
+            return null;
+        }
+    }
 }

@@ -144,7 +144,7 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
 .topalert {
   position:fixed; 
   top: 40px; 
-  left: 120px; 
+  left: 150px; 
   width: 40%;
   border: 1px solid transparent;
   border-radius: 4px;

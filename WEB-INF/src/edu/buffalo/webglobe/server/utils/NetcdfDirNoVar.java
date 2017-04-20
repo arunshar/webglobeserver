@@ -6,7 +6,6 @@ package edu.buffalo.webglobe.server.utils;
  */
 
 import ucar.ma2.Array;
-import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.dataset.NetcdfDataset;
@@ -17,9 +16,7 @@ import ucar.nc2.time.CalendarDate;
 import ucar.nc2.time.CalendarDateFormatter;
 import ucar.nc2.time.CalendarPeriod;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -46,7 +43,7 @@ public class NetcdfDirNoVar implements Serializable {
 
     public NetcdfDirNoVar(String hdfsuri) throws Exception {
         this.logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        String [] tokens = NetCDFUtils.parseHDFSURL(hdfsuri);
+        String [] tokens = Utils.parseHDFSURL(hdfsuri);
         if(tokens == null){
             return;
         }

@@ -93,8 +93,6 @@ public class UploadDataset extends HttpServlet {
                     curDate + "\"," +
                     "NULL" + ",1)";
 
-
-
             ResultSet rs = DBUtils.executeInsert(conn,stmt,cmd);
 
             if (rs.next()) {

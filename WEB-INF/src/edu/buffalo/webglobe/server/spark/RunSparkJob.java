@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 import org.apache.spark.launcher.SparkAppHandle;
 import org.apache.spark.launcher.SparkLauncher;
 
 public class RunSparkJob {
 
+    private static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 	public static String[] createSparkCluster(String scriptPath, int noNodes,
 			String typeNode) {
 		try {
@@ -17,7 +19,7 @@ public class RunSparkJob {
 			//String command = "ssh -i /home/dtran/Data/work/Aristotle/privatekeys/aristotlecloud/dtran2.pem -o StrictHostKeychecking=no centos@199.109.195.163";
 			command = command + " " + scriptPath + " -n " + noNodes
 					+ " -k dtran2 -g linux -t " + typeNode;
-			System.out.println(command);
+			logger.info(command);
 			String[] outputs = new String[3];
 			Process p = Runtime.getRuntime().exec(command);
 			InputStream in = p.getInputStream();
@@ -37,11 +39,11 @@ public class RunSparkJob {
 			in.close();
 			bufferedReader.close();
 			p.waitFor();
-			System.out.println("Create exit code: " + p.exitValue());
+			logger.info("Create exit code: " + p.exitValue());
 
 			return outputs;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		return null;
 	}
@@ -76,7 +78,7 @@ public class RunSparkJob {
 			while (!handle.getState().isFinal()) {
 				synchronized (handle) {
 					handle.wait();
-					System.out.println(handle.getState().toString());
+					logger.info(handle.getState().toString());
 				}
 			}
 
@@ -92,9 +94,8 @@ public class RunSparkJob {
 	public static void terminateCluster(String terminateScriptPath,
 			String reservationid) {
 		try {
-			System.out.println("TERMINATE SPARK CLUSTER ...... ");
-			System.out
-					.println("**************************************************************");
+			logger.info("TERMINATE SPARK CLUSTER ...... ");
+
 			String command = "ssh -i  /home/ubuntu/privateKeys/dtran2.private -o StrictHostKeychecking=no centos@172.17.49.178";
 			//String command = "ssh -i /home/dtran/Data/work/Aristotle/privatekeys/aristotlecloud/dtran2.pem -o StrictHostKeychecking=no centos@199.109.195.163";
 			command = command + " " + terminateScriptPath + " " + reservationid;
@@ -109,12 +110,10 @@ public class RunSparkJob {
 			in.close();
 			bufferedReader.close();
 			p.waitFor();
-			System.out.println("Terminate exit code: " + p.exitValue());
+			logger.info("Terminate exit code: " + p.exitValue());
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
-		System.out
-				.println("****************************************************************");
 	}
 }
