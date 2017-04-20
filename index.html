@@ -204,13 +204,13 @@
 		<tr><th></th><th>Dataset</th><th>Analysis</th><th>Submitted</th><th>Finished</th><th>Output</th><th>Status</th></tr>
 	      </thead>
 	      <tbody data-bind="foreach: submittedAnalysisJobs">
-		<tr>
+		<tr data-bind="click: function() {$root.getSubmittedAnalysisJobInfo($data.result_loc)}">
 		  <td data-bind="text: $data.index"></td>
 		  <td data-bind="text: $data.name"></td>
 		  <td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
 		  <td data-bind="text: $data.submission_time"></td>
 		  <td data-bind="text: $data.finish_time"></td>
-		  <td data-bind="click: function() {$root.getSubmittedAnalysisJobInfo()},text: $data.result_loc.substring(0,10)"></td>
+		  <td data-bind="text: $data.result_loc.substring(0,10)"></td>
 		  <td data-bind="text: $data.status"></td>
 		</tr>
 	      </tbody>
