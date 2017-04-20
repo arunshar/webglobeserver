@@ -103,9 +103,12 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 	    // --------------------------------------------------------
 	    // Bind view models to the corresponding HTML elements
 	    // --------------------------------------------------------
+	    var dvModel = new DatasetsViewModel(globe,logger);
+
 	    ko.applyBindings(new LayersViewModel(globe), document.getElementById('layers'));
-	    ko.applyBindings(new DatasetsViewModel(globe,logger),document.getElementById('datasets'));
-	    ko.applyBindings(new DatasetsViewModel(globe,logger),document.getElementById('upload'));
+	    ko.applyBindings(dvModel,document.getElementById('datasets'));
+	    ko.applyBindings(dvModel,document.getElementById('upload'));
+	    ko.applyBindings(dvModel,document.getElementById('charts'));
 	    ko.applyBindings(new ProjectionSwitchModel(globe),document.getElementById('projectionSwitch'));
 	    ko.applyBindings(new AccountManagerModel(logger),document.getElementById('account'));
 
