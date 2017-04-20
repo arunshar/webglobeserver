@@ -40,6 +40,7 @@ define(['worldwind'],
 	    self.showNext = function(){
 	      self.removeAllRenderables();
 	      self.addRenderable(self.images[self.currentIndex]);
+	      self.opacity = 0.7;
 	      self.addScreenText();
 	      self.currentIndex++;
 	      if(self.currentIndex == self.images.length)
@@ -48,6 +49,7 @@ define(['worldwind'],
 	    self.showPrevious = function(){
 	      self.removeAllRenderables();
 	      self.addRenderable(self.images[self.currentIndex]);
+	      self.opacity = 0.7;
 	      self.addScreenText();
 	      self.currentIndex--;
 	      if(self.currentIndex < 0)
@@ -58,6 +60,7 @@ define(['worldwind'],
 	      self.removeAllRenderables();
 	      self.currentIndex = 0;
 	      self.addRenderable(self.images[self.currentIndex]);
+	      self.opacity = 0.7;
 	      self.addScreenText();
 	    }
 
@@ -65,6 +68,7 @@ define(['worldwind'],
 	      self.removeAllRenderables();
 	      self.currentIndex = self.images.length-1;
 	      self.addRenderable(self.images[self.currentIndex]);
+	      self.opacity = 0.7;
 	      self.addScreenText();
 	    }
 
