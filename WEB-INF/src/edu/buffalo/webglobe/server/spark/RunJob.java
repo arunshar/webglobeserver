@@ -25,6 +25,7 @@ import edu.buffalo.webglobe.server.utils.Utils;
 @WebServlet("/RunJob")
 public class RunJob extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private String userName;
     private int datasetId;
     private String url;
     private String analysisOutputName;
@@ -53,7 +54,7 @@ public class RunJob extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        String userName = request.getUserPrincipal().getName();
+        this.userName = request.getUserPrincipal().getName();
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         this.datasetId = data.get("datasetid").getAsInt();
         this.url =  data.get("url").getAsString();
@@ -110,9 +111,9 @@ public class RunJob extends HttpServlet {
 
         String hdfsuri = Utils.parseHDFSURL(url)[0];
         String inputDir = url;
-        String logHypersFile = url + "/globalLogHypersFile";
-        String outputDir = url + "/analysis/"+analysisOutputName;
-        String monitorDataFile = url + "/monitorDataFile";
+        String logHypersFile = url + "/"+userName+"/globalLogHypersFile";
+        String outputDir = url + "/"+userName+"/analysis/"+analysisOutputName;
+        String monitorDataFile = url + "/"+userName+"/monitorDataFile";
         String colorFileName = "fullcolorvalues.xml";
         String numSlices = "3600";
         String d = "60";
