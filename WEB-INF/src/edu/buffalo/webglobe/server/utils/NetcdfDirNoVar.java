@@ -54,6 +54,7 @@ public class NetcdfDirNoVar implements Serializable {
         this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 
         // get dimension's length
+        logger.severe(">>>>>" +this.filepaths.size());
         NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.hdfsuri, filepaths.get(0), 3000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
         GridDataset gridDataset = new GridDataset(dataset);
