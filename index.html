@@ -270,7 +270,9 @@
       </div>
     </div>
     <div id="charts" class="col-sm-2 tabcontentRight" style="width: 35% !important;">
-      <button data-bind="click: $root.clearChart"><i class="fa fa-trash" aria-hidden="true"></i></button>
+      <button type="button" id="clearChart" class="btn btn-sm" data-bind="click: $root.clearChart">
+	<i class="fa fa-trash"></i>
+      </button>
       <div id="innerChart" style="width:600px;height:250px;" >
       </div>
     </div>
