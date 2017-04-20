@@ -193,6 +193,7 @@ define(
 		  "alert-warning")
 	      return;
 	  }
+	  self.loading = true;
 	  self.selectedDataset.layer.empty();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
@@ -223,6 +224,12 @@ define(
 
 	}
 
+	self.isNotLoaded = function(){
+	  if(self.selectedDataset != null){
+	    return !self.selectedDataset.loaded;
+	  }
+	  return true;
+	}
 	self.showNext = function() {
 	  self.selectedDataset.layer.showNext();
 	  globe.redraw();					
