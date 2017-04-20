@@ -166,6 +166,7 @@ define(
 	    }),
 	    success: function (dataJSON) {
 	      $('#load-images').show();
+	      $('#player').hide();
 	      $('#load-start-date').attr({
 		"max" : dataJSON.variable.imageMaxDate,
 		"min" : dataJSON.variable.imageMinDate
@@ -209,6 +210,7 @@ define(
 	      self.selectedDataset.layer.enabled = true;
 	      self.selectedDataset.loaded = true;
 	      $('#load-images').hide();
+	      $('#player').show();
 	      logger.log("Succesfully loaded images","alert-info");
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -252,17 +254,17 @@ define(
 	}
 
 	self.play = function() {
-	  if(self.selectedDataset.loaded && self.interval != null){
+	  if(self.interval != null){
 	    window.clearInterval(self.interval);
-	    self.interval = window.setInterval(function () {
-	      self.selectedDataset.layer.showNext();
-	      globe.redraw();
-	    }, 500);
 	  }
+	  self.interval = window.setInterval(function () {
+	    self.selectedDataset.layer.showNext();
+	    globe.redraw();
+	  }, 500);
 	}
 
 	self.stop = function() {
-	  if(self.selectedDataset.loadedi && self.interval != null){
+	  if(self.interval != null){
 	    window.clearInterval(self.interval);
 	  }
 	}
