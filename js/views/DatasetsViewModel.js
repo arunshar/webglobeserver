@@ -49,9 +49,9 @@ define(
 	  y = recognizer.clientY;
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
-
-	  alert(pickList.objects.length);
-	  if (pickList.objects.length == 1 && pickList.objects[0].isTerrain) {
+	  if(self.selectedDataset != null and self.selectedDataset.loaded = true){
+	    alert(pickList.objects.length);
+	  }else{
 	    var position = pickList.objects[0].position;
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
 	  }
