@@ -54,7 +54,7 @@ public class NetcdfDirNoVar implements Serializable {
         this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
 
         // get dimension's length
-        logger.severe(">>>>>" +this.filepaths.size());
+
         NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.hdfsuri, filepaths.get(0), 3000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
         GridDataset gridDataset = new GridDataset(dataset);
@@ -62,6 +62,7 @@ public class NetcdfDirNoVar implements Serializable {
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
+        logger.severe(">>>>>" +grids.size());
         for(int i = 0; i < grids.size(); i++){
             GeoGrid g = (GeoGrid) grids.get(i);
             variables.add(g.getName());
