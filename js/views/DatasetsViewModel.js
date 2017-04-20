@@ -49,10 +49,10 @@ define(
 	  var y = recognizer.clientY;
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
+	  var position = pickList.objects[0].position;
 	  if(self.selectedDataset != null && self.selectedDataset.loaded == true){
-	    self.plotChart(x,y);
+	    self.plotChart(position.latitude,position.longitude);
 	  }else{
-	    var position = pickList.objects[0].position;
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
 	  }
 	};
@@ -147,7 +147,7 @@ define(
 	    }
 	    self.selectedDataset = null;
 	    self.fields.removeAll();
-	    Plotly.purge('innerChart');
+	    self.clearChart();
 
 	    $("#datasetOpenPanel").hide();
 	    self.openActive = false;
@@ -374,6 +374,7 @@ define(
 	self.populateDatasets();
 
 	self.plotChart = function(lat,lon){
+	  alert(lat+" "+lon);
 	  Plotly.plot("innerChart", [{
 	    x: [1, 2, 3, 4, 5],
 	    y: [1, 2, 4, 8, 16] }], {
