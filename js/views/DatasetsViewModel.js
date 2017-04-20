@@ -48,7 +48,7 @@ define(
 	  var x = recognizer.clientX,
 	  y = recognizer.clientY;
 
-	  var pickList = wwd.pick(wwd.canvasCoordinates(x, y));
+	  var pickList = globe.wwd.pick(wwd.canvasCoordinates(x, y));
 
 	  alert(pickList.objects.length);
 	  if (pickList.objects.length == 1 && pickList.objects[0].isTerrain) {
