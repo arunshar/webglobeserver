@@ -37,7 +37,6 @@ define(
 	self.analysisMethods = ko.observableArray([ "Change Detection" ]);
 	self.infoActive = false;
 	self.openActive = false;
-	self.loading = false;
 	self.openAnalysis = false;
 	self.downloading = false;
 	self.submitting = false;
@@ -127,7 +126,6 @@ define(
 	    }
 	    self.selectedDataset = null;
 	    self.fields.removeAll();
-	    self.loading = false;
 
 	    $("#datasetOpenPanel").hide();
 	    self.openActive = false;
@@ -166,6 +164,7 @@ define(
 	      fieldname: fieldname
 	    }),
 	    success: function (dataJSON) {
+	      $('#load-images').show();
 	      $('#load-start-date').attr({
 		"max" : dataJSON.variable.imageMaxDate,
 		"min" : dataJSON.variable.imageMinDate
@@ -186,15 +185,6 @@ define(
 	}
 
 	self.loadImages = function() {
-	  if (self.loading) {
-	    logger
-	      .log(
-		  "Please wait till the current images are loaded.",
-		  "alert-warning")
-	      return;
-	  }
-	  alert("coming here");
-	  self.loading = true;
 	  self.selectedDataset.layer.empty();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
@@ -217,7 +207,7 @@ define(
 	      self.selectedDataset.layer.populate(imageUrls,imageDates);
 	      self.selectedDataset.layer.enabled = true;
 	      self.selectedDataset.loaded = true;
-	      self.loading = false;
+	      $('#load-images').hide();
 	      logger.log("Succesfully loaded images","alert-info");
 	    }
 	  }).fail(function (xhr, textStatus, err) {
