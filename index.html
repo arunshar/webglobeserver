@@ -180,16 +180,19 @@
 	  </div>
 	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
 	    <form role="form" id="analysisForm">
+	      <div class="col-xs-12">
 	      <label for="fieldAnalysisSelect">Field</label>
 	      <select name="fieldAnalysisSelect" data-bind="options: analysisFields" id="fieldAnalysisSelect"></select>
+	      </div>
+	      <div class="col-xs-12">
 	      <label for="analysisSelect">Analysis</label>
 	      <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
-	      <br/>
+	      </div>
 	      <div class="col-xs-12">
 	      <label for="analysisOutputName">Output Name</label>
 		<input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
 	      </div>
-	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.analyzeDataset"></span>	      
+	      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
 
 	    </form>
 	  </div>
