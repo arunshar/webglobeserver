@@ -205,7 +205,7 @@
 	      </thead>
 	      <tbody data-bind="foreach: submittedAnalysisJobs">
 		<tr>
-		  <td><span data-bind="click: $root.getDetailedAnalysisJobInfo($data.index), text: $data.index"></span></td>
+		  <td data-bind="click: $root.getDetailedAnalysisJobInfo($data.index)"><span data-bind="text: $data.index"></span></td>
 		  <td data-bind="text: $data.name"></td>
 		  <td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
 		  <td data-bind="text: $data.submission_time"></td>
