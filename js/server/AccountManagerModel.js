@@ -78,7 +78,7 @@ define(['knockout',
 	}
 	self.getSubmittedUploadJobs();
 	self.getSubmittedAnalysisJobInfo = function(result_loc){
-	  logger.log("The results file was created at <br/><b>"+result_loc+"</b>","alert-info")
+	  logger.log("The results file was created at <br/><span style=\"font-size:10px;\">"+result_loc+"</span>","alert-info")
 	}
       }
       return AccountManagerModel;
