@@ -184,7 +184,11 @@
 	      <select name="fieldAnalysisSelect" data-bind="options: analysisFields" id="fieldAnalysisSelect"></select>
 	      <label for="analysisSelect">Analysis</label>
 	      <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
+	      <br/>
+	      <label for="analysisOutputName">Output Name</label>
+		<input type="text" name="analysisOutputName" class="form-control form-control-sm" id="analysisOutputName"/>
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.analyzeDataset"></span>	      
+
 	    </form>
 	  </div>
 	</div>
