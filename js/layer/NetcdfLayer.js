@@ -29,6 +29,9 @@ define(['worldwind'],
 		self.layers.push(layer);
 	      }
 	    }
+	    self.empty = function(){
+	      self.layers = [];
+	    }
 	}
 
         NetcdfLayer.prototype = Object.create(WorldWind.RenderableLayer.prototype);

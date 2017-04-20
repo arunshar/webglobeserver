@@ -118,9 +118,11 @@ define(
 	    $("#datasetOpenPanel").show();
 	    $("#selectTimePanel").hide();
 	    self.openActive = true;
-	    self.selectedDataset.layer.enabled = true;
 	  } else {
-	    self.selectedDataset.layer.enabled = false;
+	    if(self.selectedDataset.layer.enabled){
+	      self.selectedDataset.layer.enabled = false;
+	      globe.redraw();
+	    }
 	    self.selectedDataset = null;
 	    self.fields.removeAll();
 
@@ -181,6 +183,7 @@ define(
 	}
 
 	self.loadImages = function() {
+	  self.selectedDataset.layer.empty();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	  var id = self.selectedDataset.id;
@@ -224,12 +227,15 @@ define(
 	}
 
 	self.onInputShowDate = function() {
+	  self.selectedDataset.layer.enabled = true;
+	  /*
 	  var index = parseInt($('#index-of-show-date').val());
 	  var imagesource = self.selectedDataset.images()[index]._imageSource;
 	  $('#show-date').val(imagesource.substring(imagesource.lastIndexOf('/')+1));
 
 	  self.selectedDataset.layer.removeAllRenderables();
 	  self.selectedDataset.layer.addRenderable(self.selectedDataset.images()[index]);
+	  */
 	  globe.redraw();					
 	}
 
