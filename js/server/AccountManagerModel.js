@@ -78,8 +78,8 @@ define(['knockout',
 	}
 	self.getSubmittedUploadJobs();
 
-	self.getDetailedAnalysisJobInfo = function(jobId){
-	  logger.log("Detailed Information for "+jobId,"info");
+	self.getDetailedAnalysisJobInfo = function(){
+	  logger.log("Detailed Information for ","info");
 	}
       }
       return AccountManagerModel;
