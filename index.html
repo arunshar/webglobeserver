@@ -205,13 +205,16 @@
 	      </thead>
 	      <tbody data-bind="foreach: submittedAnalysisJobs">
 		<tr>
-		  <td data-bind="text: $data.index, click: function(){ $root.getDetailedAnalysisJobInfo($data.index)}"></td>
+		  <td data-bind="text: $data.index"></td>
 		  <td data-bind="text: $data.name"></td>
 		  <td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
 		  <td data-bind="text: $data.submission_time"></td>
 		  <td data-bind="text: $data.finish_time"></td>
 		  <td data-bind="text: $data.result_loc.substring(0,10)"></td>
 		  <td data-bind="text: $data.status"></td>
+		</tr>
+		<tr>
+		  <td>Result Location: </td><td data-bind="text:$data.result_loc"></td>
 		</tr>
 	      </tbody>
 	    </table>
