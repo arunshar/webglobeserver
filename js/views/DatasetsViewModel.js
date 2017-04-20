@@ -183,6 +183,7 @@ define(
 	}
 
 	self.loadImages = function() {
+	  $("#load-images").hide();
 	  self.selectedDataset.layer.empty();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
