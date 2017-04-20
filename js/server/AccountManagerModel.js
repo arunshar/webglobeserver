@@ -77,6 +77,10 @@ define(['knockout',
 	  });
 	}
 	self.getSubmittedUploadJobs();
+
+	self.getDetailedAnalysisJobInfo = function(){
+	  logger.log("Detailed Information","info");
+	}
       }
       return AccountManagerModel;
     }
