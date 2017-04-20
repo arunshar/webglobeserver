@@ -77,6 +77,9 @@ define(['knockout',
 	  });
 	}
 	self.getSubmittedUploadJobs();
+	self.getSubmittedAnalysisJobInfo =function(){
+	  alert('here');
+	}
       }
       return AccountManagerModel;
     }
