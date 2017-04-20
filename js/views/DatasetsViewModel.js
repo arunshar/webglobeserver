@@ -379,6 +379,9 @@ define(
 	    y: [1, 2, 4, 8, 16] }], {
 	      margin: { t: 0 } } );
 	}
+	self.clearChart = function(){
+	  Plotly.purge("innerChart");
+	}
       }
       return DatasetsViewModel;
     });
