@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetDatasetDetails
@@ -58,6 +59,8 @@ public class GetDatasetDetails extends HttpServlet {
 		Statement stmt = null, stmt1 = null;
 		ResultSet rset = null, rset1 = null;
 		try {
+            Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+            logger.severe("@@@@@@@@ IN HERE");
 			// Step 1: Allocate a database Connection object
             conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
