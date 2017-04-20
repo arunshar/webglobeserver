@@ -375,15 +375,16 @@ define(
 
 	self.plotChart = function(lat,lon){
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  var id = self.selectedDataset.id;
+	  var fieldname = self.selectedDataset.fieldname;
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
 	    cache: false,
 	    type: 'POST',
-	    contentType: 'application/json; charset=utf-8',
 	    data: JSON.stringify({
-	      id: self.selectedDataset.id,
-	      fieldname: self.selectedDataset.fieldname,
+	      id: id,
+	      fieldname: fieldname,
 	      lat: lat,
 	      lon: lon
 	    }),
