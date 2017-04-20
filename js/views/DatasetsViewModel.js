@@ -46,9 +46,10 @@ define(
 	var handleClick = function (recognizer) {
 	  // Obtain the event location.
 	  var x = recognizer.clientX,
-	  y = recognizer.clientY;
+	  var y = recognizer.clientY;
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
+	  alert('Yay clicked');
 	  if(self.selectedDataset != null || self.selectedDataset.loaded == true){
 	    alert(pickList.objects.length);
 	  }else{
