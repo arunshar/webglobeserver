@@ -374,6 +374,7 @@ define(
 	self.populateDatasets();
 
 	self.plotChart = function(lat,lon){
+	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
