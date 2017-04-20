@@ -372,8 +372,12 @@ define(
 	}
 	self.populateDatasets();
 
-	self.plotChart = function(x,y){
-	  alert(x+" "+y);
+	self.plotChart = function(lat,lon){
+	  var el = document.getElementById('innerChart');
+	  Plotly.plot(el, [{
+	    x: [1, 2, 3, 4, 5],
+	    y: [1, 2, 4, 8, 16] }], {
+	      margin: { t: 0 } } );
 	}
       }
       return DatasetsViewModel;
