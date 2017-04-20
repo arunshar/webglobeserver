@@ -53,7 +53,7 @@ define(
 	  alert(pickList.objects.length);
 	  if (pickList.objects.length == 1 && pickList.objects[0].isTerrain) {
 	    var position = pickList.objects[0].position;
-	    goToAnimator.goTo(new WorldWind.Location(position.latitude, position.longitude));
+	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
 	  }
 	};
 
