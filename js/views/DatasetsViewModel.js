@@ -49,7 +49,7 @@ define(
 	  y = recognizer.clientY;
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
-	  if(self.selectedDataset != null || self.selectedDataset.loaded = true){
+	  if(self.selectedDataset != null || self.selectedDataset.loaded == true){
 	    alert(pickList.objects.length);
 	  }else{
 	    var position = pickList.objects[0].position;
