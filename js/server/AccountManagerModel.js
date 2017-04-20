@@ -79,23 +79,10 @@ define(['knockout',
 	self.getSubmittedUploadJobs();
 
 	self.getDetailedAnalysisJobInfo = function(jobId){
-	  $.ajax({
-	    url: self.webGlobeServer + 'GetDetailedAnalysisJobsInfo',
-	    cache: false,
-	    type: 'POST',
-	    contentType: 'application/json; charset=utf-8',
-	    data: JSON.stringify({
-	      jobId: jobId 
-	    }),
-	    success: function (dataJSON) { 
-	      logger.log("<b>Job Started at</b>: "+dataJSON.submission_time+
-	      "<br/><b>Job Ended at</b>: "+dataJSON.finish_time+"<br/><b>Current Status</b>: "+dataJSON.status+"<br/><b>Result Location</b>: "+dataJSON.result_loc);
-	      }
-	    }
-	  }).fail(function (xhr, textStatus, err) {
-	    logger.log("Error getting detailed analysis job information from the server","alert-danger");
-	    return 'NA';
-	  });
+	  alert(submittedAnalysisJobs);
+	  var j = self.submittedAnalysisJobs[jobId-1];
+	  logger.log("<b>Job Started at</b>: "+j.submission_time+
+	      "<br/><b>Job Ended at</b>: "+j.finish_time+"<br/><b>Current Status</b>: "+j.status+"<br/><b>Result Location</b>: "+j.result_loc);
 	}
       }
       return AccountManagerModel;
