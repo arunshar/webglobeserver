@@ -45,7 +45,7 @@ define(
 	/* register listeners */
 	var handleClick = function (recognizer) {
 	  // Obtain the event location.
-	  var x = recognizer.clientX,
+	  var x = recognizer.clientX;
 	  var y = recognizer.clientY;
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
