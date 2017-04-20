@@ -186,8 +186,8 @@ define(
 	      fieldname: fieldname
 	    }),
 	    success: function (dataJSON) {
-	      $('#load-images').show();
 	      $('#player').hide();
+	      $('#load-images').show();
 	      $('#load-start-date').attr({
 		"max" : dataJSON.variable.imageMaxDate,
 		"min" : dataJSON.variable.imageMinDate
