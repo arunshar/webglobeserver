@@ -374,11 +374,34 @@ define(
 	self.populateDatasets();
 
 	self.plotChart = function(lat,lon){
-	  alert(lat+" "+lon);
-	  Plotly.plot("innerChart", [{
-	    x: [1, 2, 3, 4, 5],
-	    y: [1, 2, 4, 8, 16] }], {
-	      margin: { t: 0 } } );
+	  //get data
+	  $.ajax({
+	    url: webGlobeServer + 'GetTimeSeriesData',
+	    cache: false,
+	    type: 'POST',
+	    contentType: 'application/json; charset=utf-8',
+	    data: JSON.stringify({
+	      id: self.selectedDataset.id,
+	      fieldname: self.selectedDataset.fieldname,
+	      lat: lat,
+	      lon: lon
+	    }),
+	    success: function (dataJSON) {
+	      var xdata = dataJSON.values;
+	      var ydata = dataJSON.dates;
+	      var xlabel = "Time";
+	      var ylabel = dataJSON.unitString; 
+	      var data = {x:xdata,y:ydata,type:'scatter'};
+	      var layout = {
+		title: self.selectedDataset.fieldname,
+		xaxis: {title: xlabel},
+		yaxis: {title: ylabel}
+	      };
+	      Plotly.plot("innerChart", data, layout);
+	    }
+	  }).fail(function (xhr, textStatus, err) {
+	    logger.log("No data returned for the selected location","alert-danger");
+	  });
 	}
 	self.clearChart = function(){
 	  Plotly.purge("innerChart");
