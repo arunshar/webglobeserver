@@ -70,7 +70,7 @@ define(['worldwind'],
 
 	    self.addScreenText = function(){
 	      self.screenText = new WorldWind.ScreenText(
-		              new WorldWind.Offset(WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 0.5), imageDates[currentIndex]);
+		              new WorldWind.Offset(WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 0.5), self.imageDates[currentIndex]);
 	      self.screenText.attributes = self.textAttributes;
 	      self.addRenderable(self.screenText);
 	    }
