@@ -260,7 +260,7 @@ define(
 	  self.interval = window.setInterval(function () {
 	    self.selectedDataset.layer.showNext();
 	    globe.redraw();
-	  }, 500);
+	  }, 200);
 	}
 
 	self.stop = function() {
