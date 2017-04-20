@@ -210,7 +210,7 @@
 		  <td data-bind="text: $data.analysis+' ('+$data.field+')'"></td>
 		  <td data-bind="text: $data.submission_time"></td>
 		  <td data-bind="text: $data.finish_time"></td>
-		  <td data-bind="click: function() {$root.showSubmittedAnalysisJobInfo()},text: $data.result_loc.substring(0,10)"></td>
+		  <td data-bind="click: function() {$root.getSubmittedAnalysisJobInfo()},text: $data.result_loc.substring(0,10)"></td>
 		  <td data-bind="text: $data.status"></td>
 		</tr>
 	      </tbody>

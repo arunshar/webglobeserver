@@ -77,7 +77,7 @@ define(['knockout',
 	  });
 	}
 	self.getSubmittedUploadJobs();
-	self.getSubmittedAnalysisJobInfo =function(){
+	self.getSubmittedAnalysisJobInfo = function(){
 	  alert('here');
 	}
       }
