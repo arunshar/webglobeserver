@@ -40,7 +40,7 @@ define(['worldwind'],
 	    self.showNext = function(){
 	      self.removeAllRenderables();
 	      self.addRenderable(self.images[self.currentIndex]);
-	      self.opacity = 0.7;
+	      self.opacity = 0.8;
 	      self.addScreenText();
 	      self.currentIndex++;
 	      if(self.currentIndex == self.images.length)

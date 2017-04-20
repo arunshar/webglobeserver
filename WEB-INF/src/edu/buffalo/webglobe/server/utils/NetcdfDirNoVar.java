@@ -76,10 +76,12 @@ public class NetcdfDirNoVar implements Serializable {
             List<Variable> vars = dataset.getVariables();
             for(int i = 0; i < vars.size(); i++){
                 Variable v = vars.get(i);
-                variables.add(v.getShortName());
-                units.add(v.getUnitsString());
-                descriptions.add(v.getDescription());
-                logger.severe("Added variable with name "+v.getShortName());
+                if(v.getDimensions().size() >= 3) {
+                    variables.add(v.getShortName());
+                    units.add(v.getUnitsString());
+                    descriptions.add(v.getDescription());
+                    logger.info("Added variable with name " + v.getShortName());
+                }
             }
         }
 
