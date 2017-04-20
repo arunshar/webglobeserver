@@ -79,7 +79,7 @@ define(['knockout',
 	self.getSubmittedUploadJobs();
 
 	self.getDetailedAnalysisJobInfo = function(jobId){
-	  alert(jobId);
+	  alert(submittedAnalysisJobs);
 	  var j = self.submittedAnalysisJobs[jobId-1];
 	  logger.log("<b>Job Started at</b>: "+j.submission_time+
 	      "<br/><b>Job Ended at</b>: "+j.finish_time+"<br/><b>Current Status</b>: "+j.status+"<br/><b>Result Location</b>: "+j.result_loc);
