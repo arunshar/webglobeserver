@@ -58,10 +58,10 @@ define(
 	};
 
 	// Listen for mouse clicks.
-	self.clickRecognizer = new WorldWind.ClickRecognizer(wwd, handleClick);
+	self.clickRecognizer = new WorldWind.ClickRecognizer(globe.wwd, handleClick);
 
 	// Listen for taps on mobile devices.
-	self.tapRecognizer = new WorldWind.TapRecognizer(wwd, handleClick);
+	self.tapRecognizer = new WorldWind.TapRecognizer(globe.wwd, handleClick);
 	/*
 	 * Populate available datasets from the database
 	 */
