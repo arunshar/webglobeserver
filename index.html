@@ -33,6 +33,11 @@
 	</a>
       </li>
       <li>
+	<a class="tablinksRight" style="position: fixed; right: 19%; width: 3%;" onclick="openTabRight(event,'charts')" title="Plot Charts">
+	  <i class="fa fa-line-chart" aria-hidden="true"></i>
+	</a>
+      </li>
+      <li>
 	<a class="tablinksRight" style="position: fixed; right: 16%; width: 3%;" onclick="openTabRight(event,'upload')" title="Add Data Set">
 	  <i class="fa fa-cloud-upload" aria-hidden="true"></i>
 	</a>
@@ -264,6 +269,11 @@
 	</div>
       </div>
     </div>
+    <div id="charts" class="col-sm-2 tabcontentRight" style="width: 35% !important;">
+      <div id="innerCharts" class="tabcontentGraphs">
+      </div>
+    </div>
+
     <script type="text/html" id="layer-template">
 <div class="btn-group btn-block">
 	<!--Layer name and visibility button-->
