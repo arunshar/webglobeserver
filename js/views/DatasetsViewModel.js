@@ -292,7 +292,6 @@ define(
 	  }
 	}
 	self.uploadData = function(){
-	  alert('coming here');
 	  var hdfsURL = $('#hdfsURL').val();
 	  var dataName = $('#dataName').val();
 	  var dataInfo = $('#dataInfo').val();
