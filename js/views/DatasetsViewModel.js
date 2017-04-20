@@ -50,7 +50,7 @@ define(
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  if(self.selectedDataset != null && self.selectedDataset.loaded == true){
-	    alert(pickList.objects.length);
+	    self.plotChart(x,y);
 	  }else{
 	    var position = pickList.objects[0].position;
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
@@ -372,6 +372,9 @@ define(
 	}
 	self.populateDatasets();
 
+	self.plotChart = function(x,y){
+	  alert(x+" "+y);
+	}
       }
       return DatasetsViewModel;
     });
