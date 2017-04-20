@@ -374,7 +374,7 @@ define(
 
 	self.plotChart = function(lat,lon){
 	  alert('comig in to plot');
-	  Plotly.plot($('#innerChart'), [{
+	  Plotly.plot($('#innerChart').id, [{
 	    x: [1, 2, 3, 4, 5],
 	    y: [1, 2, 4, 8, 16] }], {
 	      margin: { t: 0 } } );
