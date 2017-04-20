@@ -202,7 +202,7 @@ define(
 	    success: function (data) {
 	      var imageUrls = data.imageUrls;
 	      var imageDates = data.imageDates;
-	      self.selectedDataset.layer.populate(imageUrls);
+	      self.selectedDataset.layer.populate(imageUrls,imageDates);
 	      self.selectedDataset.layer.enabled = true;
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -219,6 +219,16 @@ define(
 	self.showPrevious = function() {
 	  self.selectedDataset.layer.showPrevious();
 	  globe.redraw();					
+	}
+
+	self.showFirst = function() {
+	  self.selectedDataset.layer.showFirst();
+	  globe.redraw();
+	}
+
+	self.showLast = function() {
+	  self.selectedDataset.layer.showLast();
+	  globe.redraw();
 	}
 	self.analyzeDataset = function() {
 	  if (self.submitting) {
