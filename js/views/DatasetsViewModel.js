@@ -147,6 +147,7 @@ define(
 	    }
 	    self.selectedDataset = null;
 	    self.fields.removeAll();
+	    Plotly.purge('innerChart');
 
 	    $("#datasetOpenPanel").hide();
 	    self.openActive = false;
