@@ -42,6 +42,26 @@ define(
 	self.submitting = false;
 	self.interval = null;
 
+	/* register listeners */
+	var handleClick = function (recognizer) {
+	  // Obtain the event location.
+	  var x = recognizer.clientX,
+	  y = recognizer.clientY;
+
+	  var pickList = wwd.pick(wwd.canvasCoordinates(x, y));
+
+	  alert(pickList.objects.length);
+	  if (pickList.objects.length == 1 && pickList.objects[0].isTerrain) {
+	    var position = pickList.objects[0].position;
+	    goToAnimator.goTo(new WorldWind.Location(position.latitude, position.longitude));
+	  }
+	};
+
+	// Listen for mouse clicks.
+	self.clickRecognizer = new WorldWind.ClickRecognizer(wwd, handleClick);
+
+	// Listen for taps on mobile devices.
+	self.tapRecognizer = new WorldWind.TapRecognizer(wwd, handleClick);
 	/*
 	 * Populate available datasets from the database
 	 */
