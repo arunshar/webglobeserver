@@ -61,7 +61,7 @@ public class RunJob extends HttpServlet {
         this.analysisName =  data.get("analysisname").getAsString().replace(" ", "");
         this.fieldName =  data.get("fieldname").getAsString();
         this.analysisOutputName = data.get("analysisoutputname").getAsString().replace(" ", "");
-        if(this.analysisOutputName=="")
+        if(this.analysisOutputName.equals(""))
             this.analysisOutputName="defaultanalysisname";
 
         HashMap<String,String> responseData = new HashMap<String, String>();
@@ -88,13 +88,8 @@ public class RunJob extends HttpServlet {
             if (rs.next()) {
                 jobId = rs.getInt(1);
             }
-            Thread loadingThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    runJob();
-                }
-            });
-            loadingThread.start();
+
+            runJob();
             responseData.put("message", "Analysis job started. Status of job is available under the user information panel. On success, the data set will be available for upload.");
 
         }catch(SQLException e){

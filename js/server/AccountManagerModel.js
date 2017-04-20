@@ -48,7 +48,7 @@ define(['knockout',
 	      self.submittedAnalysisJobs.removeAll();
 	      var retnum = Object.keys(dataJSON).length;
 	      for(var i = 0; i < retnum; i++){
-		self.submittedAnalysisJobs.push({'index':i+1, 'name': dataJSON[i].name, 'field': dataJSON[i].field, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time, 'analysis': dataJSON[i].analysis, 'status': dataJSON[i].status, 'result_loc': dataJSON[i].result_loc}); 
+		self.submittedAnalysisJobs.push({'index':dataJSON[i].id, 'name': dataJSON[i].name, 'field': dataJSON[i].field, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time, 'analysis': dataJSON[i].analysis, 'status': dataJSON[i].status, 'result_loc': dataJSON[i].result_loc}); 
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -68,7 +68,7 @@ define(['knockout',
 	      self.submittedUploadJobs.removeAll();
 	      var retnum = Object.keys(dataJSON).length;
 	      for(var i = 0; i < retnum; i++){
-		self.submittedUploadJobs.push({'index':i+1, 'dataset_name': dataJSON[i].dataset_name, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time,'status': dataJSON[i].status}); 
+		self.submittedUploadJobs.push({'index':dataJSON[i].id, 'dataset_name': dataJSON[i].dataset_name, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time,'status': dataJSON[i].status}); 
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -79,10 +79,23 @@ define(['knockout',
 	self.getSubmittedUploadJobs();
 
 	self.getDetailedAnalysisJobInfo = function(jobId){
-	  alert(submittedAnalysisJobs);
-	  var j = self.submittedAnalysisJobs[jobId-1];
-	  logger.log("<b>Job Started at</b>: "+j.submission_time+
-	      "<br/><b>Job Ended at</b>: "+j.finish_time+"<br/><b>Current Status</b>: "+j.status+"<br/><b>Result Location</b>: "+j.result_loc);
+	  $.ajax({
+	    url: self.webGlobeServer + 'GetDetailedAnalysisJobsInfo',
+	    cache: false,
+	    type: 'POST',
+	    contentType: 'application/json; charset=utf-8',
+	    data: JSON.stringify({
+	      jobId: jobId 
+	    }),
+	    success: function (dataJSON) { 
+	      logger.log("<b>Job Started at</b>: "+dataJSON.submission_time+
+	      "<br/><b>Job Ended at</b>: "+dataJSON.finish_time+"<br/><b>Current Status</b>: "+dataJSON.status+"<br/><b>Result Location</b>: "+dataJSON.result_loc);
+	      }
+	    }
+	  }).fail(function (xhr, textStatus, err) {
+	    logger.log("Error getting detailed analysis job information from the server","alert-danger");
+	    return 'NA';
+	  });
 	}
       }
       return AccountManagerModel;
