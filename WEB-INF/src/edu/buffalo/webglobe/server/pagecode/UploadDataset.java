@@ -146,7 +146,7 @@ public class UploadDataset extends HttpServlet {
                         rset = DBUtils.executeInsert(conn,stmt,cmd);
                         if(rset.next()){
                             int datasetId = rset.getInt(1);
-                            logger.info("STARTING IMAGE CREATION PROCESS");
+                            logger.info("STARTING IMAGE CREATION PROCESS "+ncDir.getVariables().size());
                             for (int j = 0; j < ncDir.getVariables().size(); j++) {
                                 String variable = ncDir.getVariables().get(j);
                                 NetcdfDir netcdfDir = new NetcdfDir(hdfsURL, variable);

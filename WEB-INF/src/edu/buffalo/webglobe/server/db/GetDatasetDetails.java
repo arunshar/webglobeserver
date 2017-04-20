@@ -13,7 +13,6 @@ import java.lang.Integer;
 import com.google.gson.Gson;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -55,12 +54,10 @@ public class GetDatasetDetails extends HttpServlet {
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		// query database
 
-		Connection conn = null;
-		Statement stmt = null, stmt1 = null;
-		ResultSet rset = null, rset1 = null;
+		Connection conn;
+		Statement stmt, stmt1;
+		ResultSet rset, rset1;
 		try {
-            Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-            logger.severe("@@@@@@@@ IN HERE");
 			// Step 1: Allocate a database Connection object
             conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
