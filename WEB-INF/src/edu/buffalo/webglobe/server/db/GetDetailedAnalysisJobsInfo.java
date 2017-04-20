@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Servlet implementation class GetSubmittedAnalysisJobsInfo
  */
-@WebServlet("/GetSubmittedAnalysisJobsInfo")
+@WebServlet("/GetDetailedAnalysisJobsInfo")
 public class GetDetailedAnalysisJobsInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
