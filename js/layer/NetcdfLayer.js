@@ -56,22 +56,22 @@ define(['worldwind'],
 
 	    self.showFirst = function(){
 	      self.removeAllRenderables();
-	      currentIndex = 0;
+	      self.currentIndex = 0;
 	      self.addRenderable(self.images[self.currentIndex]);
 	      self.addScreenText();
 	    }
 
 	    self.showLast = function(){
 	      self.removeAllRenderables();
-	      currentIndex = self.images.length-1;
+	      self.currentIndex = self.images.length-1;
 	      self.addRenderable(self.images[self.currentIndex]);
 	      self.addScreenText();
 	    }
 
 	    self.addScreenText = function(){
-	      screenText = new WorldWind.ScreenText(
+	      self.screenText = new WorldWind.ScreenText(
 		              new WorldWind.Offset(WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 0.5), imageDates[currentIndex]);
-	      screenText.attributes = self.textAttributes;
+	      self.screenText.attributes = self.textAttributes;
 	      self.addRenderable(self.screenText);
 	    }
 	}
