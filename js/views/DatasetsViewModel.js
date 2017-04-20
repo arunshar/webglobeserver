@@ -224,37 +224,47 @@ define(
 	  return true;
 	}
 	self.showNext = function() {
-	  self.selectedDataset.layer.showNext();
-	  globe.redraw();					
+	  if(self.selectedDataset.loaded){
+	    self.selectedDataset.layer.showNext();
+	    globe.redraw();		
+	  }	  
 	}
 
 	self.showPrevious = function() {
-	  self.selectedDataset.layer.showPrevious();
-	  globe.redraw();					
+	  if(self.selectedDataset.loaded){
+	    self.selectedDataset.layer.showPrevious();
+	    globe.redraw();		
+	  }	  
 	}
 
 	self.showFirst = function() {
-	  self.selectedDataset.layer.showFirst();
-	  globe.redraw();
+	  if(self.selectedDataset.loaded){
+	    self.selectedDataset.layer.showFirst();
+	    globe.redraw();
+	  }
 	}
 
 	self.showLast = function() {
-	  self.selectedDataset.layer.showLast();
-	  globe.redraw();
+	  if(self.selectedDataset.loaded){
+	    self.selectedDataset.layer.showLast();
+	    globe.redraw();
+	  }
 	}
 
 	self.play = function() {
-	  self.interval = window.setInterval(function () {
-	      window.clearInterval(self.interval);
-	      window.setInterval(function () {
-		  self.selectedDataset.layer.showNext();
-		  globe.redraw();
-	      }, 200);
-	  }, 200);
+	  if(self.selectedDataset.loaded && self.interval != null){
+	    window.clearInterval(self.interval);
+	    self.interval = window.setInterval(function () {
+	      self.selectedDataset.layer.showNext();
+	      globe.redraw();
+	    }, 500);
+	  }
 	}
 
 	self.stop = function() {
-	  window.clearInterval(self.interval);
+	  if(self.selectedDataset.loadedi && self.interval != null){
+	    window.clearInterval(self.interval);
+	  }
 	}
 
 	self.analyzeDataset = function() {
