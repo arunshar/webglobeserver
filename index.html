@@ -185,8 +185,10 @@
 	      <label for="analysisSelect">Analysis</label>
 	      <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
 	      <br/>
+	      <div class="col-xs-2">
 	      <label for="analysisOutputName">Output Name</label>
-		<input type="text" name="analysisOutputName" class="form-control form-control-sm" id="analysisOutputName"/>
+		<input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
+	      </div>
 	      <span class="glyphicon glyphicon-play" style="padding: 3px;" data-bind="click: $root.analyzeDataset"></span>	      
 
 	    </form>
