@@ -8,6 +8,7 @@ package edu.buffalo.webglobe.server.utils;
 import ucar.ma2.Array;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
+import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
 import ucar.nc2.dt.grid.GeoGrid;
 import ucar.nc2.dt.grid.GridDataset;
@@ -57,18 +58,32 @@ public class NetcdfDirNoVar implements Serializable {
 
         NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.hdfsuri, filepaths.get(0), 3000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
-        GridDataset gridDataset = new GridDataset(dataset);
-        List grids = gridDataset.getGrids();
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
-        logger.severe(">>>>>" +grids.size());
-        for(int i = 0; i < grids.size(); i++){
-            GeoGrid g = (GeoGrid) grids.get(i);
-            variables.add(g.getName());
-            units.add(g.getUnitsString());
-            descriptions.add(g.getDescription());
+        GridDataset gridDataset = new GridDataset(dataset);
+        List grids = gridDataset.getGrids();
+        if(grids.size() > 0){
+            //this data set has geogrids
+            for(int i = 0; i < grids.size(); i++){
+                GeoGrid g = (GeoGrid) grids.get(i);
+                variables.add(g.getName());
+                units.add(g.getUnitsString());
+                descriptions.add(g.getDescription());
+            }
+        }else{
+            //this data set does not have geogrids, just work with the dataset
+            List<Variable> vars = dataset.getVariables();
+            for(int i = 0; i < vars.size(); i++){
+                Variable v = vars.get(i);
+                variables.add(v.getShortName());
+                units.add(v.getUnitsString());
+                descriptions.add(v.getDescription());
+                logger.severe("Added variable with name "+v.getShortName());
+            }
         }
+
+
 
         List<Dimension> dims = cdfFile.getDimensions();
         timeLen = dims.get(0).getLength();
