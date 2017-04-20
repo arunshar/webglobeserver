@@ -37,44 +37,39 @@ define(['worldwind'],
 	    self.empty = function(){
 	      self.images = [];
 	    }
-	    self.showNext = function(){
+	    self.showAt = function(i){
 	      self.removeAllRenderables();
-	      self.addRenderable(self.images[self.currentIndex]);
+	      self.addRenderable(self.images[i]);
 	      self.opacity = 0.8;
-	      self.addScreenText();
+	      self.addScreenText(i);
+	    }
+
+	    self.showNext = function(){
+	      self.showAt(self.currentIndex);
 	      self.currentIndex++;
 	      if(self.currentIndex == self.images.length)
 		self.currentIndex = 0;
 	    }
 	    self.showPrevious = function(){
-	      self.removeAllRenderables();
-	      self.addRenderable(self.images[self.currentIndex]);
-	      self.opacity = 0.7;
-	      self.addScreenText();
+	      self.showAt(self.currentIndex);
 	      self.currentIndex--;
 	      if(self.currentIndex < 0)
 		self.currentIndex = self.images.length-1;;
 	    }
 
 	    self.showFirst = function(){
-	      self.removeAllRenderables();
 	      self.currentIndex = 0;
-	      self.addRenderable(self.images[self.currentIndex]);
-	      self.opacity = 0.7;
-	      self.addScreenText();
+	      self.showAt(self.currentIndex);
 	    }
 
 	    self.showLast = function(){
-	      self.removeAllRenderables();
 	      self.currentIndex = self.images.length-1;
-	      self.addRenderable(self.images[self.currentIndex]);
-	      self.opacity = 0.7;
-	      self.addScreenText();
+	      self.showAt(self.currentIndex);
 	    }
 
-	    self.addScreenText = function(){
+	    self.addScreenText = function(i){
 	      self.screenText = new WorldWind.ScreenText(
-		              new WorldWind.Offset(WorldWind.OFFSET_FRACTION, 1.0-0.05, WorldWind.OFFSET_FRACTION, 0), self.imageDates[self.currentIndex]);
+		              new WorldWind.Offset(WorldWind.OFFSET_FRACTION, 1.0-0.05, WorldWind.OFFSET_FRACTION, 0), self.imageDates[i]);
 	      self.screenText.attributes = self.textAttributes;
 	      self.addRenderable(self.screenText);
 	    }
