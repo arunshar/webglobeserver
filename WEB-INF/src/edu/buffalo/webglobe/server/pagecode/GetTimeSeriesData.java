@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetTimeSeriesData
@@ -46,7 +47,9 @@ public class GetTimeSeriesData extends HttpServlet {
 	/**
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {				
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+        logger.info("~~~~~~~~~~~~~~~~~Coming in here ~~~~~~~~~~~~~~~~~"+request.getParameter("id"));
 		int datasetId = Integer.parseInt(request.getParameter("id"));
         String fieldName = request.getParameter("fieldname");
         float x = Float.parseFloat(request.getParameter("lon"));
