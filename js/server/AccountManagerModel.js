@@ -48,7 +48,7 @@ define(['knockout',
 	      self.submittedAnalysisJobs.removeAll();
 	      var retnum = Object.keys(dataJSON).length;
 	      for(var i = 0; i < retnum; i++){
-		self.submittedAnalysisJobs.push({'index':i+1, 'name': dataJSON[i].name, 'field': dataJSON[i].field, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time, 'analysis': dataJSON[i].analysis, 'status': dataJSON[i].status}); 
+		self.submittedAnalysisJobs.push({'index':i+1, 'name': dataJSON[i].name, 'field': dataJSON[i].field, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time, 'analysis': dataJSON[i].analysis, 'status': dataJSON[i].status, 'result_loc': dataJSON[i].result_loc}); 
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {

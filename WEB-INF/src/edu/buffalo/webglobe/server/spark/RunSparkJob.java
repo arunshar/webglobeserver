@@ -83,11 +83,10 @@ public class RunSparkJob {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+
+			logger.severe(e.getMessage());
 		}
 	}
 
