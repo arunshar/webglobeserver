@@ -376,6 +376,7 @@ define(
 	self.plotChart = function(lat,lon){
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  var id = self.selectedDataset.id;
+	  alert(id);
 	  var fieldname = self.selectedDataset.fieldname;
 	  //get data
 	  $.ajax({
