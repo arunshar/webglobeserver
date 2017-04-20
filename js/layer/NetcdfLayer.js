@@ -20,17 +20,20 @@ define(['worldwind'],
 
             this.pickEnabled = false;
             this.minActiveAltitude = 3e6;
-	    self.layers = []; 
+	    self.images = []; 
 	    self.populate = function(imgUrls){
 	      for(var i = 0; i < imgUrls.length; i++){
 		var surfaceImage = new WorldWind.SurfaceImage(WorldWind.Sector.FULL_SPHERE,imgUrls[i]);
-		var layer = new WorldWind.RenderableLayer("NETCDFLAYER");
-	        layer.addRenderable(surfaceImage);	
-		self.layers.push(layer);
+		self.images.push(surfaceImage);
 	      }
 	    }
 	    self.empty = function(){
-	      self.layers = [];
+	      self.images = [];
+	    }
+	    self.showAt = function(index){
+	      alert('Comin in showat');
+	      self.removeAllRenderables();
+	      self.addRenderable(self.images[index]);
 	    }
 	}
 

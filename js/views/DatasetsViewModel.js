@@ -219,6 +219,7 @@ define(
 	      $('#index-of-show-date').change();
 	      */
 	      self.selectedDataset.layer.populate(imageUrls);
+	      self.selectedDataset.layer.enabled = true;
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");
@@ -227,7 +228,7 @@ define(
 	}
 
 	self.onInputShowDate = function() {
-	  self.selectedDataset.layer.enabled = true;
+	  self.selectedDataset.layer.showAt(0);
 	  /*
 	  var index = parseInt($('#index-of-show-date').val());
 	  var imagesource = self.selectedDataset.images()[index]._imageSource;
