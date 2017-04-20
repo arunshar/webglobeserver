@@ -40,6 +40,7 @@ define(
 	self.openAnalysis = false;
 	self.downloading = false;
 	self.submitting = false;
+	self.interval = null;
 
 	/*
 	 * Populate available datasets from the database
@@ -243,13 +244,17 @@ define(
 	}
 
 	self.play = function() {
-	  var interval = window.setInterval(function () {
-	      window.clearInterval(interval);
+	  self.interval = window.setInterval(function () {
+	      window.clearInterval(self.interval);
 	      window.setInterval(function () {
 		  self.selectedDataset.layer.showNext();
 		  globe.redraw();
 	      }, 200);
 	  }, 200);
+	}
+
+	self.stop = function() {
+	  window.clearInterval(self.interval);
 	}
 
 	self.analyzeDataset = function() {
