@@ -6,6 +6,7 @@ import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import ucar.ma2.Array;
 import ucar.nc2.time.CalendarDate;
+import ucar.nc2.time.CalendarDateFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+
 
 /**
  * Servlet implementation class GetTimeSeriesData
@@ -51,8 +51,6 @@ public class GetTimeSeriesData extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-
         int datasetId = data.get("datasetid").getAsInt();
         String fieldName = data.get("fieldname").getAsString();
         float x = data.get("lon").getAsFloat();
@@ -79,7 +77,7 @@ public class GetTimeSeriesData extends HttpServlet {
                     }
                 }
                 for(CalendarDate d: netcdfDir.getDates()){
-                    dates.add(d.toString());
+                    dates.add(CalendarDateFormatter.toDateString(d));
                 }
 
             }
