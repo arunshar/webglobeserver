@@ -54,12 +54,8 @@ public class NetcdfDir implements Serializable {
 			latLen = dims.get(1).getLength();
 			longLen = dims.get(2).getLength();
             variableName =  varName;
-            dates = new ArrayList<CalendarDate>();
+
 			Array arrTime = cdfFile.findVariable("time").read();
-            for(int i = 0; i < arrTime.getSize();i++){
-                CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
-                dates.add(calDate.add((int) arrTime.getDouble(i), CalendarPeriod.Field.Day));
-            }
 			
 			CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
 			calDate = calDate.add((int) arrTime.getDouble(0), CalendarPeriod.Field.Day);
@@ -144,17 +140,21 @@ public class NetcdfDir implements Serializable {
 	}
 
     public List<Array> getTimeSeriesData(float x, float y){
+        dates = new ArrayList<CalendarDate>();
+
         List<Array> arrayList = new ArrayList<Array>();
         for (int i = 0; i < filepaths.size(); i++) {
             NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filepaths.get(i), 10000);
             NetcdfFile cdfFile = dataset.getReferencedFile();
             List<Dimension> dimensions = cdfFile.getDimensions();
+            Dimension tDim = dimensions.get(0);
             Dimension yDim = dimensions.get(1);
             Dimension xDim = dimensions.get(2);
-
+            CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
             try {
                 Array xVals = cdfFile.findVariable(xDim.getShortName()).read();
                 Array yVals = cdfFile.findVariable(yDim.getShortName()).read();
+                Array tVals = cdfFile.findVariable(tDim.getShortName()).read();
                 int xInd = -1;
                 int yInd = -1;
 
@@ -172,11 +172,16 @@ public class NetcdfDir implements Serializable {
                         break;
                     }
                 }
+
                 if(xInd == -1 || yInd == -1) {
                     logger.severe("Selected point is not contained in the data set.");
                     return null;
                 }
 
+                //populate dates
+                for(int j = 0; j < tVals.getSize();i++){
+                    dates.add(calDate.add((int) tVals.getDouble(j), CalendarPeriod.Field.Day));
+                }
                 Variable var = cdfFile.findVariable(variableName);
                 int[] origin = {0, yInd, xInd};
                 int[] shape = {timeLen, 1, 1};
