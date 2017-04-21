@@ -1,6 +1,7 @@
 package edu.buffalo.webglobe.server.pagecode;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.utils.NetcdfDir;
 import ucar.ma2.Array;
@@ -48,14 +49,14 @@ public class GetTimeSeriesData extends HttpServlet {
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        logger.info("~~~~~~~~~~~~~~~~~Coming in here ~~~~~~~~~~~~~~~~~"+request.getParameter("datasetid"));
-        logger.info("~~~~~~~~~~~~~~~~~Coming in here ~~~~~~~~~~~~~~~~~"+request.getParameter("fieldname"));
 
-        int datasetId = Integer.parseInt(request.getParameter("datasetid"));
-        String fieldName = request.getParameter("fieldname");
-        float x = Float.parseFloat(request.getParameter("lon"));
-        float y = Float.parseFloat(request.getParameter("lon"));
+        int datasetId = data.get("datasetid").getAsInt();
+        String fieldName = data.get("fieldname").getAsString();
+        float x = data.get("lon").getAsFloat();
+        float y = data.get("lat").getAsFloat();
+
 		ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> dates = new ArrayList<String>();
         ArrayList<String> unitStrings = new ArrayList<String>();
