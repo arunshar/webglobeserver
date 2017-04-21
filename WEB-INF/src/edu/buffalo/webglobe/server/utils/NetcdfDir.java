@@ -58,7 +58,7 @@ public class NetcdfDir implements Serializable {
 			Array arrTime = cdfFile.findVariable("time").read();
             for(int i = 0; i < arrTime.getSize();i++){
                 CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
-                dates.add(calDate.add((int) arrTime.getDouble(0), CalendarPeriod.Field.Day));
+                dates.add(calDate.add((int) arrTime.getDouble(i), CalendarPeriod.Field.Day));
             }
 			
 			CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
