@@ -391,9 +391,9 @@ define(
 	    success: function (dataJSON) {
 	      
 	      var xdata = dataJSON.dates;
-	      alert(xdata);
 	      var xlabel = "Time";
 	      var ydata = dataJSON.values;
+	      alert(ydata);
 	      var ylabel = dataJSON.unitString; 
 	      var data = {x:xdata,y:ydata,type:'scatter'};
 	      var layout = {
