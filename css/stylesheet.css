@@ -145,7 +145,7 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   position:fixed; 
   top: 5%;
   left: 50%;
-  transform: translate(-5%, -50%);
+  transform: translate(-50%, -5%);
   width: 40%;
   border: 1px solid transparent;
   border-radius: 4px;
