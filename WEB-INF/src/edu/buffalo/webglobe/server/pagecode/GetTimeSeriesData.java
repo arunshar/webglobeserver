@@ -50,7 +50,9 @@ public class GetTimeSeriesData extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
         logger.info("~~~~~~~~~~~~~~~~~Coming in here ~~~~~~~~~~~~~~~~~"+request.getParameter("datasetid"));
-		int datasetId = Integer.parseInt(request.getParameter("datasetid"));
+        logger.info("~~~~~~~~~~~~~~~~~Coming in here ~~~~~~~~~~~~~~~~~"+request.getParameter("fieldname"));
+
+        int datasetId = Integer.parseInt(request.getParameter("datasetid"));
         String fieldName = request.getParameter("fieldname");
         float x = Float.parseFloat(request.getParameter("lon"));
         float y = Float.parseFloat(request.getParameter("lon"));
