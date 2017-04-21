@@ -20,6 +20,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -59,8 +60,8 @@ public class GetTimeSeriesData extends HttpServlet {
 
 		ArrayList<String> values = new ArrayList<String>();
         ArrayList<String> dates = new ArrayList<String>();
-        ArrayList<String> unitStrings = new ArrayList<String>();
-		HashMap<String, ArrayList<String>> responseData = new HashMap<String, ArrayList<String>>();
+        String unitString = null;
+		HashMap<String, HashMap<String, String>> responseData = new HashMap<String, HashMap<String,String>>();
 		try {
 			Connection conn = DBUtils.getConnection();
             Statement stmt = conn.createStatement();
@@ -69,7 +70,7 @@ public class GetTimeSeriesData extends HttpServlet {
             ResultSet rset = DBUtils.executeQuery(conn,stmt,cmd);
             if(rset.next()) {
                 String hdfsURL = rset.getString(1);
-                unitStrings.add(rset.getString(2));
+                unitString = rset.getString(2);
                 NetcdfDir netcdfDir = new NetcdfDir(hdfsURL, fieldName);
                 List<Array> arrayList = netcdfDir.getTimeSeriesData(x,y);
                 for(Array array: arrayList){
@@ -85,9 +86,16 @@ public class GetTimeSeriesData extends HttpServlet {
 		} catch (SQLException e) {
             e.printStackTrace();
         }
-        responseData.put("values", values);
-        responseData.put("dates", dates);
-        responseData.put("unitString", unitStrings);
+
+        for(int i = 0; i < dates.size(); i++){
+            HashMap<String, String> info = new HashMap<String, String>();
+            info.put("date",dates.get(i));
+            info.put("value",values.get(i));
+            if(i == 0){
+                info.put("unitString",unitString);
+            }
+            responseData.put((new Integer(i)).toString(), info);
+        }
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
