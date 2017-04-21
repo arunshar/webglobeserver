@@ -179,7 +179,7 @@ public class NetcdfDir implements Serializable {
                 }
 
                 //populate dates
-                for(int j = 0; j < tVals.getSize();i++){
+                for(int j = 0; j < tVals.getSize();j++){
                     dates.add(calDate.add((int) tVals.getDouble(j), CalendarPeriod.Field.Day));
                 }
                 Variable var = cdfFile.findVariable(variableName);
