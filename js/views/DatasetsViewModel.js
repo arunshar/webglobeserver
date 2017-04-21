@@ -392,12 +392,14 @@ define(
 	      var xdata = [];
 	      var ydata = [];
 	      var retnum = Object.keys(dataJSON).length;
+	      alert(retnum);
+	      
 	      var ylabel = dataJSON[0].unitString;
 	      for(var i = 0; i < retnum; i++){
 		xdata.push(dataJSON[i].date);
 		ydata.push(dataJSON[i].value+0.0);
 	      }
-	      
+	      alert(ydata);
 	      var xlabel = "Time";
 	      var layout = {
 		title: self.selectedDataset.fieldname,
