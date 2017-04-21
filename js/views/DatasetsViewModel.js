@@ -34,7 +34,7 @@ define(
 	self.selectedDatasetAnalysis = ko.observable();
 	self.fields = ko.observableArray([]);
 	self.analysisFields = ko.observableArray([]);
-	self.analysisMethods = ko.observableArray([ "Change Detection" ]);
+	self.analysisMethods = ko.observableArray([ "Change Detection", "Anomaly Detection","Correlation Analysis" ]);
 	self.infoActive = false;
 	self.openActive = false;
 	self.openAnalysis = false;
@@ -300,6 +300,10 @@ define(
 	  }
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
 	  var analysisname = $("#analysisSelect :selected").text();
+	  if(analysisname != "Change Detection"){
+	    logger.log("Only Gaussian Process change detection is currently supported.","alert-warning");
+	    return;
+	  }
 	  var analysisoutputname = $("#analysisOutputName").val();
 	  var url = self.selectedDatasetAnalysis.url;
 	  logger.log("Submitting " + analysisname + " <a href=\""
