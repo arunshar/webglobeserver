@@ -381,6 +381,9 @@ define(
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  var datasetid = self.selectedDataset.id;
 	  var fieldname = self.selectedDataset.fieldname;
+	  if(lat < 0){
+	    lat = 360 + lat;
+	  }
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
