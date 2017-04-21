@@ -407,7 +407,8 @@ define(
 		xaxis: {title: xlabel},
 		yaxis: {title: ylabel}
 	      };
-	      Plotly.plot("innerChart", data, layout);
+	      //Plotly.plot("innerChart", data, layout);
+	      Plotly.plot("innerChart", data);
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log("No data returned for the selected location","alert-danger");
