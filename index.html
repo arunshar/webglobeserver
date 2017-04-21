@@ -184,25 +184,27 @@
 	  </div>
 	  <div id="analysisPanel" style="display: none;" class="alert alert-danger alert-dismissible">
 	    <form role="form" id="analysisForm">
-	      <div class="form-group row" style="padding: 2px;">
+	      <div class="form-group row" style="padding: 5px;">
 		<label for="fieldAnalysisSelect" class="col-2 col-form-label">Variable</label>
 		<div class="col-4">
 		  <select name="fieldAnalysisSelect" data-bind="options: analysisFields" id="fieldAnalysisSelect"></select>
 		</div>
 	      </div>
-	      <div class="form-group row">
+	      <div class="form-group row" style="padding: 5px;">
 		<label for="analysisSelect" class="col-2 col-form-label">Analysis</label>
 		<div class="col-4">
 		  <select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
 		</div>
 	      </div>
-	      <div class="form-group row">
+	      <div class="form-group row" style="padding: 5px;">
 		<label for="analysisOutputName" class="col-2 col-form-label">Output Name</label>
 		<div class="col-4">
 		  <input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
 		</div>
 	      </div>
-	      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
+	      <div class="form-group row" style="padding: 5px;">
+		<button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
+	      </div>
 	    </form>
 	  </div>
 	</div>
