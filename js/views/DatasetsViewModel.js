@@ -389,9 +389,11 @@ define(
 	      lon: lon
 	    }),
 	    success: function (dataJSON) {
-	      var xdata = dataJSON.values;
-	      var ydata = dataJSON.dates;
+	      
+	      var xdata = dataJSON.dates;
+	      alert(xdata);
 	      var xlabel = "Time";
+	      var ydata = dataJSON.values;
 	      var ylabel = dataJSON.unitString; 
 	      var data = {x:xdata,y:ydata,type:'scatter'};
 	      var layout = {
