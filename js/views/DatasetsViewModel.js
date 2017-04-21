@@ -400,9 +400,9 @@ define(
 	      
 	      var xlabel = "Time";
 	      alert(xdata[0]+" "+ydata[0]);
-	      xdata = ['2013-10-04', '2013-11-04', '2013-12-04'];
-		ydata = [1,4,9];
-	      var data = {x:xdata,y:ydata,type:'scatter'};
+	      xdata1 = ['2013-10-04', '2013-11-04', '2013-12-04'];
+		ydata1 = [ydata[0],4,9];
+	      var data = {x:xdata1,y:ydata1,type:'scatter'};
 	      var layout = {
 		title: self.selectedDataset.fieldname,
 		xaxis: {title: xlabel},
