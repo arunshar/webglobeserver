@@ -395,12 +395,12 @@ define(
 	      var ylabel = dataJSON[0].unitString;
 	      for(var i = 0; i < retnum; i++){
 		xdata.push(dataJSON[i].date);
-		ydata.push(dataJSON[i].value);
+		ydata.push(dataJSON[i].value+0.0);
 	      }
 	      
 	      var xlabel = "Time";
-	      alert(xdata);
-	      alert(ydata);
+	      xdata = [1,2,3,4];
+		ydata = [1,4,9,16];
 	      var data = {x:xdata,y:ydata,type:'scatter'};
 	      var layout = {
 		title: self.selectedDataset.fieldname,
