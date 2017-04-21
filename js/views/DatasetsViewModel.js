@@ -405,11 +405,12 @@ define(
 	      var layout = {
 		title: self.selectedDataset.fieldname,
 		xaxis: {title: xlabel},
-		yaxis: {title: ylabel}
+		yaxis: {title: ylabel},
+		margin: {t:0}
 	      };
 	      //Plotly.plot("innerChart", data, layout);
 	      Plotly.plot( innerChart, [{
-	      	x: xdata,y: ydata }], {margin: { t: 0 } } );
+	      	x: xdata,y: ydata }], layout );
 	      //Plotly.plot("innerChart", data);
 	    }
 	  }).fail(function (xhr, textStatus, err) {
