@@ -389,12 +389,18 @@ define(
 	      lon: lon
 	    }),
 	    success: function (dataJSON) {
+	      var xdata = [];
+	      var ydata = [];
+	      var retnum = Object.keys(dataJSON).length;
+	      var ylabel = dataJSON[0].unitString;
+	      for(var i = 0; i < retnum; i++){
+		xdata.push(dataJSON[i].date);
+		ydata.push(dataJSON[i].value);
+	      }
 	      
-	      var xdata = dataJSON.dates;
 	      var xlabel = "Time";
-	      var ydata = dataJSON.values;
+	      alert(xdata);
 	      alert(ydata);
-	      var ylabel = dataJSON.unitString; 
 	      var data = {x:xdata,y:ydata,type:'scatter'};
 	      var layout = {
 		title: self.selectedDataset.fieldname,
