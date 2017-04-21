@@ -408,7 +408,11 @@ define(
 		yaxis: {title: ylabel}
 	      };
 	      //Plotly.plot("innerChart", data, layout);
-	      Plotly.plot("innerChart", data);
+	      Plotly.plot( innerChart, [{
+	      	x: [1, 2, 3, 4, 5],
+	      		y: [1, 2, 4, 8, 16] }], {
+	      			margin: { t: 0 } } );
+	      //Plotly.plot("innerChart", data);
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log("No data returned for the selected location","alert-danger");
