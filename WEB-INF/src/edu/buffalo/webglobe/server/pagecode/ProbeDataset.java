@@ -48,6 +48,7 @@ public class ProbeDataset extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         logger = Logger.getLogger("WEBGLOBE.LOGGER");
+        logger.severe("Starting this");
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         this.hdfsURL = data.get("hdfsURL").getAsString();
         logger.info("Starting the probe job "+this.hdfsURL);
