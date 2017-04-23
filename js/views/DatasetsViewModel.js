@@ -356,6 +356,8 @@ define(
 	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
 	  }	
+
+	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  self.probing = true;
 	  $("#probe-spinner").show();
 	  //probe the data set
