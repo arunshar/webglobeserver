@@ -358,7 +358,26 @@ define(
 	  }	
 	  self.probing = true;
 	  $("#probe-spinner").show();
-	  alert(hdfsURL);
+	  //probe the data set
+	  $.ajax({
+	    url: webGlobeServer + 'ProbeDataset',
+	    cache: false,
+	    type: 'POST',
+	    data: JSON.stringify({
+	      hdfsURL: hdfsURL,
+	    }),
+	    success: function (data) {
+	      var numvars = data.numvars;
+	      var name = data.name;
+	      var info = data.info;
+	      logger.log('<h4>'+name+'</h4><hr/><b>Number of Variables = '+numvars+'</b><p>'+info+'</p>','alert-info');
+	    }
+	  }).fail(function (xhr, textStatus, err) {
+	    logger.log("Data set not found.","alert-danger");
+	  });                            
+	  //
+	  self.probing = false;
+	  $("#probe-spinner").hide();
 	}
 	self.uploadData = function(){
 	  var hdfsURL = $('#hdfsURL').val();

@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 /**
  * Servlet implementation class GetDatasetDetails
@@ -61,8 +60,8 @@ public class GetDatasetDetails extends HttpServlet {
 			// Step 1: Allocate a database Connection object
             conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
-			String cmd = "select id,name,url,available,info,info_url from netcdf_datasets where available = \"all\" or available = \""
-					+ userName + "\"";
+			String cmd = "select id,name,url,available,info,info_url from netcdf_datasets where is_accessible = 1 and (available = \"all\" or available = \""
+					+ userName + "\")";
 			rset = stmt.executeQuery(cmd);
 			int i = 0;
 			while (rset.next()) {

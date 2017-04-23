@@ -122,6 +122,7 @@ public class UploadDataset extends HttpServlet {
         Statement stmt;
         ResultSet rset;
         int status = 0;
+        int datasetId = -1;
         try {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
@@ -140,12 +141,12 @@ public class UploadDataset extends HttpServlet {
                         logger.severe("Error: Unable to parse server address.");
                         status = -1;
                     } else {
-                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url) VALUES (\"" +
-                                dataName + "\",\"" + hdfsURL+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\")";
+                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible) VALUES (\"" +
+                                dataName + "\",\"" + hdfsURL+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\",0)";
 
                         rset = DBUtils.executeInsert(conn,stmt,cmd);
                         if(rset.next()){
-                            int datasetId = rset.getInt(1);
+                            datasetId = rset.getInt(1);
                             logger.info("STARTING IMAGE CREATION PROCESS ");
                             for (int j = 0; j < ncDir.getVariables().size(); j++) {
                                 String variable = ncDir.getVariables().get(j);
@@ -215,15 +216,21 @@ public class UploadDataset extends HttpServlet {
         conn = DBUtils.getConnection();
         try {
             stmt = conn.createStatement();
-            String cmd;
+            String cmd,cmd1 = null;
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String curDate = dt.format(new Date());
             if(status == 1){
                 cmd = "UPDATE submitted_image_creation_jobs SET status='DONE', finish_time= \""+curDate+"\" where id=" + jobId;
+                if(datasetId != -1)
+                    cmd1 = "UPDATE netcdf_datasets SET is_accessible = 1 where id ="+datasetId;
             }else{
                 cmd = "UPDATE submitted_image_creation_jobs SET status='FAILED', finish_time= \""+curDate+"\"  where id=" + jobId;
+                if(datasetId != -1)
+                    cmd1 = "DELETE from netcdf_datasets WHERE id="+datasetId;
             }
             DBUtils.executeUpdate(conn,stmt,cmd);
+            if(cmd1 != null)
+                DBUtils.executeUpdate(conn,stmt,cmd1);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Message", e);
         }

@@ -35,6 +35,8 @@ public class NetcdfDirNoVar implements Serializable {
     private int timeLen;
     private int latLen;
     private int longLen;
+    String dataDescription = null;
+    String datasetName = null;
     private ArrayList<String> variables = null;
     private ArrayList<String> units = null;
     private ArrayList<String> descriptions = null;
@@ -61,6 +63,8 @@ public class NetcdfDirNoVar implements Serializable {
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
+        dataDescription = dataset.getDetailInfo();
+        datasetName = cdfFile.getTitle();
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         if(grids.size() > 0){
@@ -84,8 +88,6 @@ public class NetcdfDirNoVar implements Serializable {
                 }
             }
         }
-
-
 
         List<Dimension> dims = cdfFile.getDimensions();
         timeLen = dims.get(0).getLength();
@@ -136,6 +138,10 @@ public class NetcdfDirNoVar implements Serializable {
     public ArrayList<String> getUnits(){
         return units;
     }
+
+    public String getDataDescription(){ return dataDescription; }
+
+    public String getDatasetName(){ return datasetName;}
 
     public ArrayList<String> getDescriptions(){
         return descriptions;
