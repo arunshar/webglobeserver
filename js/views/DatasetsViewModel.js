@@ -344,6 +344,14 @@ define(
 	    self.infoActive = false;
 	  }
 	}
+	self.probeData = function(){
+	  var hdfsURL = $('#hdfsURL').val();
+	  if (hdfsURL == ''){ 
+	    logger.log('Insufficient arguments.','alert-danger');
+	    return;
+	  }	
+	  $("#probe-spinner").show();
+	}
 	self.uploadData = function(){
 	  var hdfsURL = $('#hdfsURL').val();
 	  var dataName = $('#dataName').val();
