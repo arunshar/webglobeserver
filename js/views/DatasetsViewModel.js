@@ -349,6 +349,7 @@ define(
 	self.probeData = function(){
 	  if(self.probing){
 	    logger.log('Please wait until the current probe is finished.','alert-danger');
+	    return;
 	  }
 	  var hdfsURL = $('#hdfsURL').val();
 	  if (hdfsURL == ''){ 
