@@ -369,13 +369,14 @@ define(
 	      hdfsURL: hdfsURL,
 	    }),
 	    success: function (data) {
-	      if(data.status == "-1"){
+	      if(parseInt(data.status) == -1){
 		logger.log("Error loading data set","alert-danger");
+	      }else{
+		var numvars = data.numvars;
+		var name = data.name;
+		var info = data.info;
+		logger.log('<h4>'+name+'</h4><hr/><b>Number of Variables = '+numvars+'</b><p>'+info+'</p>','alert-info');
 	      }
-	      var numvars = data.numvars;
-	      var name = data.name;
-	      var info = data.info;
-	      logger.log('<h4>'+name+'</h4><hr/><b>Number of Variables = '+numvars+'</b><p>'+info+'</p>','alert-info');
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log("Error loading data set","alert-danger");
