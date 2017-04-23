@@ -351,6 +351,9 @@ define(
 	    return;
 	  }	
 	  $("#probe-spinner").show();
+	  $("#probe-data").disabled = true;
+
+	  alert(hdfsURL);
 	}
 	self.uploadData = function(){
 	  var hdfsURL = $('#hdfsURL').val();
