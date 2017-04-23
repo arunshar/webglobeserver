@@ -375,10 +375,10 @@ define(
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log("Data set not found.","alert-danger");
 	  });                            
-	  //
 	  self.probing = false;
 	  $("#probe-spinner").hide();
 	}
+
 	self.uploadData = function(){
 	  var hdfsURL = $('#hdfsURL').val();
 	  var dataName = $('#dataName').val();

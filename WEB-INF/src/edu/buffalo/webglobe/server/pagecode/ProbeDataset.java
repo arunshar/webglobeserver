@@ -50,7 +50,7 @@ public class ProbeDataset extends HttpServlet {
         logger = Logger.getLogger("WEBGLOBE.LOGGER");
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         this.hdfsURL = data.get("hdfsURL").getAsString();
-
+        logger.info("Starting the probe job "+this.hdfsURL);
         Map<String, String> responseData =  probeDataset();
         responseData.put("message", "Probing job started.");
 
