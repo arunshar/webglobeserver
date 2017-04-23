@@ -369,8 +369,7 @@ define(
 	      hdfsURL: hdfsURL,
 	    }),
 	    success: function (data) {
-	      alert(data.status);
-	      if(data.status == -1){
+	      if(data.status == "-1"){
 		logger.log("Error loading data set","alert-danger");
 	      }
 	      var numvars = data.numvars;
