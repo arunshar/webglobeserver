@@ -40,6 +40,8 @@ define(
 	self.openAnalysis = false;
 	self.downloading = false;
 	self.submitting = false;
+	self.uploading = false;
+	self.probing = false;
 	self.interval = null;
 
 	/* register listeners */
@@ -345,14 +347,16 @@ define(
 	  }
 	}
 	self.probeData = function(){
+	  if(self.probing){
+	    logger.log('Please wait until the current probe is finished.','alert-danger');
+	  }
 	  var hdfsURL = $('#hdfsURL').val();
 	  if (hdfsURL == ''){ 
 	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
 	  }	
+	  self.probing = true;
 	  $("#probe-spinner").show();
-	  $("#probe-data").disabled = true;
-
 	  alert(hdfsURL);
 	}
 	self.uploadData = function(){
