@@ -369,13 +369,16 @@ define(
 	      hdfsURL: hdfsURL,
 	    }),
 	    success: function (data) {
+	      if(data.status == -1){
+		logger.log("Error loading data set","alert-danger");
+	      }
 	      var numvars = data.numvars;
 	      var name = data.name;
 	      var info = data.info;
 	      logger.log('<h4>'+name+'</h4><hr/><b>Number of Variables = '+numvars+'</b><p>'+info+'</p>','alert-info');
 	    }
 	  }).fail(function (xhr, textStatus, err) {
-	    logger.log("Data set not found.","alert-danger");
+	    logger.log("Error loading data set","alert-danger");
 	  });                            
 	  self.probing = false;
 	  $("#probe-spinner").hide();
