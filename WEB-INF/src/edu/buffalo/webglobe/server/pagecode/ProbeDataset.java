@@ -92,7 +92,7 @@ public class ProbeDataset extends HttpServlet {
                 responseData.put("numvars",Integer.toString(ncDir.getVariables().size()));
                 responseData.put("name",ncDir.getDatasetName());
                 responseData.put("info",ncDir.getDataDescription());
-                responseData.put("infoURL",ncDir.getInfoURL());
+                responseData.put("infoURL",ncDir.getDatasetInfoURL());
                 for (int j = 0; j < ncDir.getVariables().size(); j++) {
                     String variable = ncDir.getVariables().get(j);
                     responseData.put("var"+j, variable);
