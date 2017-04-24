@@ -57,6 +57,7 @@ public abstract class NetcdfSource implements Serializable {
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
+
         dataDescription = dataset.getDetailInfo();
         datasetName = dataset.getTitle();
         GridDataset gridDataset = new GridDataset(dataset);

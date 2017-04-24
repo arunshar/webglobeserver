@@ -146,11 +146,13 @@ public class UploadDataset extends HttpServlet {
 
                     //check if the URL points to a file or a directory
                     if(dir.contains(".")){
-                        if(VALID_EXTENSIONS.contains(dir.substring(dir.indexOf(".")+1)) ) {
-                            ncDir = new NetcdfFile(protocol,uri,dir);
-                        }else {
-                            logger.severe("File extension is not supported.");
-                            status = -1;
+                        if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
+                            if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
+                                ncDir = new NetcdfFile(protocol,uri,dir);
+                            }else {
+                                logger.severe("File extension is not supported.");
+                                status = -1;
+                            }
                         }
                     }else {
                         if(!protocol.equalsIgnoreCase("hdfs")){

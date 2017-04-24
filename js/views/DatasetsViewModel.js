@@ -351,8 +351,8 @@ define(
 	    logger.log('Please wait until the current probe is finished.','alert-danger');
 	    return;
 	  }
-	  var hdfsURL = $('#hdfsURL').val();
-	  if (hdfsURL == ''){ 
+	  var url= $('#url').val();
+	  if (url == ''){ 
 	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
 	  }	
@@ -366,7 +366,7 @@ define(
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
-	      hdfsURL: hdfsURL,
+	      url: url,
 	    }),
 	    success: function (data) {
 	      if(parseInt(data.status) == -1){
@@ -386,11 +386,11 @@ define(
 	}
 
 	self.uploadData = function(){
-	  var hdfsURL = $('#hdfsURL').val();
+	  var url = $('#url').val();
 	  var dataName = $('#dataName').val();
 	  var dataInfo = $('#dataInfo').val();
 	  var dataInfoURL = $('#dataInfoURL').val();
-	  if (hdfsURL == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
+	  if (url == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
 	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
 	  }	
@@ -402,7 +402,7 @@ define(
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
-	      hdfsURL: hdfsURL,
+	      url: url,
 	      dataName: dataName,
 	      dataInfo: dataInfo,
 	      dataInfoURL: dataInfoURL

@@ -83,7 +83,7 @@ public class GetTimeSeriesData extends HttpServlet {
                 //check if the URL points to a file or a directory
                 NetcdfSource ncDir = null;
                 if (dir.contains(".")) {
-                    if (VALID_EXTENSIONS.contains(dir.substring(dir.indexOf(".") + 1))) {
+                    if (VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".") + 1,dir.length()))) {
                         ncDir = new NetcdfFile(protocol, uri, dir);
                     }
                 } else {
