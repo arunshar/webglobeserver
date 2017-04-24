@@ -13,7 +13,7 @@
  * disposal of the software.
  */
 
-package edu.buffalo.webglobe.server.utils;
+package edu.buffalo.webglobe.server.netcdf;
 
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.util.WWIO;

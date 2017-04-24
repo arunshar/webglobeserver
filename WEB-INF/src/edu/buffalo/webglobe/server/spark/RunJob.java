@@ -1,5 +1,6 @@
 package edu.buffalo.webglobe.server.spark;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,11 +27,8 @@ import edu.buffalo.webglobe.server.utils.Utils;
 public class RunJob extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private String userName;
-    private int datasetId;
     private String url;
     private String analysisOutputName;
-    private String fieldName;
-    private String analysisName;
     private int jobId;
 
     /**
@@ -56,10 +54,10 @@ public class RunJob extends HttpServlet {
         // TODO Auto-generated method stub
         this.userName = request.getUserPrincipal().getName();
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        this.datasetId = data.get("datasetid").getAsInt();
+        int datasetId = data.get("datasetid").getAsInt();
         this.url =  data.get("url").getAsString();
-        this.analysisName =  data.get("analysisname").getAsString().replace(" ", "");
-        this.fieldName =  data.get("fieldname").getAsString();
+        String analysisName = data.get("analysisname").getAsString().replace(" ", "");
+        String fieldName = data.get("fieldname").getAsString();
         this.analysisOutputName = data.get("analysisoutputname").getAsString().replace(" ", "");
         if(this.analysisOutputName.equals(""))
             this.analysisOutputName="defaultanalysisname";
@@ -73,7 +71,7 @@ public class RunJob extends HttpServlet {
 
             //add an entry to the submitted_analysis_jobs table
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String curDate = dt.format(new Date()).toString();
+            String curDate = dt.format(new Date());
             String cmd = "INSERT INTO submitted_analysis_jobs (user_name,dataset_id,analysis,field,status,submission_time,finish_time,result_loc,priority) VALUES (\"" +
                     userName + "\"," +
                     datasetId + ",\"" +
@@ -104,7 +102,13 @@ public class RunJob extends HttpServlet {
         //run the job
         String[] outputs = RunSparkJob.createSparkCluster("/home/centos/bash-scripts/sparkcluster.sh", 10, "m1.medium");
 
-        String hdfsuri = Utils.parseHDFSURL(url)[0];
+
+        String hdfsuri;
+        try{
+            hdfsuri = Utils.parseURL(url)[0];
+        } catch(MalformedURLException e){
+            return;
+        }
         String inputDir = url;
         String logHypersFile = url + "/"+userName+"/globalLogHypersFile";
         String outputDir = url + "/"+userName+"/analysis/"+analysisOutputName;
@@ -151,7 +155,7 @@ public class RunJob extends HttpServlet {
             Statement stmt = conn.createStatement();
             //update the entry in the submitted_analysis_jobs table
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String curDate = dt.format(new Date()).toString();
+            String curDate = dt.format(new Date());
             String cmd = "UPDATE submitted_analysis_jobs SET finish_time=\""+curDate+"\", status='DONE',result_loc=\""+outputDir+"\" where id=" + jobId;
             DBUtils.executeUpdate(conn,stmt,cmd);
         } catch (SQLException e) {

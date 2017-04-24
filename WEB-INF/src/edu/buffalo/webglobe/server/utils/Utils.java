@@ -1,12 +1,12 @@
 package edu.buffalo.webglobe.server.utils;
 
-import ucar.ma2.Array;
-import ucar.ma2.MAMath;
+import edu.buffalo.webglobe.server.netcdf.NetcdfColorMap;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -14,31 +14,6 @@ import javax.xml.stream.XMLStreamException;
 
 public class Utils {
     private final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-
-    public static File[] createImages(NetcdfDir netcdfDir, String saveDir, String from, String to){
-
-        File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
-        folder.mkdirs();
-
-        int startIndex = Math.max(netcdfDir.getIndexFromDate(from),0);
-        int endIndex = Math.min(netcdfDir.getIndexFromDate(to),netcdfDir.getFilepaths().size()*netcdfDir.getTimeLen()-1);
-        for (int i = startIndex; i <= endIndex; ++i) {
-            Array src = netcdfDir.getData(i);
-            float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
-            MAMath.MinMax minmax;
-            if (netcdfDir.getVariableName().equals("tasmax")) {
-                minmax = new MAMath.MinMax(200, 350);
-            } else if (netcdfDir.getVariableName().equals("ChangeDetection")) {
-                minmax = new MAMath.MinMax(-1, 2);
-            } else {
-                minmax = MAMath.getMinMax(src);
-            }
-
-            Utils.createImage(data, (float) minmax.min, (float) minmax.max, Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfDir.getDateFromIndex(i) + ".png");
-        }
-        File[] listOfFiles = folder.listFiles();
-        return listOfFiles;
-    }
 
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;
@@ -95,13 +70,19 @@ public class Utils {
 		return false;
 	}
 
-    public static String[] parseHDFSURL(String hdfsuri){
+    public static String[] parseURL(String uri) throws MalformedURLException{
 
         try {
-            String[] tokens = new String[2];
-            String s1 = hdfsuri.substring(hdfsuri.indexOf("://") + 3, hdfsuri.length());
-            tokens[0] = "hdfs://" + s1.substring(0, s1.indexOf('/'));
-            tokens[1] = s1.substring(s1.indexOf('/'), s1.length());
+            String[] tokens = new String[3];
+            if(uri.indexOf("://") == -1){
+                throw(new MalformedURLException());
+            }
+            String protocol = uri.substring(0,uri.indexOf("://"));
+            String s1 = uri.substring(uri.indexOf("://") + 3, uri.length());
+
+            tokens[0] = protocol;
+            tokens[1] = protocol+"://" + s1.substring(0, s1.indexOf('/'));
+            tokens[2] = s1.substring(s1.indexOf('/'), s1.length());
             return tokens;
         }catch(Exception e) {
             return null;

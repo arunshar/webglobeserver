@@ -1,4 +1,4 @@
-package edu.buffalo.webglobe.server.pagecode;
+package edu.buffalo.webglobe.server.db;
 
 import java.io.IOException;
 import java.sql.Connection;

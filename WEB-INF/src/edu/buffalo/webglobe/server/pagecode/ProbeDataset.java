@@ -2,8 +2,10 @@ package edu.buffalo.webglobe.server.pagecode;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import edu.buffalo.webglobe.server.utils.NetcdfDir;
-import edu.buffalo.webglobe.server.utils.NetcdfDirNoVar;
+import edu.buffalo.webglobe.server.netcdf.NetcdfFile;
+import edu.buffalo.webglobe.server.netcdf.NetcdfSource;
+import edu.buffalo.webglobe.server.netcdf.NetcdfDirectory;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 /**
  * @author chandola
  * @version $Id$
@@ -26,7 +30,7 @@ import java.util.logging.Logger;
 public class ProbeDataset extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Logger logger;
-    private String hdfsURL;
+    private String url;
 
     /**
      * @see javax.servlet.http.HttpServlet#HttpServlet()
@@ -48,10 +52,8 @@ public class ProbeDataset extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        logger.severe("Starting this");
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        this.hdfsURL = data.get("hdfsURL").getAsString();
-        logger.info("Starting the probe job "+this.hdfsURL);
+        this.url = data.get("url").getAsString();
         Map<String, String> responseData =  probeDataset();
         responseData.put("message", "Probing job started.");
 
@@ -64,11 +66,33 @@ public class ProbeDataset extends HttpServlet {
     public Map<String, String> probeDataset(){
         Map<String, String> responseData = new HashMap<String, String>();
         // query database
-        int status = 0;
+        int status;
         //open netcdfdata directory and find all plottable variables
-        NetcdfDirNoVar ncDir;
+        NetcdfSource ncDir;
         try {
-            ncDir = new NetcdfDirNoVar(hdfsURL);
+            String [] tokens = Utils.parseURL(url);
+            String protocol = tokens[0];
+            String uri = tokens[1];
+            String dir = tokens[2];
+
+            //check if the URL points to a file or a directory
+            if(dir.contains(".")){
+             if(VALID_EXTENSIONS.contains(dir.substring(dir.indexOf(".")+1)) ) {
+                 ncDir = new NetcdfFile(protocol,uri,dir);
+             }else {
+                 status = -1;
+                 responseData.put("status",(Integer.toString(status)));
+                 return responseData;
+             }
+            }else {
+                if(!protocol.equalsIgnoreCase("hdfs")){
+                    status = -1;
+                    responseData.put("status",(Integer.toString(status)));
+                    return responseData;
+                }
+                ncDir = new NetcdfDirectory(protocol,uri,dir);
+            }
+
             if (ncDir.getVariables() == null) {
                 logger.severe("Error: Unable to parse server address.");
                 status = -1;
@@ -78,10 +102,9 @@ public class ProbeDataset extends HttpServlet {
                 responseData.put("info",ncDir.getDataDescription());
                 for (int j = 0; j < ncDir.getVariables().size(); j++) {
                     String variable = ncDir.getVariables().get(j);
-                    NetcdfDir netcdfDir = new NetcdfDir(hdfsURL, variable);
-                    responseData.put("var"+j,netcdfDir.getVariableName());
-                    status = 1;
+                    responseData.put("var"+j, variable);
                 }
+                status = 1;
             }
         } catch (Exception e) {
             status = -1;

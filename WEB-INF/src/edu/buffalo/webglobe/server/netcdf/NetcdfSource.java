@@ -1,4 +1,4 @@
-package edu.buffalo.webglobe.server.utils;
+package edu.buffalo.webglobe.server.netcdf;
 
 /**
  * @author chandola
@@ -23,48 +23,42 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class NetcdfDirNoVar implements Serializable {
+public abstract class NetcdfSource implements Serializable {
     /**
      *
      */
     private static final long serialVersionUID = 6617469854915522348L;
 
-    private String hdfsuri;
-    private String dir;
-    private ArrayList<String> filepaths = null;
-    private int timeLen;
-    private int latLen;
-    private int longLen;
-    String dataDescription = null;
-    String datasetName = null;
-    private ArrayList<String> variables = null;
-    private ArrayList<String> units = null;
-    private ArrayList<String> descriptions = null;
-    private CalendarDate startDate;
-    private CalendarDate endDate;
-    private Logger logger;
+    protected String uri;
+    protected String target;
+    protected String protocol;
+    protected int timeLen;
+    protected int latLen;
+    protected int longLen;
+    protected String dataDescription = null;
+    protected String datasetName = null;
+    protected ArrayList<String> variables = null;
+    protected ArrayList<String> units = null;
+    protected ArrayList<String> descriptions = null;
+    protected CalendarDate startDate;
+    protected CalendarDate endDate;
+    protected static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+    private int lonLen;
+    private CalendarDate[] dates;
 
-    public NetcdfDirNoVar(String hdfsuri) throws Exception {
-        this.logger = Logger.getLogger("WEBGLOBE.LOGGER");
-        String [] tokens = Utils.parseHDFSURL(hdfsuri);
-        if(tokens == null){
-            return;
-        }
 
-        this.hdfsuri = tokens[0];
-        this.dir = tokens[1];
+    public NetcdfSource(String protocol, String uri, String target) throws Exception {
 
-        this.filepaths = NetCDFUtils.listPaths(hdfsuri, dir);
+        this.protocol = protocol;
+        this.uri = uri;
+        this.target = target;
 
-        // get dimension's length
-
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.hdfsuri, filepaths.get(0), 3000);
-        NetcdfFile cdfFile = dataset.getReferencedFile();
+        ucar.nc2.dataset.NetcdfDataset dataset = this.loadDataset();
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
         dataDescription = dataset.getDetailInfo();
-        datasetName = cdfFile.getTitle();
+        datasetName = dataset.getTitle();
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         if(grids.size() > 0){
@@ -88,24 +82,28 @@ public class NetcdfDirNoVar implements Serializable {
                 }
             }
         }
-
-        List<Dimension> dims = cdfFile.getDimensions();
+        List<Dimension> dims = dataset.getDimensions();
         timeLen = dims.get(0).getLength();
         latLen = dims.get(1).getLength();
         longLen = dims.get(2).getLength();
-        Array arrTime = cdfFile.findVariable("time").read();
 
+        Array arrTime = dataset.findVariable("time").read();
         CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
         calDate = calDate.add((int) arrTime.getDouble(0), CalendarPeriod.Field.Day);
         startDate = calDate;
 
         calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");
-        calDate = calDate.add((int) arrTime.getDouble(0) + filepaths.size()*timeLen - 1, CalendarPeriod.Field.Day);
+        calDate = calDate.add((int) arrTime.getDouble(0) + timeLen - 1, CalendarPeriod.Field.Day);
         endDate = calDate;
 
         dataset.close();
     }
 
+    public abstract int getTotalTimeLength();
+
+    protected abstract NetcdfDataset loadDataset();
+
+    protected abstract NetcdfDataset loadDataset(int yearInd);
 
     public CalendarDate getStartDate() {
         return startDate;
@@ -115,12 +113,12 @@ public class NetcdfDirNoVar implements Serializable {
         return endDate;
     }
 
-    public String getHdfsuri() {
-        return hdfsuri;
+    public String getUri() {
+        return uri;
     }
 
-    public String getDir() {
-        return dir;
+    public String getTarget() {
+        return target;
     }
 
     public int getTimeLen() {
@@ -129,10 +127,6 @@ public class NetcdfDirNoVar implements Serializable {
 
     public ArrayList<String> getVariables(){
         return variables;
-    }
-
-    public ArrayList<String> getFilepaths() {
-        return filepaths;
     }
 
     public ArrayList<String> getUnits(){
@@ -158,6 +152,18 @@ public class NetcdfDirNoVar implements Serializable {
         CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
         return dateFormatter.toString(startDate.add(i , CalendarPeriod.Field.Day));
+    }
+
+    public int getLatLen() {
+        return latLen;
+    }
+
+    public int getLonLen() {
+        return lonLen;
+    }
+
+    public CalendarDate[] getDates() {
+        return dates;
     }
 }
 

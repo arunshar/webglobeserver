@@ -27,7 +27,6 @@ public class RunSparkJob {
 					new InputStreamReader(in), 1);
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
-				System.out.println(line);
 				String[] tokens = line.split(" ");
 				if (tokens[0].equals("RESERVATION"))
 					outputs[0] = tokens[1]; // reservationid
