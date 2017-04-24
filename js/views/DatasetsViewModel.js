@@ -375,7 +375,9 @@ define(
 		var numvars = data.numvars;
 		var name = data.name;
 		var info = data.info;
-		logger.log('<h4>'+name+'</h4><hr/><b>Number of Variables = '+numvars+'</b><p>'+info+'</p>','alert-info');
+		logger.log('<h4>'+name+'</h4><hr/>Number of Variables = '+numvars+','alert-info');
+		//prepopulate fields
+		$('#upload-dataName').val(name);
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -387,9 +389,9 @@ define(
 
 	self.uploadData = function(){
 	  var url = $('#url').val();
-	  var dataName = $('#dataName').val();
-	  var dataInfo = $('#dataInfo').val();
-	  var dataInfoURL = $('#dataInfoURL').val();
+	  var dataName = $('#upload-dataName').val();
+	  var dataInfo = $('#upload-dataInfo').val();
+	  var dataInfoURL = $('#upload-dataInfoURL').val();
 	  if (url == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
 	    logger.log('Insufficient arguments.','alert-danger');
 	    return;
