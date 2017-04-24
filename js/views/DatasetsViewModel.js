@@ -375,7 +375,7 @@ define(
 		var numvars = data.numvars;
 		var name = data.name;
 		var info = data.info;
-		logger.log('<h4>'+name+'</h4><hr/>Number of Variables = '+numvars+','alert-info');
+		logger.log('<h4>'+name+'</h4><hr/>Number of Variables = '+numvars,'alert-info');
 		//prepopulate fields
 		$('#upload-dataName').val(name);
 	      }
