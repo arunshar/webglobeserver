@@ -142,24 +142,16 @@ public class UploadDataset extends HttpServlet {
                     String dir = tokens[2];
 
                     //check if the URL points to a file or a directory
-                    if(dir.contains(".")){
-                        if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
-                            if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
-                                ncDir = new NetcdfFile(protocol,uri,dir);
-                            }else {
-                                Utils.logger.severe("File extension is not supported.");
-                                status = -1;
-                            }
-                        }
-                    }else {
+                    if(Utils.isNCFile(dir)) {
+                        ncDir = new NetcdfFile(protocol,uri,dir);
+                    } else {
                         if(!protocol.equalsIgnoreCase("hdfs")){
-                            Utils.logger.severe("Directory strucutre is only supported for data in HDFS");
                             status = -1;
-                        }
-                        else {
+                        }else {
                             ncDir = new NetcdfDirectory(protocol, uri, dir);
                         }
                     }
+
                     if (ncDir != null) {
                         if((ncDir.getVariables() == null)) {
                             Utils.logger.severe("Error: Unable to parse server address.");

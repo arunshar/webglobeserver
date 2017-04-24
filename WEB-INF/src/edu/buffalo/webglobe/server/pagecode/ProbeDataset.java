@@ -66,24 +66,16 @@ public class ProbeDataset extends HttpServlet {
         //open netcdfdata directory and find all plottable variables
         NetcdfSource ncDir;
         try {
-            Utils.logger.info("&&&&& "+url);
             String [] tokens = Utils.parseURL(url);
-            Utils.logger.info("&&&&& PARSING SUCCESSFUL "+url);
 
             String protocol = tokens[0];
             String uri = tokens[1];
             String dir = tokens[2];
 
             //check if the URL points to a file or a directory
-            if(dir.contains(".")){
-             if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
-                 ncDir = new NetcdfFile(protocol,uri,dir);
-             }else {
-                 status = -1;
-                 responseData.put("status",(Integer.toString(status)));
-                 return responseData;
-             }
-            }else {
+            if(Utils.isNCFile(dir)) {
+                ncDir = new NetcdfFile(protocol,uri,dir);
+            } else {
                 if(!protocol.equalsIgnoreCase("hdfs")){
                     status = -1;
                     responseData.put("status",(Integer.toString(status)));
@@ -91,7 +83,7 @@ public class ProbeDataset extends HttpServlet {
                 }
                 ncDir = new NetcdfDirectory(protocol,uri,dir);
             }
-
+            Utils.logger.severe(">>>>>> "+ncDir.getDatasetName());
             if (ncDir.getVariables() == null) {
                 Utils.logger.severe("Error: Unable to parse server address.");
                 status = -1;

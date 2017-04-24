@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
+import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
+
 public class Utils {
     public final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
@@ -87,5 +89,9 @@ public class Utils {
         }catch(Exception e) {
             return null;
         }
+    }
+
+    public static boolean isNCFile(String uri){
+        return uri.lastIndexOf('.') != -1 && VALID_EXTENSIONS.contains(uri.substring(uri.lastIndexOf('.') + 1, uri.length()));
     }
 }
