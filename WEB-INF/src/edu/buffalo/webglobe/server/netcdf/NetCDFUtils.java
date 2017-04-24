@@ -134,7 +134,7 @@ public class NetCDFUtils {
     public static String extractInfo(NetcdfDataset dataset) {
         for(String name: Constants.VALID_DESCRIPTION_TAGS){
             if(dataset.findAttribute(name) != null)
-                return dataset.findAttribute(name).getStringValue();
+                return dataset.findGlobalAttribute(name).getStringValue();
         }
         return null;
     }
@@ -142,7 +142,7 @@ public class NetCDFUtils {
     public static String extractTitle(NetcdfDataset dataset) {
         for(String name: Constants.VALID_TITLE_TAGS){
             if(dataset.findAttribute(name) != null)
-                return dataset.findAttribute(name).getStringValue();
+                return dataset.findGlobalAttribute(name).getStringValue();
         }
         return null;
     }
