@@ -66,7 +66,10 @@ public class ProbeDataset extends HttpServlet {
         //open netcdfdata directory and find all plottable variables
         NetcdfSource ncDir;
         try {
+            Utils.logger.info("&&&&& "+url);
             String [] tokens = Utils.parseURL(url);
+            Utils.logger.info("&&&&& PARSING SUCCESSFUL "+url);
+
             String protocol = tokens[0];
             String uri = tokens[1];
             String dir = tokens[2];
