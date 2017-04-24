@@ -75,6 +75,7 @@ public class ProbeDataset extends HttpServlet {
             //check if the URL points to a file or a directory
             if(Utils.isNCFile(dir)) {
                 ncDir = new NetcdfFile(protocol,uri,dir);
+                ncDir.initialize();
             } else {
                 if(!protocol.equalsIgnoreCase("hdfs")){
                     status = -1;
@@ -82,9 +83,10 @@ public class ProbeDataset extends HttpServlet {
                     return responseData;
                 }
                 ncDir = new NetcdfDirectory(protocol,uri,dir);
+                ncDir.initialize();
             }
             Utils.logger.severe(">>>>>> "+ncDir.getDatasetName());
-            if (ncDir.getVariables() == null) {
+            if ((ncDir.isInitialized()) && (ncDir.getVariables() == null)){
                 Utils.logger.severe("Error: Unable to parse server address.");
                 status = -1;
             } else {

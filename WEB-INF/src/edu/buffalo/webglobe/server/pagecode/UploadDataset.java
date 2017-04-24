@@ -144,79 +144,82 @@ public class UploadDataset extends HttpServlet {
                     //check if the URL points to a file or a directory
                     if(Utils.isNCFile(dir)) {
                         ncDir = new NetcdfFile(protocol,uri,dir);
+                        ncDir.initialize();
                     } else {
                         if(!protocol.equalsIgnoreCase("hdfs")){
                             status = -1;
                         }else {
                             ncDir = new NetcdfDirectory(protocol, uri, dir);
+                            ncDir.initialize();
                         }
                     }
 
-                    if (ncDir != null) {
-                        if((ncDir.getVariables() == null)) {
-                            Utils.logger.severe("Error: Unable to parse server address.");
-                            status = -1;
-                        } else {
-                            cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible) VALUES (\"" +
-                                    dataName + "\",\"" + url+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\",0)";
+                    if ((ncDir != null) && (ncDir.isInitialized()) ) {
 
-                            rset = DBUtils.executeInsert(conn,stmt,cmd);
-                            if(rset.next()){
-                                datasetId = rset.getInt(1);
-                                Utils.logger.info("STARTING IMAGE CREATION PROCESS ");
-                                for (int j = 0; j < ncDir.getVariables().size(); j++) {
-                                    String variable = ncDir.getVariables().get(j);
-                                    NetcdfVariable netcdfVariable = new NetcdfVariable(ncDir, variable);
-                                    //get minmax values
-                                    MAMath.MinMax minmax;
-                                    //TODO - Change this to accept minmax ranges from the user
-                                    if (variable.equals("tasmax")) {
-                                        minmax = new MAMath.MinMax(200, 373);
-                                    } else if (variable.equals("ChangeDetection")) {
-                                        minmax = new MAMath.MinMax(-1, 2);
-                                    } else {
-                                        Array src1 = netcdfVariable.getData(0);
-                                        minmax = MAMath.getMinMax(src1);
-                                    }
-                                    cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,field_description,units,max_value,min_value) VALUES (" +
-                                            datasetId + ",\"" + variable + "\",\"" + ncDir.getDescriptions().get(j) +
-                                            "\",\"" + ncDir.getUnits().get(j) + "\"," +
-                                            minmax.max + "," + minmax.min+")";
-                                    Statement stmt1 = conn.createStatement();
-                                    ResultSet rset1 = DBUtils.executeInsert(conn,stmt1,cmd);
 
-                                    int fieldId = -1;
-                                    if(rset1.next())
-                                        fieldId = rset1.getInt(1);
-                                    String saveDir = netcdfVariable.getNetcdfSource().getTarget() + "/variable/" + variable;
-                                    File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
-                                    folder.mkdirs();
+                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible) VALUES (\"" +
+                                dataName + "\",\"" + url+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\",0)";
 
-                                    int startIndex = 0;
-                                    int endIndex = netcdfVariable.getNetcdfSource().getTotalTimeLength();
-
-                                    for (int i = startIndex; i < endIndex; ++i) {
-                                        Array src = netcdfVariable.getData(i);
-                                        float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
-                                        String imgLocation = Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfVariable.getNetcdfSource().getDateFromIndex(i) + ".png";
-                                        String imgURL = Constants.PUBLIC_ADDRESS +"/" + saveDir + "/" + netcdfVariable.getNetcdfSource().getDateFromIndex(i) + ".png";
-                                        Utils.createImage(data, (float) minmax.min, (float) minmax.max, imgLocation);
-                                        //create an entry in the database
-                                        //datasetId, fieldId, timeindex, timestamp, imgLocation
-                                        cmd = "INSERT INTO netcdf_dataset_images (dataset_id, field_id, time_index,timestamp, img_location)"+
-                                               "VALUES("+ datasetId +","+fieldId+","+i+",\""+ netcdfVariable.getNetcdfSource().getDateFromIndex(i)+"\",\""+imgURL+"\")";
-                                        DBUtils.executeUpdate(conn,stmt1,cmd);
-                                    }
-                                    status = 1;
+                        rset = DBUtils.executeInsert(conn,stmt,cmd);
+                        if(rset.next()){
+                            datasetId = rset.getInt(1);
+                            Utils.logger.info("STARTING IMAGE CREATION PROCESS ");
+                            for (int j = 0; j < ncDir.getVariables().size(); j++) {
+                                String variable = ncDir.getVariables().get(j);
+                                NetcdfVariable netcdfVariable = new NetcdfVariable(ncDir, variable);
+                                //get minmax values
+                                MAMath.MinMax minmax;
+                                //TODO - Change this to accept minmax ranges from the user
+                                if (variable.equals("tasmax")) {
+                                    minmax = new MAMath.MinMax(200, 373);
+                                } else if (variable.equals("ChangeDetection")) {
+                                    minmax = new MAMath.MinMax(-1, 2);
+                                } else {
+                                    Array src1 = netcdfVariable.getData(0);
+                                    minmax = MAMath.getMinMax(src1);
                                 }
-                                Utils.logger.info("ENDED IMAGE CREATION PROCESS");
+                                cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,field_description,units,max_value,min_value) VALUES (" +
+                                        datasetId + ",\"" + variable + "\",\"" + ncDir.getDescriptions().get(j) +
+                                        "\",\"" + ncDir.getUnits().get(j) + "\"," +
+                                        minmax.max + "," + minmax.min+")";
+                                Statement stmt1 = conn.createStatement();
+                                ResultSet rset1 = DBUtils.executeInsert(conn,stmt1,cmd);
 
-                            }else{
-                                Utils.logger.severe("Error: Could not create a new dataset record.");
-                                status = -1;
+                                int fieldId = -1;
+                                if(rset1.next())
+                                    fieldId = rset1.getInt(1);
+                                String saveDir = netcdfVariable.getNetcdfSource().getTarget() + "/variable/" + variable;
+                                File folder = new File(Constants.LOCAL_DIRECTORY + saveDir);
+                                folder.mkdirs();
+
+                                int startIndex = 0;
+                                int endIndex = netcdfVariable.getNetcdfSource().getTotalTimeLength();
+
+                                for (int i = startIndex; i < endIndex; ++i) {
+                                    Array src = netcdfVariable.getData(i);
+                                    float[][] data = ((float[][][]) src.copyToNDJavaArray())[0];
+                                    String imgLocation = Constants.LOCAL_DIRECTORY + saveDir + "/" + netcdfVariable.getNetcdfSource().getDateFromIndex(i) + ".png";
+                                    String imgURL = Constants.PUBLIC_ADDRESS +"/" + saveDir + "/" + netcdfVariable.getNetcdfSource().getDateFromIndex(i) + ".png";
+                                    Utils.createImage(data, (float) minmax.min, (float) minmax.max, imgLocation);
+                                    //create an entry in the database
+                                    //datasetId, fieldId, timeindex, timestamp, imgLocation
+                                    cmd = "INSERT INTO netcdf_dataset_images (dataset_id, field_id, time_index,timestamp, img_location)"+
+                                            "VALUES("+ datasetId +","+fieldId+","+i+",\""+ netcdfVariable.getNetcdfSource().getDateFromIndex(i)+"\",\""+imgURL+"\")";
+                                    DBUtils.executeUpdate(conn,stmt1,cmd);
+                                }
+                                status = 1;
                             }
+                            Utils.logger.info("ENDED IMAGE CREATION PROCESS");
+
+                        }else{
+                            Utils.logger.severe("Error: Could not create a new dataset record.");
+                            status = -1;
                         }
+                    } else {
+                        Utils.logger.severe("Error: Unable to parse server address.");
+                        status = -1;
                     }
+
                 } catch (Exception e) {
                     Utils.logger.severe(e.getMessage());
                     Utils.logger.severe("Error: Unable to open HDFS file.");

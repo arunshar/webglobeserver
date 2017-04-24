@@ -42,15 +42,19 @@ public abstract class NetcdfSource implements Serializable {
     protected CalendarDate startDate;
     protected CalendarDate endDate;
     private CalendarDate[] dates;
-
+    protected NetcdfDataset dataset;
+    protected boolean initialized;
 
     public NetcdfSource(String protocol, String uri, String target) throws Exception {
 
         this.protocol = protocol;
         this.uri = uri;
         this.target = target;
-        Utils.logger.severe(">>>> INCOMMMMMMING");
-        ucar.nc2.dataset.NetcdfDataset dataset = this.loadDataset();
+        this.initialized = false;
+    }
+
+    public void initialize() throws Exception{
+        this.dataset = this.loadDataset();
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
         descriptions = new ArrayList<String>();
@@ -95,6 +99,7 @@ public abstract class NetcdfSource implements Serializable {
         endDate = calDate;
 
         dataset.close();
+        this.initialized = true;
     }
 
     public abstract int getTotalTimeLength();
@@ -163,5 +168,7 @@ public abstract class NetcdfSource implements Serializable {
     public CalendarDate[] getDates() {
         return dates;
     }
+
+    public boolean isInitialized(){return initialized;}
 }
 
