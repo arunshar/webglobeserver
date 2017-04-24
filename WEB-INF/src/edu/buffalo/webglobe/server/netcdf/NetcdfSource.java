@@ -49,7 +49,7 @@ public abstract class NetcdfSource implements Serializable {
         this.protocol = protocol;
         this.uri = uri;
         this.target = target;
-
+        Utils.logger.severe(">>>> INCOMMMMMMING");
         ucar.nc2.dataset.NetcdfDataset dataset = this.loadDataset();
         variables = new ArrayList<String>();
         units = new ArrayList<String>();

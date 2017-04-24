@@ -74,8 +74,6 @@ public class ProbeDataset extends HttpServlet {
 
             //check if the URL points to a file or a directory
             if(Utils.isNCFile(dir)) {
-                Utils.logger.severe(">>>>>> file");
-
                 ncDir = new NetcdfFile(protocol,uri,dir);
             } else {
                 if(!protocol.equalsIgnoreCase("hdfs")){
@@ -83,8 +81,6 @@ public class ProbeDataset extends HttpServlet {
                     responseData.put("status",(Integer.toString(status)));
                     return responseData;
                 }
-                Utils.logger.severe(">>>>>> directory");
-
                 ncDir = new NetcdfDirectory(protocol,uri,dir);
             }
             Utils.logger.severe(">>>>>> "+ncDir.getDatasetName());
