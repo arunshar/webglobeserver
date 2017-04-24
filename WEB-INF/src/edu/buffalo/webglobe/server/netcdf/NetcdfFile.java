@@ -31,7 +31,7 @@ public class NetcdfFile extends NetcdfSource implements Serializable {
             NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.uri, this.target, 3000);
             return dataset;
         }else{
-            NetcdfDataset dataset = NetCDFUtils.loadHTTPNetcdfDataSet(this.protocol, this.uri, this.target);
+            NetcdfDataset dataset = NetCDFUtils.loadHTTPNetcdfDataSet(this.uri, this.target);
             return dataset;
         }
     }

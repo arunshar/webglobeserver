@@ -59,13 +59,13 @@ public class NetCDFUtils {
     /**
      * Loads a NetCDF Dataset from HTTP URL
      */
-    public static NetcdfDataset loadHTTPNetcdfDataSet(String protocol, String url, String target){
+    public static NetcdfDataset loadHTTPNetcdfDataSet(String url, String target){
         NetcdfDataset.setUseNaNs(false);
 
         try{
-            return new NetcdfDataset(NetcdfFile.open(protocol+"://"+url+"/"+target));
+            return new NetcdfDataset(NetcdfFile.open(url+"/"+target));
         } catch (IOException e) {
-            Utils.logger.severe(("Couldn't open dataset " +protocol+"://"+url+"/"+target));        }
+            Utils.logger.severe(("Couldn't open dataset " +url+"/"+target));        }
         return null;
     }
 	/**
