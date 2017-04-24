@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.Utils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -130,4 +131,19 @@ public class NetCDFUtils {
 	}
 
 
+    public static String extractInfo(NetcdfDataset dataset) {
+        for(String name: Constants.VALID_DESCRIPTION_TAGS){
+            if(dataset.findAttribute(name) != null)
+                return dataset.findAttribute(name).getStringValue();
+        }
+        return null;
+    }
+
+    public static String extractTitle(NetcdfDataset dataset) {
+        for(String name: Constants.VALID_TITLE_TAGS){
+            if(dataset.findAttribute(name) != null)
+                return dataset.findAttribute(name).getStringValue();
+        }
+        return null;
+    }
 }

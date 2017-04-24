@@ -10,4 +10,7 @@ public class Constants {
     public static final String DB_USER_NAME = "root";
     public static final String DB_PASSWORD = "mysql";
     public static final List<String> VALID_EXTENSIONS = Arrays.asList("nc", "h5", "netcdf", "hdf", "grib", "grib2");
+    public static final List<String> VALID_DESCRIPTION_TAGS = Arrays.asList("info", "Info", "information", "Information","Description", "description", "About", "about");
+    public static final List<String> VALID_TITLE_TAGS = Arrays.asList("Title", "title", "Name", "name");
+
 }

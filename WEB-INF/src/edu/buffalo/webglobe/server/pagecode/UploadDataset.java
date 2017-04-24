@@ -178,8 +178,8 @@ public class UploadDataset extends HttpServlet {
                                     Array src1 = netcdfVariable.getData(0);
                                     minmax = MAMath.getMinMax(src1);
                                 }
-                                cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,field_description,units,max_value,min_value) VALUES (" +
-                                        datasetId + ",\"" + variable + "\",\"" + ncDir.getDescriptions().get(j) +
+                                cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,units,max_value,min_value) VALUES (" +
+                                        datasetId + ",\"" + variable +
                                         "\",\"" + ncDir.getUnits().get(j) + "\"," +
                                         minmax.max + "," + minmax.min+")";
                                 Statement stmt1 = conn.createStatement();

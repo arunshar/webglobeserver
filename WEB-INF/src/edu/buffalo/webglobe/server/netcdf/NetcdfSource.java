@@ -38,7 +38,6 @@ public abstract class NetcdfSource implements Serializable {
     protected String datasetName = null;
     protected ArrayList<String> variables = null;
     protected ArrayList<String> units = null;
-    protected ArrayList<String> descriptions = null;
     protected CalendarDate startDate;
     protected CalendarDate endDate;
     private CalendarDate[] dates;
@@ -57,10 +56,9 @@ public abstract class NetcdfSource implements Serializable {
         this.dataset = this.loadDataset();
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
-        descriptions = new ArrayList<String>();
 
-        dataDescription = dataset.getDetailInfo();
-        datasetName = dataset.getTitle();
+        dataDescription = NetCDFUtils.extractInfo(dataset);
+        datasetName = NetCDFUtils.extractTitle(dataset);
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         if(grids.size() > 0){
@@ -69,7 +67,6 @@ public abstract class NetcdfSource implements Serializable {
                 GeoGrid g = (GeoGrid) grids.get(i);
                 variables.add(g.getName());
                 units.add(g.getUnitsString());
-                descriptions.add(g.getDescription());
             }
         }else{
             //this data set does not have geogrids, just work with the dataset
@@ -79,7 +76,6 @@ public abstract class NetcdfSource implements Serializable {
                 if(v.getDimensions().size() >= 3) {
                     variables.add(v.getShortName());
                     units.add(v.getUnitsString());
-                    descriptions.add(v.getDescription());
                     Utils.logger.info("Added variable with name " + v.getShortName());
                 }
             }
@@ -139,10 +135,6 @@ public abstract class NetcdfSource implements Serializable {
     public String getDataDescription(){ return dataDescription; }
 
     public String getDatasetName(){ return datasetName;}
-
-    public ArrayList<String> getDescriptions(){
-        return descriptions;
-    }
 
     public int getIndexFromDate(String dateStr) {
         CalendarDate date = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, dateStr);
