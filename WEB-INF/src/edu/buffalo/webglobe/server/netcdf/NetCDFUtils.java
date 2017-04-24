@@ -65,7 +65,7 @@ public class NetCDFUtils {
         try{
             return new NetcdfDataset(NetcdfFile.open(protocol+"://"+url+"/"+target));
         } catch (IOException e) {
-            Utils.logger.severe(("Couldn't open dataset " +url));        }
+            Utils.logger.severe(("Couldn't open dataset " +protocol+"://"+url+"/"+target));        }
         return null;
     }
 	/**

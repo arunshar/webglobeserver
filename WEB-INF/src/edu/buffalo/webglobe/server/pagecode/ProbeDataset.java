@@ -85,7 +85,6 @@ public class ProbeDataset extends HttpServlet {
                 ncDir = new NetcdfDirectory(protocol,uri,dir);
                 ncDir.initialize();
             }
-            Utils.logger.severe(">>>>>> "+ncDir.getDatasetName());
             if ((ncDir.isInitialized()) && (ncDir.getVariables() == null)){
                 Utils.logger.severe("Error: Unable to parse server address.");
                 status = -1;
