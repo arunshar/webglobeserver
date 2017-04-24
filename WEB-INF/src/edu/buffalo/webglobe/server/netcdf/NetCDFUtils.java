@@ -146,4 +146,14 @@ public class NetCDFUtils {
         }
         return null;
     }
+
+    public static String extractInfoURL(NetcdfDataset dataset) {
+        if(dataset.findGlobalAttributeIgnoreCase("references") != null) {
+            String infoURL = dataset.findGlobalAttributeIgnoreCase("references").getStringValue();
+            if(infoURL.startsWith("http")||(infoURL.startsWith("www"))){
+                return infoURL;
+            }
+        }
+        return null;
+    }
 }

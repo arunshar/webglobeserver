@@ -36,11 +36,13 @@ public abstract class NetcdfSource implements Serializable {
     protected int lonLen;
     protected String dataDescription = null;
     protected String datasetName = null;
+    protected String datasetInfoURL = null;
     protected ArrayList<String> variables = null;
     protected ArrayList<String> units = null;
     protected CalendarDate startDate;
     protected CalendarDate endDate;
     private CalendarDate[] dates;
+    private String infoURL;
 
     public NetcdfDataset getDataset() {
         return dataset;
@@ -64,6 +66,7 @@ public abstract class NetcdfSource implements Serializable {
 
         dataDescription = NetCDFUtils.extractInfo(dataset);
         datasetName = NetCDFUtils.extractTitle(dataset);
+        datasetName = NetCDFUtils.extractInfoURL(dataset);
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         if(grids.size() > 0){
@@ -167,5 +170,9 @@ public abstract class NetcdfSource implements Serializable {
     }
 
     public boolean isInitialized(){return initialized;}
+
+    public String getInfoURL() {
+        return infoURL;
+    }
 }
 
