@@ -41,6 +41,11 @@ public abstract class NetcdfSource implements Serializable {
     protected CalendarDate startDate;
     protected CalendarDate endDate;
     private CalendarDate[] dates;
+
+    public NetcdfDataset getDataset() {
+        return dataset;
+    }
+
     protected NetcdfDataset dataset;
     protected boolean initialized;
 
