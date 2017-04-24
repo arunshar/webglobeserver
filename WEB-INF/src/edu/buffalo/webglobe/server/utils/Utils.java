@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
 public class Utils {
-    private final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
+    public final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;

@@ -5,8 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import edu.buffalo.webglobe.server.utils.Utils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -20,7 +20,6 @@ import ucar.nc2.dataset.NetcdfDataset;
 import edu.buffalo.webglobe.server.spark.HDFSRandomAccessFile;
 
 public class NetCDFUtils {
-    public static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 	/**
 	 * Converts the native ma2.Array from the NetCDF library to a one
 	 * dimensional Java Array of Doubles.
@@ -50,7 +49,7 @@ public class NetCDFUtils {
 				if (array[i] == -9999.0)
 					array[i] = 0.0;
 		} catch (Exception ex) {
-			logger.severe(
+			Utils.logger.severe(
                     "Error while converting a netcdf.ucar.ma2 to a 1D array. Most likely occurred with casting");
 		}
 
@@ -66,7 +65,7 @@ public class NetCDFUtils {
         try{
             return new NetcdfDataset(NetcdfFile.open(protocol+"://"+url+"/"+target));
         } catch (IOException e) {
-            logger.severe(("Couldn't open dataset " +url));        }
+            Utils.logger.severe(("Couldn't open dataset " +url));        }
         return null;
     }
 	/**
@@ -85,10 +84,10 @@ public class NetCDFUtils {
 			HDFSRandomAccessFile raf = new HDFSRandomAccessFile(dfsUri, location, bufferSize);
 			return (new NetcdfDataset(NetcdfFile.open(raf, location, null, null)));
 		} catch (IOException ex) {
-			logger.severe(("Cannot open dataset " + dfsUri + "" + location));
+			Utils.logger.severe(("Cannot open dataset " + dfsUri + "" + location));
 			return null;
 		} catch (Exception ex) {
-            logger.severe(("Cannot open dataset " + dfsUri + "" + location));
+            Utils.logger.severe(("Cannot open dataset " + dfsUri + "" + location));
             return null;
 		}
 	}

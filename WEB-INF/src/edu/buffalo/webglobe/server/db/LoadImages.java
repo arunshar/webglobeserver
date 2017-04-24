@@ -1,13 +1,10 @@
 package edu.buffalo.webglobe.server.db;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.ServletException;
@@ -17,8 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import edu.buffalo.webglobe.server.db.DBUtils;
-import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 /**
  * Servlet implementation class LoadImages
@@ -71,8 +67,10 @@ public class LoadImages extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(responseJson);
+            stmt.close();
+            conn.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.severe(e.getMessage());
         }
     }
 

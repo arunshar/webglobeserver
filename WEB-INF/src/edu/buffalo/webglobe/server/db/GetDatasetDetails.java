@@ -11,6 +11,7 @@ import java.util.Map;
 import java.lang.Integer;
 
 import com.google.gson.Gson;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -100,7 +101,7 @@ public class GetDatasetDetails extends HttpServlet {
 			stmt.close();
 			conn.close();
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+            Utils.logger.severe(ex.getMessage());
 		}
 		String responseJson = new Gson().toJson(responseData);
 		response.setContentType("application/json");

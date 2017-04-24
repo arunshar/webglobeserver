@@ -19,6 +19,7 @@ import edu.buffalo.webglobe.server.db.DBUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.nc2.time.CalendarDate;
 import ucar.nc2.time.CalendarDateFormatter;
 /**
@@ -84,8 +85,10 @@ public class LoadNetcdfDataset extends HttpServlet {
                 variableInfo.put("imageMaxDate", dateFormatter.toString(d2));
 
             }
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.severe(e.getMessage());
         }
 
 

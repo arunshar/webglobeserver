@@ -1,16 +1,15 @@
 package edu.buffalo.webglobe.server.db;
 
 import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 import java.sql.*;
-import java.util.logging.Logger;
 
 /**
  * @author chandola
  * @version $Id$
  */
 public class DBUtils {
-    private static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
     public static Connection getConnection() {
         Connection conn = null;
         try {
@@ -25,19 +24,19 @@ public class DBUtils {
     }
 
     public static ResultSet executeQuery(Connection conn, Statement stmt, String query) throws SQLException {
-        logger.info("Executing "+query);
+        Utils.logger.info("Executing "+query);
         stmt.executeQuery(query);
         ResultSet resultSet = stmt.getResultSet();
         return resultSet;
     }
 
     public static void executeUpdate(Connection conn, Statement stmt, String query) throws SQLException {
-        logger.info("Executing "+query);
+        Utils.logger.info("Executing "+query);
         stmt.executeUpdate(query);
     }
 
     public static ResultSet executeInsert(Connection conn, Statement stmt, String query) throws SQLException {
-        logger.info("Executing "+query);
+        Utils.logger.info("Executing "+query);
         stmt.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
         ResultSet resultSet = stmt.getGeneratedKeys();
         return resultSet;

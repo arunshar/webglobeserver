@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Dimension;
-import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
 import ucar.nc2.time.Calendar;
@@ -26,7 +25,6 @@ public class NetcdfVariable implements Serializable {
     private NetcdfSource netcdfSource;
 	private String variableName;
     private ArrayList<CalendarDate> dates;
-	private static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
 	public NetcdfVariable(NetcdfSource netcdfSource, String variableName){
         this.netcdfSource = netcdfSource;
@@ -51,9 +49,9 @@ public class NetcdfVariable implements Serializable {
 			dataset.close();
 			return src;
 		} catch (IOException e) {
-			logger.severe(e.getMessage());
+			Utils.logger.severe(e.getMessage());
 		} catch (InvalidRangeException e) {
-            logger.severe(e.getMessage());
+            Utils.logger.severe(e.getMessage());
 		}
 
         return null;
@@ -96,7 +94,7 @@ public class NetcdfVariable implements Serializable {
                 }
 
                 if(xInd == -1 || yInd == -1) {
-                    logger.severe("Selected point is not contained in the data set.");
+                    Utils.logger.severe("Selected point is not contained in the data set.");
                     return null;
                 }
 
@@ -110,10 +108,10 @@ public class NetcdfVariable implements Serializable {
                 Array arr = var.read(origin,shape);
                 arrayList.add(arr);
             }catch(IOException e){
-                logger.severe("Error reading data for variable");
+                Utils.logger.severe("Error reading data for variable");
                 return null;
             } catch (InvalidRangeException e) {
-                logger.severe("Error specifying the ranges");
+                Utils.logger.severe("Error specifying the ranges");
                 return null;
             }
         }

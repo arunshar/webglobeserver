@@ -89,7 +89,8 @@ public class RunJob extends HttpServlet {
 
             runJob();
             responseData.put("message", "Analysis job started. Status of job is available under the user information panel. On success, the data set will be available for upload.");
-
+            stmt.close();
+            conn.close();
         }catch(SQLException e){
             responseData.put("message", "Error starting job");
         }
@@ -158,8 +159,10 @@ public class RunJob extends HttpServlet {
             String curDate = dt.format(new Date());
             String cmd = "UPDATE submitted_analysis_jobs SET finish_time=\""+curDate+"\", status='DONE',result_loc=\""+outputDir+"\" where id=" + jobId;
             DBUtils.executeUpdate(conn,stmt,cmd);
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.severe(e.getMessage());
         }
 
 

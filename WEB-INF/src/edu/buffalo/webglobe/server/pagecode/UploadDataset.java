@@ -29,9 +29,6 @@ import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.ma2.MAMath;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 /**
  * @author chandola
@@ -44,7 +41,6 @@ import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 @WebServlet("/UploadDataset")
 public class UploadDataset extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private Logger logger;
     private String userName;
     private String dataName;
     private String url;
@@ -71,7 +67,6 @@ public class UploadDataset extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        logger = Logger.getLogger("WEBGLOBE.LOGGER");
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         this.url = data.get("url").getAsString();
         this.dataName = data.get("dataName").getAsString();
@@ -109,6 +104,8 @@ public class UploadDataset extends HttpServlet {
             });
             loadingThread.start();
             responseData.put("message", "Loading job started. Status of job is available under the user information panel. On success, the data set will be available under the climate data sets panel.");
+            stmt.close();
+            conn.close();
 
         }catch(SQLException e){
             responseData.put("message", "Error starting job");
@@ -132,7 +129,7 @@ public class UploadDataset extends HttpServlet {
             String cmd = "select * from netcdf_datasets where name = '" + dataName + "' AND url = '" + url + "'";
             rset = DBUtils.executeQuery(conn,stmt,cmd);
             if (rset.next()) {
-                logger.severe("Error: Dataset already exists in database");
+                Utils.logger.severe("Error: Dataset already exists in database");
                 status = -1;
             }
             //open netcdfdata directory and find all Geogrid variables
@@ -150,13 +147,13 @@ public class UploadDataset extends HttpServlet {
                             if(VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".")+1,dir.length())) ) {
                                 ncDir = new NetcdfFile(protocol,uri,dir);
                             }else {
-                                logger.severe("File extension is not supported.");
+                                Utils.logger.severe("File extension is not supported.");
                                 status = -1;
                             }
                         }
                     }else {
                         if(!protocol.equalsIgnoreCase("hdfs")){
-                            logger.severe("Directory strucutre is only supported for data in HDFS");
+                            Utils.logger.severe("Directory strucutre is only supported for data in HDFS");
                             status = -1;
                         }
                         else {
@@ -165,7 +162,7 @@ public class UploadDataset extends HttpServlet {
                     }
                     if (ncDir != null) {
                         if((ncDir.getVariables() == null)) {
-                            logger.severe("Error: Unable to parse server address.");
+                            Utils.logger.severe("Error: Unable to parse server address.");
                             status = -1;
                         } else {
                             cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible) VALUES (\"" +
@@ -174,7 +171,7 @@ public class UploadDataset extends HttpServlet {
                             rset = DBUtils.executeInsert(conn,stmt,cmd);
                             if(rset.next()){
                                 datasetId = rset.getInt(1);
-                                logger.info("STARTING IMAGE CREATION PROCESS ");
+                                Utils.logger.info("STARTING IMAGE CREATION PROCESS ");
                                 for (int j = 0; j < ncDir.getVariables().size(); j++) {
                                     String variable = ncDir.getVariables().get(j);
                                     NetcdfVariable netcdfVariable = new NetcdfVariable(ncDir, variable);
@@ -220,17 +217,17 @@ public class UploadDataset extends HttpServlet {
                                     }
                                     status = 1;
                                 }
-                                logger.info("ENDED IMAGE CREATION PROCESS");
+                                Utils.logger.info("ENDED IMAGE CREATION PROCESS");
 
                             }else{
-                                logger.severe("Error: Could not create a new dataset record.");
+                                Utils.logger.severe("Error: Could not create a new dataset record.");
                                 status = -1;
                             }
                         }
                     }
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Message", e);
-                    logger.severe("Error: Unable to open HDFS file.");
+                    Utils.logger.severe(e.getMessage());
+                    Utils.logger.severe("Error: Unable to open HDFS file.");
                     status = -1;
                 }
             }
@@ -238,12 +235,12 @@ public class UploadDataset extends HttpServlet {
             conn.close();
         }
         catch(SQLException e){
-            logger.log(Level.SEVERE, "Message", e);
-            logger.severe("Error: Unable to connect to the database");
+            Utils.logger.severe(e.getMessage());
+            Utils.logger.severe("Error: Unable to connect to the database");
             status = -1;
         }
-        conn = DBUtils.getConnection();
         try {
+            conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd,cmd1 = null;
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -260,8 +257,11 @@ public class UploadDataset extends HttpServlet {
             DBUtils.executeUpdate(conn,stmt,cmd);
             if(cmd1 != null)
                 DBUtils.executeUpdate(conn,stmt,cmd1);
+            stmt.close();
+            conn.close();
+
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Message", e);
+            Utils.logger.severe(e.getMessage());
         }
     }
 }

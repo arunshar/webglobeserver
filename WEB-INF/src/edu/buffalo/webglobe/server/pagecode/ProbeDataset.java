@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 /**
@@ -29,7 +28,6 @@ import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 @WebServlet("/ProbeDataset")
 public class ProbeDataset extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private Logger logger;
     private String url;
 
     /**
@@ -50,8 +48,6 @@ public class ProbeDataset extends HttpServlet {
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        logger = Logger.getLogger("WEBGLOBE.LOGGER");
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
         this.url = data.get("url").getAsString();
         Map<String, String> responseData =  probeDataset();
@@ -94,7 +90,7 @@ public class ProbeDataset extends HttpServlet {
             }
 
             if (ncDir.getVariables() == null) {
-                logger.severe("Error: Unable to parse server address.");
+                Utils.logger.severe("Error: Unable to parse server address.");
                 status = -1;
             } else {
                 responseData.put("numvars",Integer.toString(ncDir.getVariables().size()));

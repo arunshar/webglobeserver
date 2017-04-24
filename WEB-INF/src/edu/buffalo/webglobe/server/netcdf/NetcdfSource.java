@@ -5,9 +5,9 @@ package edu.buffalo.webglobe.server.netcdf;
  * @version $Id$
  */
 
+import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.nc2.Dimension;
-import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
 import ucar.nc2.dt.grid.GeoGrid;
@@ -20,7 +20,6 @@ import ucar.nc2.time.CalendarPeriod;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 
 public abstract class NetcdfSource implements Serializable {
@@ -34,7 +33,7 @@ public abstract class NetcdfSource implements Serializable {
     protected String protocol;
     protected int timeLen;
     protected int latLen;
-    protected int longLen;
+    protected int lonLen;
     protected String dataDescription = null;
     protected String datasetName = null;
     protected ArrayList<String> variables = null;
@@ -42,8 +41,6 @@ public abstract class NetcdfSource implements Serializable {
     protected ArrayList<String> descriptions = null;
     protected CalendarDate startDate;
     protected CalendarDate endDate;
-    protected static final Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
-    private int lonLen;
     private CalendarDate[] dates;
 
 
@@ -79,14 +76,14 @@ public abstract class NetcdfSource implements Serializable {
                     variables.add(v.getShortName());
                     units.add(v.getUnitsString());
                     descriptions.add(v.getDescription());
-                    logger.info("Added variable with name " + v.getShortName());
+                    Utils.logger.info("Added variable with name " + v.getShortName());
                 }
             }
         }
         List<Dimension> dims = dataset.getDimensions();
         timeLen = dims.get(0).getLength();
         latLen = dims.get(1).getLength();
-        longLen = dims.get(2).getLength();
+        lonLen = dims.get(2).getLength();
 
         Array arrTime = dataset.findVariable("time").read();
         CalendarDate calDate = CalendarDateFormatter.isoStringToCalendarDate(Calendar.noleap, "2005-01-01");

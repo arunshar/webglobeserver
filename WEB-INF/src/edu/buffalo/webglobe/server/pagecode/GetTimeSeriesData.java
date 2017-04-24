@@ -35,7 +35,6 @@ import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 @WebServlet("/GetTimeSeriesData")
 public class GetTimeSeriesData extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     /**
      * @see javax.servlet.http.HttpServlet#HttpServlet()
      */
@@ -105,10 +104,12 @@ public class GetTimeSeriesData extends HttpServlet {
                 }
 
             }
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.severe(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            Utils.logger.severe(e.getMessage());
         }
 
         for (int i = 0; i < dates.size(); i++) {
