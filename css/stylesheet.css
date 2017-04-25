@@ -65,7 +65,7 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
 }
 
 .tabcontentInfo {
-    font-size: 10px;
+    font-size: 12px;
     display: none;
     height: 100%;
     top: 95px;
