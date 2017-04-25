@@ -417,8 +417,8 @@ define(
 	      dataName: dataName,
 	      dataInfo: dataInfo,
 	      dataInfoURL: dataInfoURL,
-	      visualizationOnly = visualizationOnly,
-	      selectedColormap = selectedColormap
+	      visualizationOnly: visualizationOnly,
+	      selectedColormap: selectedColormap
 	    }),
 	    success: function (data) {
 	      var message = data.message;
