@@ -35,7 +35,7 @@ define(
 	self.fields = ko.observableArray([]);
 	self.analysisFields = ko.observableArray([]);
 	self.analysisMethods = ko.observableArray([ "Change Detection", "Anomaly Detection","Correlation Analysis" ]);
-	self.availableColormaps = ko.observableArray(["Linear","Log","Discrete"]
+	self.availableColormaps = ko.observableArray(["Linear","Log","Discrete"]);
 	self.infoActive = false;
 	self.openActive = false;
 	self.openAnalysis = false;
