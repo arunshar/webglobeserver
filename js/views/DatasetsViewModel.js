@@ -314,6 +314,7 @@ define(
 	      + ":" + fieldname + "</a>", "alert-info");
 
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  
 
 	  $.ajax({
 	    url: webGlobeServer + 'RunJob',
