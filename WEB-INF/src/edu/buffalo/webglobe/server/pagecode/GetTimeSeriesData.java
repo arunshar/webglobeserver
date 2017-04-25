@@ -102,8 +102,7 @@ public class GetTimeSeriesData extends HttpServlet {
                             values.add((new Float(array.getFloat(i))).toString());
                         }
                     }
-                    for (CalendarDate d : ncDir.getDates()) {
-                        Utils.logger.severe("IIIIII IN HERE "+d);
+                    for (CalendarDate d : netcdfVariable.getDates()) {
                         dates.add(CalendarDateFormatter.toDateString(d));
                     }
                 }

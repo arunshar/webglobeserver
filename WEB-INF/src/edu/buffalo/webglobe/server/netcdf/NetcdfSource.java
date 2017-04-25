@@ -41,7 +41,6 @@ public abstract class NetcdfSource implements Serializable {
     protected ArrayList<String> units = null;
     protected CalendarDate startDate;
     protected CalendarDate endDate;
-    private CalendarDate[] dates;
 
     public NetcdfDataset getDataset() {
         return dataset;
@@ -162,10 +161,6 @@ public abstract class NetcdfSource implements Serializable {
 
     public int getLonLen() {
         return lonLen;
-    }
-
-    public CalendarDate[] getDates() {
-        return dates;
     }
 
     public boolean isInitialized(){return initialized;}

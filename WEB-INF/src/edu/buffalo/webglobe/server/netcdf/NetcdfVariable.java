@@ -58,6 +58,7 @@ public class NetcdfVariable implements Serializable {
 	}
 
     public List<Array> getTimeSeriesData(float x, float y){
+        this.dates = new ArrayList<CalendarDate>();
         int numFiles = 1;
         if(this.netcdfSource instanceof NetcdfDirectory){
             numFiles = ((NetcdfDirectory) this.netcdfSource).getFilepaths().size();
@@ -99,7 +100,7 @@ public class NetcdfVariable implements Serializable {
                 }
 
                 //populate dates
-                for(int j = 0; j < tVals.getSize();j++){
+                for (int j = 0; j < tVals.getSize(); j++) {
                     dates.add(calDate.add((int) tVals.getDouble(j), CalendarPeriod.Field.Day));
                 }
                 Variable var = dataset.findVariable(variableName);
@@ -117,5 +118,8 @@ public class NetcdfVariable implements Serializable {
         }
         return arrayList;
     }
-	
+
+    public ArrayList<CalendarDate> getDates() {
+        return dates;
+    }
 }
