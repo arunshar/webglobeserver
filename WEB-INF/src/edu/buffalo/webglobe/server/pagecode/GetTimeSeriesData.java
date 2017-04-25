@@ -97,7 +97,7 @@ public class GetTimeSeriesData extends HttpServlet {
                     List<Array> arrayList = netcdfVariable.getTimeSeriesData(x, y);
 
                     for (Array array : arrayList) {
-                        Utils.logger.severe("IIIIII IN HERE "+array.getSize());
+
                         for (int i = 0; i < array.getSize(); i++) {
                             values.add((new Float(array.getFloat(i))).toString());
                         }
@@ -115,7 +115,7 @@ public class GetTimeSeriesData extends HttpServlet {
         } catch (Exception e) {
             Utils.logger.severe(e.getMessage());
         }
-
+        Utils.logger.severe("IIIIII IN HERE "+dates.size());
         for (int i = 0; i < dates.size(); i++) {
             HashMap<String, String> info = new HashMap<String, String>();
             info.put("date", dates.get(i));
