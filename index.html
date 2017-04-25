@@ -130,7 +130,7 @@
 	</div>
 	<div id="datasets1-body" class="section-body collapse in">
 	  <div class="panel-heading panel-heading-white">
-	    <select name="datasetSelect" data-bind="options: availableDatasets" id="fieldSelect"></select>
+	    <select name="datasetSelect" data-bind="options: availableDatasets.name" id="fieldSelect"></select>
 	    <ul class="nav nav-pills">
 	      <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
 	      <li><a data-toggle="pill" href="#menu1">Menu 1</a></li>
@@ -138,15 +138,15 @@
 	    </ul>
 	    <div class="tab-content">
 	      <div id="home" class="tab-pane fade in active">
-		<h3>HOME</h3>
+		<h3>Load</h3>
 		<p>Some content.</p>
 	      </div>
 	      <div id="menu1" class="tab-pane fade">
-		<h3>Menu 1</h3>
+		<h3>Animate</h3>
 		<p>Some content in menu 1.</p>
 	      </div>
 	      <div id="menu2" class="tab-pane fade">
-		<h3>Menu 2</h3>
+		<h3>Analyze</h3>
 		<p>Some content in menu 2.</p>
 	      </div>
 	    </div>
