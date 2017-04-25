@@ -61,7 +61,7 @@ public class RunJob extends HttpServlet {
         this.analysisOutputName = data.get("analysisoutputname").getAsString().replace(" ", "");
         if(this.analysisOutputName.equals(""))
             this.analysisOutputName="defaultanalysisname";
-
+        Utils.logger.severe("COmING IN HERE");
         HashMap<String,String> responseData = new HashMap<String, String>();
         Connection conn;
         Statement stmt;
