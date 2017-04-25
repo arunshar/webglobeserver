@@ -141,6 +141,10 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   padding: 4px;
 }
 
+.panel-heading {
+  font-size: 16px;
+}
+
 .topalert {
   position:fixed; 
   top: 5%;
