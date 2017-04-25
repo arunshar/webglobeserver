@@ -103,6 +103,7 @@ public class GetTimeSeriesData extends HttpServlet {
                         }
                     }
                     for (CalendarDate d : ncDir.getDates()) {
+                        Utils.logger.severe("IIIIII IN HERE "+d);
                         dates.add(CalendarDateFormatter.toDateString(d));
                     }
                 }
@@ -115,7 +116,6 @@ public class GetTimeSeriesData extends HttpServlet {
         } catch (Exception e) {
             Utils.logger.severe(e.getMessage());
         }
-        Utils.logger.severe("IIIIII IN HERE "+dates.size());
         for (int i = 0; i < dates.size(); i++) {
             HashMap<String, String> info = new HashMap<String, String>();
             info.put("date", dates.get(i));
