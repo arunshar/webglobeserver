@@ -101,6 +101,7 @@ public class RunJob extends HttpServlet {
     }
     public void runJob(){
         //run the job
+        Utils.logger.severe("INSIDE RUNJOB");
         String[] outputs = RunSparkJob.createSparkCluster("/home/centos/bash-scripts/sparkcluster.sh", 10, "m1.medium");
 
 

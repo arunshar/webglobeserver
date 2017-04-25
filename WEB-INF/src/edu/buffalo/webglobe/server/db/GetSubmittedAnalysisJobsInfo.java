@@ -66,8 +66,7 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 			rset = DBUtils.executeQuery(conn, stmt, cmd);
 			int i = 0;
 			while (rset.next()) {
-
-				Map<String, String> submittedJobInfo = new HashMap<String, String>();
+                Map<String, String> submittedJobInfo = new HashMap<String, String>();
 				int id = rset.getInt("id");
 				String analysis = rset.getString("analysis");
 				String field = rset.getString("field");
