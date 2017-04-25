@@ -396,12 +396,17 @@ define(
 	  var dataName = $('#upload-dataName').val();
 	  var dataInfo = $('#upload-dataInfo').val();
 	  var dataInfoURL = $('#upload-dataInfoURL').val();
-	  if (url == '' || dataName == '' || dataInfo == ''|| dataInfoURL == ''){
-	    logger.log('Insufficient arguments.','alert-danger');
+	  var visualizationOnly = $('#upload-visualization-only').val();
+	  var selectedColormap = $('#upload-select-colormap').val();
+
+
+	  if (url == '' || dataName == '' || dataInfo == ''){
+	    logger.log('URL, name, and information are required arguments.','alert-danger');
 	    return;
 	  }	
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  self.uploading = true;
+	  alert(visualizationOnly +" "+selectedColormap);
 
 	  $.ajax({
 	    url: webGlobeServer + 'UploadDataset',
@@ -411,7 +416,9 @@ define(
 	      url: url,
 	      dataName: dataName,
 	      dataInfo: dataInfo,
-	      dataInfoURL: dataInfoURL
+	      dataInfoURL: dataInfoURL,
+	      visualizationOnly = visualizationOnly,
+	      selectedColormap = selectedColormap
 	    }),
 	    success: function (data) {
 	      var message = data.message;
