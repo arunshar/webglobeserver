@@ -396,7 +396,11 @@ define(
 	  var dataName = $('#upload-dataName').val();
 	  var dataInfo = $('#upload-dataInfo').val();
 	  var dataInfoURL = $('#upload-dataInfoURL').val();
-	  var visualizationOnly = $('#upload-visualization-only').val();
+	  var visualizationOnly = 0;
+	  if ($('#upload-visualization-only').is(":checked"))
+	  {
+	    visualizationOnly = 1;
+	  }
 	  var selectedColormap = $('#upload-select-colormap').val();
 
 	  if (url == '' || dataName == '' || dataInfo == ''){
@@ -405,7 +409,6 @@ define(
 	  }	
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  self.uploading = true;
-	  alert(visualizationOnly +" "+selectedColormap);
 
 	  $.ajax({
 	    url: webGlobeServer + 'UploadDataset',
@@ -452,6 +455,10 @@ define(
 	      var xdata = [];
 	      var ydata = [];
 	      var retnum = Object.keys(dataJSON).length;
+	      if (retnum == 0){
+		logger.log("No data returned for the selected location","alert-danger");
+		return;
+	      }
 	      
 	      var ylabel = dataJSON[0].unitString;
 	      for(var i = 0; i < retnum; i++){
