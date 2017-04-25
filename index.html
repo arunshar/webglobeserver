@@ -33,7 +33,7 @@
 	</a>
       </li>
       <li>
-	<a class="tablinksRight" style="position: fixed; right: 22%; width: 3%;" onclick="openTabRight(event,'datasets')" title="Show Datasets">
+	<a class="tablinksRight" style="position: fixed; right: 22%; width: 3%;" onclick="openTabRight(event,'datasets1')" title="Show Datasets">
 	  <i class="fa fa-database" aria-hidden="true"></i>
 	</a>
       </li>
@@ -121,8 +121,38 @@
 	  </div>
 	</div>
       </div>
-      <div id="datasets" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
-      <!--div id="datasets" class="col-sm-2 tabcontentLeft leftTabPadding" style="font-size: 10px !important; padding-bottom: 25% !important;"-->
+      <div id="datasets1" class="col-sm-8 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 8px !important;width: 35%;  padding-bottom: 25% !important;">
+	<div class="section-heading">
+	  <h4 class="sub-header">
+	    <span class="glyphicon glyphicon-refresh" data-bind="click: populateDatasets;" aria-hidden="true" style="padding-right:5px;"></span>
+	    Available Datasets 
+	  </h4>
+	</div>
+	<div id="datasets1-body" class="section-body collapse in">
+	  <ul class="nav nav-pills">
+	    <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+	    <li><a data-toggle="pill" href="#menu1">Menu 1</a></li>
+	    <li><a data-toggle="pill" href="#menu2">Menu 2</a></li>
+	  </ul>
+
+	  <div class="tab-content">
+	    <div id="home" class="tab-pane fade in active">
+	      <h3>HOME</h3>
+	      <p>Some content.</p>
+	    </div>
+	    <div id="menu1" class="tab-pane fade">
+	      <h3>Menu 1</h3>
+	      <p>Some content in menu 1.</p>
+	    </div>
+	    <div id="menu2" class="tab-pane fade">
+	      <h3>Menu 2</h3>
+	      <p>Some content in menu 2.</p>
+	    </div>
+	  </div>
+
+	</div>
+      </div>
+      <div id="datasets" class="col-sm-2 tabcontentLeft leftTabPadding" style="font-size: 10px !important; padding-bottom: 25% !important;">
 	<div class="section-heading">
 	  <h4 class="sub-header">
 	    <span class="glyphicon glyphicon-refresh" data-bind="click: populateDatasets;" aria-hidden="true" style="padding-right:5px;"></span>
