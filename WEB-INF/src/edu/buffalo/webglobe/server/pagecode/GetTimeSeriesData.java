@@ -93,8 +93,9 @@ public class GetTimeSeriesData extends HttpServlet {
 
                 if (ncDir != null) {
                     NetcdfVariable netcdfVariable = new NetcdfVariable(ncDir, fieldName);
-                    Utils.logger.severe("IIIIII IN HERE");
+
                     List<Array> arrayList = netcdfVariable.getTimeSeriesData(x, y);
+                    Utils.logger.severe("IIIIII IN HERE "+arrayList.size());
                     for (Array array : arrayList) {
                         for (int i = 0; i < array.getSize(); i++) {
                             values.add((new Float(array.getFloat(i))).toString());
