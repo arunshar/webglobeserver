@@ -6,7 +6,10 @@ import java.util.List;
 
 public class Constants {
 	public static final String PUBLIC_ADDRESS = "http://199.109.195.187:8000";
+    public static final String HDFS_SERVER = "hdfs://hdfs://172.17.6.142:9000";
+    public static final String HDFS_BASEDIR = "/user/ubuntu/";
 	public static final String LOCAL_DIRECTORY = "/home/ubuntu/fileserver";
+    public static final String LOCAL_TMP_DIRECTORY = "/home/ubuntu/fileserver/tmp";
     public static final String DB_USER_NAME = "root";
     public static final String DB_PASSWORD = "mysql";
     public static final List<String> VALID_EXTENSIONS = Arrays.asList("nc", "h5", "netcdf", "hdf", "grib", "grib2");

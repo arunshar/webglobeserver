@@ -2,6 +2,8 @@ package edu.buffalo.webglobe.server.pagecode;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,11 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
-import edu.buffalo.webglobe.server.netcdf.NetcdfFile;
-import edu.buffalo.webglobe.server.netcdf.NetcdfSource;
+import edu.buffalo.webglobe.server.netcdf.*;
 import edu.buffalo.webglobe.server.utils.Constants;
-import edu.buffalo.webglobe.server.netcdf.NetcdfVariable;
-import edu.buffalo.webglobe.server.netcdf.NetcdfDirectory;
 import edu.buffalo.webglobe.server.utils.Utils;
 import ucar.ma2.Array;
 import ucar.ma2.MAMath;
@@ -46,6 +45,8 @@ public class UploadDataset extends HttpServlet {
     private String url;
     private String dataInfo;
     private String dataInfoURL;
+    private String visualizationOnly;
+    private String selectedColormap;
     private int jobId = -1;
 
     /**
@@ -72,6 +73,8 @@ public class UploadDataset extends HttpServlet {
         this.dataName = data.get("dataName").getAsString();
         this.dataInfo = data.get("dataInfo").getAsString();
         this.dataInfoURL = data.get("dataInfoURL").getAsString();
+        this.visualizationOnly = data.get("visualizationOnly").getAsString();
+        this.selectedColormap = data.get("selectedColormap").getAsString();
         Map<String, String> responseData = new HashMap<String, String>();
         this.userName = request.getUserPrincipal().getName();
 
@@ -117,13 +120,32 @@ public class UploadDataset extends HttpServlet {
     }
 
     public void uploadDataset(){
-        // query database
+
+
         Connection conn;
         Statement stmt;
         ResultSet rset;
         int status = 0;
         int datasetId = -1;
+        int isAnalyzable = 1;
+
         try {
+            // query database
+            String[] tokens;
+            tokens = Utils.parseURL(url);
+
+            String protocol = tokens[0];
+            String uri = tokens[1];
+            String dir = tokens[2];
+
+            if(this.visualizationOnly.equalsIgnoreCase("on")) {
+                isAnalyzable = 0;
+            }else{
+                if(!protocol.equalsIgnoreCase("hdfs")){
+                    //copy the file to hdfs
+                    url = NetCDFUtils.copyRemoteFileToHDFS(url, this.userName);
+                }
+            }
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();
             String cmd = "select * from netcdf_datasets where name = '" + dataName + "' AND url = '" + url + "'";
@@ -136,10 +158,6 @@ public class UploadDataset extends HttpServlet {
             if (status != -1) {
                 NetcdfSource ncDir = null;
                 try {
-                    String [] tokens = Utils.parseURL(url);
-                    String protocol = tokens[0];
-                    String uri = tokens[1];
-                    String dir = tokens[2];
 
                     //check if the URL points to a file or a directory
                     if(Utils.isNCFile(dir)) {
@@ -157,8 +175,8 @@ public class UploadDataset extends HttpServlet {
                     if ((ncDir != null) && (ncDir.isInitialized()) ) {
 
 
-                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible) VALUES (\"" +
-                                dataName + "\",\"" + url+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\",0)";
+                        cmd = "INSERT INTO netcdf_datasets (name,url,available,info,info_url,is_accessible,is_analyzable) VALUES (\"" +
+                                dataName + "\",\"" + url+"\",\""+userName+"\",\""+dataInfo+"\",\""+dataInfoURL+"\",0,"+isAnalyzable+")";
 
                         rset = DBUtils.executeInsert(conn,stmt,cmd);
                         if(rset.next()){
@@ -208,6 +226,7 @@ public class UploadDataset extends HttpServlet {
                                     DBUtils.executeUpdate(conn,stmt1,cmd);
                                 }
                                 status = 1;
+
                             }
                             Utils.logger.info("ENDED IMAGE CREATION PROCESS");
 
@@ -229,11 +248,12 @@ public class UploadDataset extends HttpServlet {
             stmt.close();
             conn.close();
         }
-        catch(SQLException e){
+        catch(Exception e){
             Utils.logger.severe(e.getMessage());
             Utils.logger.severe("Error: Unable to connect to the database");
             status = -1;
         }
+
         try {
             conn = DBUtils.getConnection();
             stmt = conn.createStatement();

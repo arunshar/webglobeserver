@@ -399,7 +399,6 @@ define(
 	  var visualizationOnly = $('#upload-visualization-only').val();
 	  var selectedColormap = $('#upload-select-colormap').val();
 
-
 	  if (url == '' || dataName == '' || dataInfo == ''){
 	    logger.log('URL, name, and information are required arguments.','alert-danger');
 	    return;

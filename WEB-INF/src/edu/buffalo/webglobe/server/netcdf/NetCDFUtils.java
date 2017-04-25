@@ -1,8 +1,12 @@
 package edu.buffalo.webglobe.server.netcdf;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +17,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
+import org.apache.hadoop.io.IOUtils;
 import ucar.ma2.Array;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
@@ -113,6 +118,28 @@ public class NetCDFUtils {
 
 		return paths;
 	}
+
+    public static String copyRemoteFileToHDFS(String uri, String dir) throws IOException, URISyntaxException {
+        //first copy the file to local directory
+        URL url = new URL(uri);
+        String [] tokens = Utils.parseURL(uri);
+        String localTarget = Constants.LOCAL_TMP_DIRECTORY+'/'+tokens[2];
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(localTarget);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        //next copy the local file to HDFS
+        FileSystem fs = FileSystem.get(new URI(Constants.HDFS_SERVER), new Configuration());
+        Path dirPath = new Path(Constants.HDFS_BASEDIR+"/"+dir);
+        fs.mkdirs(dirPath);
+        Path destPath = new Path(Constants.HDFS_BASEDIR+"/"+dir+tokens[2]);
+        OutputStream os = fs.create(destPath);
+        InputStream is = new BufferedInputStream(new FileInputStream(localTarget));
+        IOUtils.copyBytes(is, os, 4096, false);
+        //finally delete the local file
+        File localFile = new File(localTarget);
+        localFile.delete();
+        return Constants.HDFS_BASEDIR+"/"+dir+tokens[2];
+    }
 
 	public static int[] getDimLens(String hdfsuri, String filePath) throws IOException {
 		NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filePath, 10000);
