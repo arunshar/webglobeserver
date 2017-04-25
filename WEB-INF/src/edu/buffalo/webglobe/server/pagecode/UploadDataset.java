@@ -45,7 +45,7 @@ public class UploadDataset extends HttpServlet {
     private String url;
     private String dataInfo;
     private String dataInfoURL;
-    private String visualizationOnly;
+    private int visualizationOnly;
     private String selectedColormap;
     private int jobId = -1;
 
@@ -73,7 +73,7 @@ public class UploadDataset extends HttpServlet {
         this.dataName = data.get("dataName").getAsString();
         this.dataInfo = data.get("dataInfo").getAsString();
         this.dataInfoURL = data.get("dataInfoURL").getAsString();
-        this.visualizationOnly = data.get("visualizationOnly").getAsString();
+        this.visualizationOnly = data.get("visualizationOnly").getAsInt();
         this.selectedColormap = data.get("selectedColormap").getAsString();
         Map<String, String> responseData = new HashMap<String, String>();
         this.userName = request.getUserPrincipal().getName();
@@ -138,7 +138,7 @@ public class UploadDataset extends HttpServlet {
             String uri = tokens[1];
             String dir = tokens[2];
 
-            if(this.visualizationOnly.equalsIgnoreCase("on")) {
+            if(this.visualizationOnly == 1) {
                 isAnalyzable = 0;
             }else{
                 if(!protocol.equalsIgnoreCase("hdfs")){

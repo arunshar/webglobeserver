@@ -69,7 +69,7 @@ public class GetTimeSeriesData extends HttpServlet {
             Connection conn = DBUtils.getConnection();
             Statement stmt = conn.createStatement();
             String cmd = "SELECT D.url,F.units from netcdf_datasets as D,netcdf_dataset_fields F where D.id = " + datasetId +
-                    " and D.id = F.dataset_id and F.field_name = \"" + fieldName + "\"";
+                    " and D.id = F.dataset_id and D.is_analyzable = 1 and D.is_accessible = 1 and F.field_name = \"" + fieldName + "\"";
             ResultSet rset = DBUtils.executeQuery(conn, stmt, cmd);
             if (rset.next()) {
                 String url = rset.getString(1);
@@ -81,15 +81,16 @@ public class GetTimeSeriesData extends HttpServlet {
 
                 //check if the URL points to a file or a directory
                 NetcdfSource ncDir = null;
-                if (dir.contains(".")) {
-                    if (VALID_EXTENSIONS.contains(dir.substring(dir.lastIndexOf(".") + 1,dir.length()))) {
-                        ncDir = new NetcdfFile(protocol, uri, dir);
-                    }
+                if(Utils.isNCFile(dir)) {
+                    ncDir = new NetcdfFile(protocol,uri,dir);
+                    ncDir.initialize();
                 } else {
-                    if (protocol.equalsIgnoreCase("hdfs")) {
+                    if(protocol.equalsIgnoreCase("hdfs")){
                         ncDir = new NetcdfDirectory(protocol, uri, dir);
+                        ncDir.initialize();
                     }
                 }
+
                 if (ncDir != null) {
                     NetcdfVariable netcdfVariable = new NetcdfVariable(ncDir, fieldName);
                     List<Array> arrayList = netcdfVariable.getTimeSeriesData(x, y);
