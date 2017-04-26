@@ -132,8 +132,8 @@ define(
 		return 'NA';
 	      });
 	}
-	self.datasetSelected = function(){
-	  alert("Hey:");
+	self.datasetSelected = function(dataset){
+	alert(dataset);
 	}
 
 
