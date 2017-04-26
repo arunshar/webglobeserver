@@ -133,7 +133,7 @@ define(
 	      });
 	}
 	self.datasetSelected = function(dataset){
-	alert(dataset);
+	alert(dataset.name);
 	}
 
 
