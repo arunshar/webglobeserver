@@ -132,6 +132,9 @@ define(
 		return 'NA';
 	      });
 	}
+	self.datasetSelected = function(){
+	  alert("Hey:");
+	}
 
 
 	self.showDatasetPanel = function(dataset) {
