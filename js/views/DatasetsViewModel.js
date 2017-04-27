@@ -134,7 +134,8 @@ define(
 	}
 
 	self.datasetSelected = function(dataset){
-	console.log(dataset);
+	  alert($('#datasetSelect').val());
+
 	}
 
 
