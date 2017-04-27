@@ -133,10 +133,8 @@ define(
 	      });
 	}
 
-	self.datasetSelected = function(dataset){
-	  alert(dataset.name);
-	  alert($('#datasetSelect').text());
-
+	self.datasetSelected = function(viewmodel,event){
+	  alert(event.target.value);
 	}
 
 
