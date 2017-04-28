@@ -136,6 +136,7 @@ define(
 	}
 
 	self.datasetSelected = function(viewmodel,event){
+	  alert(event.target.value);
 	  self.selectedDatasetId = event.target.value; 
 	  self.selectedDataset = datasets[self.selectedDatasetId];
 	  alert(event.target.value);
