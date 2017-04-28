@@ -136,7 +136,7 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  alert("in here");
+	  alert("in here "+self.selectedDatasetId+" --");
 	}
 
 
