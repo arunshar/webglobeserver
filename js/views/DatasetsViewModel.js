@@ -28,6 +28,13 @@ define(
        */
       function DatasetsViewModel(globe, logger) {
 	var self = this;
+	self.sampleRates = ko.observableArray([192000, 176400, 96000, 88200, 48000, 44100]);
+	self.selectedSampleRate0 = ko.observable();
+
+	self.addSrate = function (model,event) {
+	  alert(event.target.value);;
+	}
+
 	layerManager = globe.layerManager;
 	self.availableDatasets = ko.observableArray([]);
 	self.selectedDataset = ko.observable();
@@ -133,7 +140,7 @@ define(
 	      });
 	}
 
-	self.datasetSelected = function(viewmodel,event){
+	seLf.datasetSelected = function(viewmodel,event){
 	  alert(event.target.value);
 	}
 
