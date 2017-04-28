@@ -31,6 +31,8 @@ define(
 	self.sampleRates = ko.observableArray([192000, 176400, 96000, 88200, 48000, 44100]);
 
 	self.addSrate = function (model,event) {
+
+	  console.log(event.target.value);
 	  alert(event.target.value.name);
 	}
 
