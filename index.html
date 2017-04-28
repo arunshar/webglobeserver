@@ -127,7 +127,7 @@
 	  <div class="panel-heading panel-heading-white">
 	    <div style="padding-bottom: 5%">
 	      <p>Sample rate:
-	          <select data-bind="options: sampleRates, value: selectedSampleRate0, event: {change: addSrate}"></select>
+	          <select data-bind="options: sampleRates, event: {change: addSrate}"></select>
 	      </p>
 	      <select name="datasetSelect" data-bind="options: availableDatasets,optionsText: 'name',optionsCaption: 'Choose...',event: { change: $root.datasetSelected}" id="datasetSelect"></select>
 	    </div>
