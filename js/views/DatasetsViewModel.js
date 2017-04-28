@@ -135,9 +135,8 @@ define(
 	      });
 	}
 
-	self.datasetSelected = function(viewmodel,event){
-	  self.selectedDatasetId = event.target.value; 
-	  self.selectedDataset = datasets[self.selectedDatasetId];
+	self.datasetSelected = function(){
+	  alert("in here");
 	}
 
 
