@@ -32,7 +32,7 @@ define(
 
 	self.addSrate = function (model,event) {
 
-	  console.log(event.target.value);
+	  console.log(event);
 	  alert(event.target.value.name);
 	}
 
