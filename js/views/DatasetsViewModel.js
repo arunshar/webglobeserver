@@ -31,7 +31,6 @@ define(
 
 	layerManager = globe.layerManager;
 	self.availableDatasets = ko.observableArray([]);
-	self.selectedDatasetId = ko.observable();
 	self.selectedDataset = ko.observable();
 	self.selectedDatasetAnalysis = ko.observable();
 	self.fields = ko.observableArray([]);
