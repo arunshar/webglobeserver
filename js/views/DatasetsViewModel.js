@@ -140,7 +140,7 @@ define(
 	      });
 	}
 
-	seLf.datasetSelected = function(viewmodel,event){
+	self.datasetSelected = function(viewmodel,event){
 	  alert(event.target.value);
 	}
 
