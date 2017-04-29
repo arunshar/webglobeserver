@@ -137,11 +137,10 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  if($("#datasetSelect: selected").text() == 'Choose...'
+	  if($("#datasetSelect: selected").text() == 'Choose...')
+	    return;
 	  var index  = $("#datasetSelect :selected").attr('value');
-	  if(index != null){
-	    alert(self.availableDatasets()[index].name);
-	  }
+	  alert(self.availableDatasets()[index].name);
 	}
 
 
