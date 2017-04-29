@@ -137,8 +137,7 @@ define(
 
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
-	  alert(index);
-	  if(index != undefined){
+	  if(index != '' || index != undefined || index != null){
 	    alert(self.availableDatasets()[index].name);
 	  }
 	}
