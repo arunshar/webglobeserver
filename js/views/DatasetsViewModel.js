@@ -135,8 +135,10 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  var v = $("#datasetSelect :selected").attr('value');
-	  alert("in here "+v);
+	  var id  = $("#datasetSelect :selected").attr('value');
+	  if(id != undefined){
+	    alert(self.datasets[id].name);
+	  }
 	}
 
 
