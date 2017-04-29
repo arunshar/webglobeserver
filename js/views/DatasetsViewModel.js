@@ -135,7 +135,8 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  alert("in here "+self.selectedDatasetId+" --");
+	  var v = $("#datasetSelect :selected").text();
+	  alert("in here "+v);
 	}
 
 
