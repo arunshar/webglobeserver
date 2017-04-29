@@ -137,8 +137,7 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  if($("#datasetSelect: selected").text() == 'Choose...')
-	    return;
+	  var text  = $("#datasetSelect :selected").attr('value');
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  alert(self.availableDatasets()[index].name);
 	}
