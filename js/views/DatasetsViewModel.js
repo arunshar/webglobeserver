@@ -82,7 +82,6 @@ define(
 		  type : 'POST',
 		  contentType : 'application/json; charset=utf-8',
 		  success : function(dataJSON) {
-		    //push an empty one
 		    for (var i = 0; i < dataJSON.count.value; i++) {
 		      var datasetInfo = 'dataset' + i;
 		      var id = dataJSON[datasetInfo].id;
@@ -137,9 +136,10 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  var text  = $("#datasetSelect :selected").attr('value');
 	  var index  = $("#datasetSelect :selected").attr('value');
-	  alert(self.availableDatasets()[index].name);
+	  if(index != undefined){
+	    alert(self.availableDatasets()[index].name);
+	  }
 	}
 
 
