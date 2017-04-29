@@ -82,6 +82,8 @@ define(
 		  type : 'POST',
 		  contentType : 'application/json; charset=utf-8',
 		  success : function(dataJSON) {
+		    //push an empty one
+		    self.availableDatasets.push({'index': -1,'name': 'Select Dataset'});
 		    for (var i = 0; i < dataJSON.count.value; i++) {
 		      var datasetInfo = 'dataset' + i;
 		      var id = dataJSON[datasetInfo].id;
