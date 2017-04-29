@@ -106,6 +106,7 @@ define(
 			var shortName = (name.length<n) ? ' '.repeat(n-name.length)+name : name.substring(0,n-1);
 
 		      self.availableDatasets.push({
+			'index': i,
 			'id' : id,
 			'url' : url,
 			'name' : name,
@@ -135,9 +136,9 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  var id  = $("#datasetSelect :selected").attr('value');
-	  if(id != undefined){
-	    alert(self.availableDatasets()[id].name);
+	  var index  = $("#datasetSelect :selected").attr('value');
+	  if(index != undefined){
+	    alert(self.availableDatasets()[index].name);
 	  }
 	}
 
