@@ -135,7 +135,8 @@ define(
 	}
 
 	self.datasetSelected = function(){
-	  var v = $("#datasetSelect :selected").value();
+	  console.log($("#datasetSelect: selected"));
+	  var v = $("#datasetSelect :selected").text();
 	  alert("in here "+v);
 	}
 
