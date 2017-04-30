@@ -61,7 +61,7 @@ public class GetDatasetDetails extends HttpServlet {
 			// Step 1: Allocate a database Connection object
             conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
-			String cmd = "select id,name,url,available,info,info_url from netcdf_datasets where is_accessible = 1 and (available = \"all\" or available = \""
+			String cmd = "select id,name,url,available,info,info_url,is_analyzable from netcdf_datasets where is_accessible = 1 and (available = \"all\" or available = \""
 					+ userName + "\")";
 			rset = stmt.executeQuery(cmd);
 			int i = 0;
@@ -72,6 +72,7 @@ public class GetDatasetDetails extends HttpServlet {
 				String available = rset.getString("available");
 				String info = rset.getString("info");
 				String info_url = rset.getString("info_url");
+                int is_analyzable = rset.getInt("is_analyzable");
 				int id = rset.getInt("id");
 				datasetInfo.put("id", (new Integer(id)).toString());
 				datasetInfo.put("name", name);
@@ -79,6 +80,7 @@ public class GetDatasetDetails extends HttpServlet {
 				datasetInfo.put("available", available);
 				datasetInfo.put("info", info);
 				datasetInfo.put("info_url", info_url);
+                datasetInfo.put("is_analyzable", Integer.toString(is_analyzable));
 				// get fields
 				String cmd1 = "select field_name from netcdf_dataset_fields where dataset_id = " + id;
 				stmt1 = conn.createStatement();
