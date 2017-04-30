@@ -238,7 +238,7 @@ define(
 	}
 
 	self.isNotLoaded = function(){
-	  if(self.selectedDataset != null){
+	  if(self.selectedDataset != null && self.selectedDataset != undefined){
 	    return !self.selectedDataset.loaded;
 	  }
 	  return true;
