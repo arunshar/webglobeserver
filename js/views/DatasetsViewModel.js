@@ -138,6 +138,9 @@ define(
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
+	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
+	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
+	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	    alert(self.availableDatasets()[index].name);
 	  }else{
 	    //reset
