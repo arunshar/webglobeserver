@@ -162,6 +162,7 @@ define(
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  self.resetDatasets();
 	  if(self.availableDatasets()[index] != undefined){
+	    alert("Going in");
 	    self.selectedDataset = self.availableDatasets()[index];  
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
