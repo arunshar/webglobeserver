@@ -143,9 +143,9 @@ define(
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
-
 	    self.fields.removeAll();
-	    var dataset = self.availableDatasets()[index]; 
+	    self.selectedDataset = self.availableDatasets()[index];  
+	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
 	      self.fields.push(dataset.fields[i].name);
 	    }
