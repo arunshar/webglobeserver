@@ -282,7 +282,6 @@ define(
 	      self.selectedDataset.layer.enabled = true;
 	      self.selectedDataset.loaded = true;
 	      $('#load-images').hide();
-	      $('#player').show();
 	      logger.log("Succesfully loaded images","alert-info");
 	    }
 	  }).fail(function (xhr, textStatus, err) {
