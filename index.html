@@ -350,36 +350,6 @@
       <div id="innerChart" style="width:600px;height:250px;" >
       </div>
     </div>
-
-    <script type="text/html" id="layer-template">
-<div class="btn-group btn-block">
-	<!--Layer name and visibility button-->
-	<button type="button"
-	class="btn btn-default layer-name wrap-panel-heading btn-xs"
-	style="display: block; width: 98%;"
-	data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
-	<span class="glyphicon pull-left"
-	data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
-	<span class="layer" data-bind="text: $data.name()"></span>
-	</button>
-	</div>
-    </script>
-    <script type="text/html" id="dataset-template">
-<div data-bind="style: { background: $data.user_data ? '#C3D9FF' : 'white' }" class="panel panel-info" style="padding:1px;">
-	<span class="dataset" data-bind="text: $data.name"></span>
-	<a href="#" data-bind="click: $root.showInfo" class="dataset-action"><span class="glyphicon glyphicon-info-sign"></span></a>
-	<a href="#" data-bind="click: $root.showDatasetPanel" class="dataset-action"><span class="glyphicon glyphicon-eye-open"></span></a>
-	<a href="#" data-bind="click: $root.showAnalysisPanel" class="dataset-action"><span class="glyphicon glyphicon-wrench"></span></a>
-	<a href="#" class="dataset-action"><span class="glyphicon glyphicon-trash"></span></a>
-	</div>
-    </script>
-    <script type="text/javascript">
-$(function () {
-  $('#load-start-date').datetimepicker();
-  $('#load-end-date').datetimepicker();
-});
-    </script>
-
     <!--Spin.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
     <!--JQuery and JQuery UI-->

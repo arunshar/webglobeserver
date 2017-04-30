@@ -525,5 +525,6 @@ define(
 	  Plotly.purge("innerChart");
 	}
       }
+
       return DatasetsViewModel;
     });
