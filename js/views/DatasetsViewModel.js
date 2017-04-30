@@ -71,7 +71,6 @@ define(
 	  if((self.selectedDataset != null) && (!self.isNotLoaded())){
 	    self.selectedDataset.layer.removeAllRenderables();
 	    self.selectedDataset.layer.empty();
-	    self.selectedDataset = ko.observable();
 	    globe.redraw();
 	  }
 	  $('#dataset-animate').hide();
@@ -81,6 +80,7 @@ define(
 	  $('#dataset-animate-pill').attr('data-toggle', '');
 	  $('#dataset-analyze-pill').attr('data-toggle', '');
 	  $('#dataset-charts-pill').attr('data-toggle', '');
+	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
 	}
 
