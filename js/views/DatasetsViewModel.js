@@ -94,6 +94,9 @@ define(
 
 		      var info = dataJSON[datasetInfo].info;
 		      var info_url = dataJSON[datasetInfo].info_url;
+		      var is_analyzable = true;
+		      if (dataJSON[datasetInfo].is_analyzable == 0)
+			is_analyzable = false;
 		      var fieldcount = dataJSON[datasetInfo].fieldcount;
 		      var fields = [];
 		      for (var j = 0; j < fieldcount; j++) {
@@ -102,18 +105,16 @@ define(
 			fields.push(fieldName);
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
-		      var n = 25
-			var shortName = (name.length<n) ? ' '.repeat(n-name.length)+name : name.substring(0,n-1);
 
 		      self.availableDatasets.push({
 			'index': i,
 			'id' : id,
 			'url' : url,
 			'name' : name,
-			'shortName' : shortName,
 			'user_data' : user_data,
 			'info' : info,
 			'info_url' : info_url,
+			'is_analyzable': is_analyzable,
 			'fields' : fields,
 			'enabled' : false,
 			'layer' : datasetLayer,
@@ -138,15 +139,21 @@ define(
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
+	    self.fields.removeAll();
+	    var dataset = self.availableDatasets[index]; 
+	    for (var i = 0; i < dataset.fields.length; i++) {
+	      self.fields.push(dataset.fields[i]);
+	    }
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
-	    alert(self.availableDatasets()[index].name);
 	  }else{
 	    //reset
+	    $('#dataset-animate-pill').attr('data-toggle', '');
+	    $('#dataset-analyze-pill').attr('data-toggle', '');
+	    $('#dataset-charts-pill').attr('data-toggle', '');
 	  }
 	}
-
 
 	self.showDatasetPanel = function(dataset) {
 	  if (!self.openActive) {
