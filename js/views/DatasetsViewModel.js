@@ -146,6 +146,9 @@ define(
 	    $('#dataset-animate').show();
 	    $('#dataset-analyze').show();
 	    $('#dataset-charts').show();
+
+	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
+	    removeClass('active')
 	    self.fields.removeAll();
 	    var dataset = self.availableDatasets()[index]; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -173,6 +176,7 @@ define(
 	    $('#dataset-animate').hide();
 	    $('#dataset-analyze').hide();
 	    $('#dataset-charts').hide();
+	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 	    $('#dataset-animate-pill').attr('data-toggle', '');
 	    $('#dataset-analyze-pill').attr('data-toggle', '');
 	    $('#dataset-charts-pill').attr('data-toggle', '');
