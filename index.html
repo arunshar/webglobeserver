@@ -152,18 +152,27 @@ $( function() {
 		    From: <input type="text" id="load-start-date">
 		    To: <input type="text" id="load-end-date">
 		  </div>
+		  <div class="form-group">
+		    <button type="button" class="btn btn-primary btn-sm" id="load-images" data-bind="click: $root.loadImages,css: {active: $root.isNotLoaded">
+		      Load Images
+		    </button>
+		  </div>
 		</div>
 	      </div>
 	      <div id="dataset-analyze" class="tab-pane fade">
-		<h3>Analyze</h3>
+		<div class="input-group well" align="center">
+		  <div style="padding-bottom: 1%" class="form-group">
+		    <label for="analysisFieldSelect">Variable</label>
+		    <select name="analysisFieldSelect" data-bind="options: fields" id="analysisFieldSelect"></select>
+		  </div>
+		  <div class="form-group">
+		  </div>
+		</div>
 	      </div>
 	      <div id="dataset-charts" class="tab-pane fade">
-		<h3>Charts</h3>
 	      </div>
-
 	    </div>
 	  </div>
-
 	</div>
       </div>
       <!--div id="datasets" class="col-sm-2 tabcontentLeft leftTabPadding" style="font-size: 10px !important; padding-bottom: 25% !important;">
@@ -198,36 +207,36 @@ $( function() {
 	<input type="date date-sm" id="load-end-date"/></div>
 	</div>
 	<button type="button" class="btn btn-primary btn-sm" id="load-images"
-	data-bind="click: $root.loadImages,css: {active: $root.isNotLoaded">
-	Load Images
-	</button>                                      
-	</form>                               
-	<!--div class="container"-->
-	<div id="player" class="player text-center">
-	  <button type="button" id="button_bbw" class="btn btn-sm" data-bind="click: $root.showFirst">
-	    <i class="fa fa-fast-backward"></i>
-	  </button>
+						      data-bind="click: $root.loadImages,css: {active: $root.isNotLoaded">
+						      Load Images
+						      </button>                                      
+						      </form>                               
+						      <!--div class="container"-->
+						      <div id="player" class="player text-center">
+							<button type="button" id="button_bbw" class="btn btn-sm" data-bind="click: $root.showFirst">
+							  <i class="fa fa-fast-backward"></i>
+							</button>
 
-	  <button type="button" id="button_bw" class="btn btn-sm" data-bind="click: $root.showPrevious">
-	    <i class="fa fa-backward"></i>
-	  </button>
+							<button type="button" id="button_bw" class="btn btn-sm" data-bind="click: $root.showPrevious">
+							  <i class="fa fa-backward"></i>
+							</button>
 
-	  <button type="button" id="button_play" class="btn btn-sm" data-bind="click: $root.play">
-	    <i class="fa fa-play"></i>
-	  </button>
+							<button type="button" id="button_play" class="btn btn-sm" data-bind="click: $root.play">
+							  <i class="fa fa-play"></i>
+							</button>
 
-	  <button type="button" id="button_stop" class="btn btn-sm" data-bind="click: $root.stop">
-	    <i class="fa fa-stop"></i>
-	  </button>
+							<button type="button" id="button_stop" class="btn btn-sm" data-bind="click: $root.stop">
+							  <i class="fa fa-stop"></i>
+							</button>
 
-	  <button type="button" id="button_fw" class="btn btn-sm" data-bind="click: $root.showNext">
-	    <i class="fa fa-forward"></i>
-	  </button>
+							<button type="button" id="button_fw" class="btn btn-sm" data-bind="click: $root.showNext">
+							  <i class="fa fa-forward"></i>
+							</button>
 
-	  <button type="button" id="button_ffw" class="btn btn-sm" data-bind="click: $root.showLast">
-	    <i class="fa fa-fast-forward"></i>
-	  </button>    
-	</div>
+							<button type="button" id="button_ffw" class="btn btn-sm" data-bind="click: $root.showLast">
+							  <i class="fa fa-fast-forward"></i>
+							</button>    
+						      </div>
 	</div>	    
 	</div>	    
 	</div>
