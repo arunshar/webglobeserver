@@ -149,11 +149,27 @@ define(
 	      self.fields.push(dataset.fields[i].name);
 	      alert(dataset.fields[i].mindate);
 	    }
+	    //show time data
+	      $('#load-start-date').attr({
+		"max" : dataset.fields[0].maxdate; 
+		"min" : dataset.fields[0].mindate; 
+	      });
+	      $('#load-start-date').val(dataset.fields[0].mindate);
+
+	      $('#load-end-date').attr({
+		"max" : dataset.fields[0].maxdate; 
+		"min" : dataset.fields[0].mindate; 
+	      });
+	      $('#load-end-date').val(dataset.fields[0].maxdate);
+
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	  }else{
 	    //reset
+	    $('#dataset-animate').hide();
+	    $('#dataset-analyze').hide();
+	    $('#dataset-charts').hide();
 	    $('#dataset-animate-pill').attr('data-toggle', '');
 	    $('#dataset-analyze-pill').attr('data-toggle', '');
 	    $('#dataset-charts-pill').attr('data-toggle', '');
