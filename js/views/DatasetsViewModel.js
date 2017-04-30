@@ -68,7 +68,7 @@ define(
 	self.tapRecognizer = new WorldWind.TapRecognizer(globe.wwd, handleClick);
 
 	self.resetDatasets = function(){
-	  if((self.selectedDataset != null) && (!self.selectedDataset.isNotLoaded())){
+	  if((self.selectedDataset != null) && (!self.isNotLoaded())){
 	    self.selectedDataset.layer.removeAllRenderables();
 	    self.selectedDataset.layer.empty();
 	    self.selectedDataset = ko.observable();
@@ -207,7 +207,7 @@ define(
 	}
 
 	self.loadImages = function() {
-	  if(self.selectedDataset.isNotLoaded()){
+	  if(self.isNotLoaded()){
 	    var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	    var id = self.selectedDataset.id;
