@@ -100,9 +100,13 @@ define(
 		      var fieldcount = dataJSON[datasetInfo].fieldcount;
 		      var fields = [];
 		      for (var j = 0; j < fieldcount; j++) {
+			
 			var fieldInfo = 'field' + j;
 			var fieldName = dataJSON[datasetInfo][fieldInfo];
-			fields.push(fieldName);
+			var minDate = dataJSON[datasetInfo]['field'+j+'_mindate'];
+			var maxDate = dataJSON[datasetInfo]['field'+j+'_maxdate'];
+			var field = {'name': fieldName, 'mindate': minDate, 'maxdate': maxDate};
+			fields.push(field);
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
 
@@ -142,7 +146,8 @@ define(
 	    self.fields.removeAll();
 	    var dataset = self.availableDatasets()[index]; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
-	      self.fields.push(dataset.fields[i]);
+	      self.fields.push(dataset.fields[i].name);
+	      alert(dataset.fields[i].mindate);
 	    }
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
