@@ -143,6 +143,9 @@ define(
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
+	    $('#dataset-animate').hide();
+	    $('#dataset-analyze').hide();
+	    $('#dataset-charts').hide();
 	    self.fields.removeAll();
 	    var dataset = self.availableDatasets()[index]; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -162,6 +165,7 @@ define(
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
 
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
+
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	  }else{
