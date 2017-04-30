@@ -102,14 +102,14 @@ public class GetDatasetDetails extends HttpServlet {
                     stmt2 = conn.createStatement();
                     rset2 = DBUtils.executeQuery(conn,stmt2,cmd2);
                     rset2.next();
-                    String tsmin = rset.getString(1);
+                    String tsmin = rset2.getString(1);
 
                     cmd2 = "select timestamp from netcdf_dataset_images where dataset_id="+id+
                             " and field_id="+fieldId+" and time_index = (select max(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
                     stmt2 = conn.createStatement();
                     rset2 = DBUtils.executeQuery(conn,stmt2,cmd2);
                     rset2.next();
-                    String tsmax = rset.getString(1);
+                    String tsmax = rset2.getString(1);
 
                     CalendarDate d1 = dateFormatter.parse(tsmin);
                     CalendarDate d2 = dateFormatter.parse(tsmax);
@@ -126,7 +126,6 @@ public class GetDatasetDetails extends HttpServlet {
 			Map<String, String> countInfo = new HashMap<String, String>();
 			countInfo.put("value", (new Integer(i)).toString());
 			responseData.put("count", countInfo);
-            Utils.logger.info("COMIN IN HERE");
 			rset.close();
 			stmt.close();
 			conn.close();
