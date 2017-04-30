@@ -298,35 +298,35 @@ define(
 	  return true;
 	}
 	self.showNext = function() {
-	  if(!self.isNotLoaded){
+	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showNext();
 	    globe.redraw();		
 	  }	  
 	}
 
 	self.showPrevious = function() {
-	  if(!self.isNotLoaded){
+	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showPrevious();
 	    globe.redraw();		
 	  }	  
 	}
 
 	self.showFirst = function() {
-	  if(!self.isNotLoaded){
+	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showFirst();
 	    globe.redraw();
 	  }
 	}
 
 	self.showLast = function() {
-	  if(!self.isNotLoaded){
+	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showLast();
 	    globe.redraw();
 	  }
 	}
 
 	self.play = function() {
-	  if(!self.isNotLoaded){
+	  if(!self.isNotLoaded()){
 	    if(self.interval != null){
 	      window.clearInterval(self.interval);
 	    }
