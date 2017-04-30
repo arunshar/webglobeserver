@@ -126,6 +126,7 @@ public class GetDatasetDetails extends HttpServlet {
 			Map<String, String> countInfo = new HashMap<String, String>();
 			countInfo.put("value", (new Integer(i)).toString());
 			responseData.put("count", countInfo);
+            Utils.logger.info("COMIN IN HERE");
 			rset.close();
 			stmt.close();
 			conn.close();
