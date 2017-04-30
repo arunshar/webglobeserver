@@ -350,6 +350,20 @@
       <div id="innerChart" style="width:600px;height:250px;" >
       </div>
     </div>
+
+    <script type="text/html" id="layer-template">
+<div class="btn-group btn-block">
+	<!--Layer name and visibility button-->
+	<button type="button"
+	class="btn btn-default layer-name wrap-panel-heading btn-xs"
+	style="display: block; width: 98%;"
+	data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
+	<span class="glyphicon pull-left"
+	data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
+	<span class="layer" data-bind="text: $data.name()"></span>
+	</button>
+	</div>
+    </script>
     <!--Spin.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
     <!--JQuery and JQuery UI-->
