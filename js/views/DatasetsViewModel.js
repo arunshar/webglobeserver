@@ -30,13 +30,13 @@ define(
 	var self = this;
 
 	layerManager = globe.layerManager;
-	self.availableDatasets = ko.observableArray([]);
-	self.selectedDataset = ko.observable();
-	self.selectedDatasetAnalysis = ko.observable();
-	self.fields = ko.observableArray([]);
-	self.analysisFields = ko.observableArray([]);
 	self.analysisMethods = ko.observableArray([ "Change Detection", "Anomaly Detection","Correlation Analysis" ]);
 	self.availableColormaps = ko.observableArray(["Linear","Log","Discrete"]);
+	//fields that need to be reset
+	self.availableDatasets = ko.observableArray([]);
+	self.selectedDataset = ko.observable();
+	self.fields = ko.observableArray([]);
+	//fields that are used to check the status
 	self.infoActive = false;
 	self.openActive = false;
 	self.openAnalysis = false;
@@ -66,10 +66,27 @@ define(
 
 	// Listen for taps on mobile devices.
 	self.tapRecognizer = new WorldWind.TapRecognizer(globe.wwd, handleClick);
+
+	self.resetDatasets = function(){
+	  if((self.selectedDataset != null) && (!self.selectedDataset.isNotLoaded())){
+	    self.selectedDataset.layer.removeAllRenderables();
+	    self.selectedDataset.layer.empty();
+	    self.selectedDataset = ko.observable();
+	    globe.redraw();
+	  }
+	  $('#dataset-animate').hide();
+	  $('#dataset-analyze').hide();
+	  $('#dataset-charts').hide();
+	  $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
+	  $('#dataset-animate-pill').attr('data-toggle', '');
+	  $('#dataset-analyze-pill').attr('data-toggle', '');
+	  $('#dataset-charts-pill').attr('data-toggle', '');
+	  self.fields.removeAll();
+	}
+
 	/*
 	 * Populate available datasets from the database
 	 */
-
 	self.populateDatasets = function() {
 	  self.availableDatasets.removeAll();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
@@ -122,8 +139,6 @@ define(
 			'fields' : fields,
 			'enabled' : false,
 			'layer' : datasetLayer,
-			'images': ko.observableArray(),
-			'variableAddress' : "",
 			'loaded' : false
 		      });
 		    }
@@ -140,10 +155,13 @@ define(
 	      });
 	}
 
+	/*
+	 * Handler for selection of dataset in the dataset panel
+	 */
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
+	  self.resetDatasets();
 	  if(self.availableDatasets()[index] != undefined){
-	    self.fields.removeAll();
 	    self.selectedDataset = self.availableDatasets()[index];  
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -167,42 +185,8 @@ define(
 	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
-
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
-	  }else{
-	    //reset
-	    self.selectedDataset = ko.observable();
-	    $('#dataset-animate').hide();
-	    $('#dataset-analyze').hide();
-	    $('#dataset-charts').hide();
-	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
-	    $('#dataset-animate-pill').attr('data-toggle', '');
-	    $('#dataset-analyze-pill').attr('data-toggle', '');
-	    $('#dataset-charts-pill').attr('data-toggle', '');
-	  }
-	}
-
-	self.showDatasetPanel = function(dataset) {
-	  if (!self.openActive) {
-	    self.selectedDataset = dataset;
-	    for (var i = 0; i < dataset.fields.length; i++) {
-	      self.fields.push(dataset.fields[i]);
-	    }
-	    $("#datasetOpenPanel").show();
-	    $("#selectTimePanel").hide();
-	    self.openActive = true;
-	  } else {
-	    if(self.selectedDataset.layer.enabled){
-	      self.selectedDataset.layer.enabled = false;
-	      globe.redraw();
-	    }
-	    self.selectedDataset = null;
-	    self.fields.removeAll();
-	    self.clearChart();
-
-	    $("#datasetOpenPanel").hide();
-	    self.openActive = false;
 	  }
 	}
 
@@ -222,73 +206,35 @@ define(
 	  }
 	}
 
-	self.displayTimePanel = function() {
-	  var id = self.selectedDataset.id;
-	  var fieldname = $("#fieldSelect :selected").text();
-	  self.selectedDataset.fieldname = fieldname;
-	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-
-	  $.ajax({
-	    url: webGlobeServer + 'LoadNetcdfDataset',
-	    cache: false,
-	    type: 'POST',
-	    contentType: 'application/json; charset=utf-8',
-	    data: JSON.stringify({
-	      id: id,
-	      fieldname: fieldname
-	    }),
-	    success: function (dataJSON) {
-	      $('#player').hide();
-	      $('#load-images').show();
-	      $('#load-start-date').attr({
-		"max" : dataJSON.variable.imageMaxDate,
-		"min" : dataJSON.variable.imageMinDate
-	      });
-	      $('#load-start-date').val(dataJSON.variable.imageMinDate);
-
-	      $('#load-end-date').attr({
-		"max" : dataJSON.variable.imageMaxDate,
-		"min" : dataJSON.variable.imageMinDate
-	      });
-	      $('#load-end-date').val(dataJSON.variable.imageMaxDate);
-	    }
-	  }).fail(function (xhr, textStatus, err) {
-	    logger.log(err,"alert-danger");
-	  });
-
-	  $("#selectTimePanel").show();
-	}
-
 	self.loadImages = function() {
-	  self.selectedDataset.layer.empty();
-	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  if(self.selectedDataset.isNotLoaded()){
+	    var webGlobeServer = constants.WEBGLOBE_SERVER;
 
-	  var id = self.selectedDataset.id;
-	  var fieldname = $("#fieldSelect :selected").text();
+	    var id = self.selectedDataset.id;
+	    var fieldname = $("#fieldSelect :selected").text();
 
-	  $.ajax({
-	    url: webGlobeServer + 'LoadImages',
-	    cache: false,
-	    type: 'POST',
-	    data: {
-	      datasetId: id,
-	      fieldname: fieldname,
-	      from: $('#load-start-date').val(),
-	      to: $('#load-end-date').val()
-	    },
-	    success: function (data) {
-	      var imageUrls = data.imageUrls;
-	      var imageDates = data.imageDates;
-	      self.selectedDataset.layer.populate(imageUrls,imageDates);
-	      self.selectedDataset.layer.enabled = true;
-	      self.selectedDataset.loaded = true;
-	      $('#load-images').hide();
-	      logger.log("Succesfully loaded images","alert-info");
-	    }
-	  }).fail(function (xhr, textStatus, err) {
-	    logger.log(err,"alert-danger");
-	  });                            
-
+	    $.ajax({
+	      url: webGlobeServer + 'LoadImages',
+	      cache: false,
+	      type: 'POST',
+	      data: {
+		datasetId: id,
+		fieldname: fieldname,
+		from: $('#load-start-date').val(),
+		to: $('#load-end-date').val()
+	      },
+	      success: function (data) {
+		var imageUrls = data.imageUrls;
+		var imageDates = data.imageDates;
+		self.selectedDataset.layer.populate(imageUrls,imageDates);
+		self.selectedDataset.layer.enabled = true;
+		self.selectedDataset.loaded = true;
+		logger.log("Succesfully loaded images","alert-info");
+	      }
+	    }).fail(function (xhr, textStatus, err) {
+	      logger.log(err,"alert-danger");
+	    });
+	  }	  
 	}
 
 	self.isNotLoaded = function(){

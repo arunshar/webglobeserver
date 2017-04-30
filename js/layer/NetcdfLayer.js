@@ -36,7 +36,9 @@ define(['worldwind'],
 	    }
 	    self.empty = function(){
 	      self.images = [];
+	      self.imageDates = [];
 	    }
+
 	    self.showAt = function(i){
 	      self.removeAllRenderables();
 	      self.addRenderable(self.images[i]);
