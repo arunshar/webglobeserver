@@ -172,6 +172,7 @@ define(
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	  }else{
 	    //reset
+	    self.selectedDataset = ko.observable();
 	    $('#dataset-animate').hide();
 	    $('#dataset-analyze').hide();
 	    $('#dataset-charts').hide();
@@ -297,41 +298,43 @@ define(
 	  return true;
 	}
 	self.showNext = function() {
-	  if(self.selectedDataset.loaded){
+	  if(!self.isNotLoaded){
 	    self.selectedDataset.layer.showNext();
 	    globe.redraw();		
 	  }	  
 	}
 
 	self.showPrevious = function() {
-	  if(self.selectedDataset.loaded){
+	  if(!self.isNotLoaded){
 	    self.selectedDataset.layer.showPrevious();
 	    globe.redraw();		
 	  }	  
 	}
 
 	self.showFirst = function() {
-	  if(self.selectedDataset.loaded){
+	  if(!self.isNotLoaded){
 	    self.selectedDataset.layer.showFirst();
 	    globe.redraw();
 	  }
 	}
 
 	self.showLast = function() {
-	  if(self.selectedDataset.loaded){
+	  if(!self.isNotLoaded){
 	    self.selectedDataset.layer.showLast();
 	    globe.redraw();
 	  }
 	}
 
 	self.play = function() {
-	  if(self.interval != null){
-	    window.clearInterval(self.interval);
+	  if(!self.isNotLoaded){
+	    if(self.interval != null){
+	      window.clearInterval(self.interval);
+	    }
+	    self.interval = window.setInterval(function () {
+	      self.selectedDataset.layer.showNext();
+	      globe.redraw();
+	    }, 200);
 	  }
-	  self.interval = window.setInterval(function () {
-	    self.selectedDataset.layer.showNext();
-	    globe.redraw();
-	  }, 200);
 	}
 
 	self.stop = function() {
