@@ -143,11 +143,7 @@ define(
 	self.datasetSelected = function(){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
-	    $('#dataset-animate').show();
-	    $('#dataset-analyze').show();
-	    $('#dataset-charts').show();
 
-	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 	    self.fields.removeAll();
 	    var dataset = self.availableDatasets()[index]; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -165,6 +161,10 @@ define(
 	      "min" : dataset.fields[0].mindate 
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
+	    $('#dataset-animate').show();
+	    $('#dataset-analyze').show();
+	    $('#dataset-charts').show();
+	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 
