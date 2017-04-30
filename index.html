@@ -149,7 +149,6 @@
 		      <div class="input-group-addon"><i class="fa fa-chevron-right" aria-hidden="true"></i>
 			<input type="date date-sm" id="load-end-date"/></div>
 		    </div>
-		    <p>Date: <input type="text" id="datepicker"></p>
 		</div>
 	      </div>
 	      <div id="dataset-analyze" class="tab-pane fade">
@@ -374,10 +373,11 @@
 	<a href="#" class="dataset-action"><span class="glyphicon glyphicon-trash"></span></a>
 	</div>
     </script>
-    <script>
-$( function() {
-  $( "#datepicker" ).datepicker();
-} );
+    <script type="text/javascript">
+$(function () {
+  $('#load-start-date').datetimepicker();
+  $('#load-end-date').datetimepicker();
+});
     </script>
 
     <!--Spin.js-->
