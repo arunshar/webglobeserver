@@ -93,7 +93,7 @@ public class GetDatasetDetails extends HttpServlet {
                     // get time limits
                     CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
 
-                    int fieldId = rset.getInt("id");
+                    int fieldId = rset1.getInt("id");
                     String cmd2;
                     Statement stmt2;
                     ResultSet rset2;
