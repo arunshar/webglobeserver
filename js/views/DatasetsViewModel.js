@@ -148,7 +148,6 @@ define(
 	    $('#dataset-charts').show();
 
 	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
-	    removeClass('active')
 	    self.fields.removeAll();
 	    var dataset = self.availableDatasets()[index]; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
