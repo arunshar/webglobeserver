@@ -169,7 +169,7 @@ define(
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	    $('#dataset-animate').show();
-	    $('#dataset-animate').children().show();
+	    $('#dataset-animate-subpanel').show();
 	    $('#dataset-analyze').show();
 	    $('#dataset-charts').show();
 	    self.selectedDataset = self.availableDatasets()[index];  
