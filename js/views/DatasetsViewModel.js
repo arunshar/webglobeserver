@@ -424,6 +424,7 @@ define(
 	self.populateDatasets();
 
 	self.plotChart = function(lat,lon){
+	  $("#plot-chart-spinner").show();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  var datasetid = self.selectedDataset.id;
 	  var fieldname = $("#fieldChartsSelect :selected").text();
@@ -442,6 +443,7 @@ define(
 	      lon: lon
 	    }),
 	    success: function (dataJSON) {
+	      $("#plot-chart-spinner").hide();
 	      var xdata = [];
 	      var ydata = [];
 	      var retnum = Object.keys(dataJSON).length;
@@ -466,6 +468,7 @@ define(
 	      	x: xdata,y: ydata }], layout );
 	    }
 	  }).fail(function (xhr, textStatus, err) {
+	      $("#plot-chart-spinner").hide();
 	    logger.log("No data returned for the selected location","alert-danger");
 	  });
 	}
