@@ -1,12 +1,13 @@
 
+/*
 ul.tab {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /*border: 1px solid #ccc;*/
     background-color: black;
 }
+*/
 
 /* Float the list items side by side */
 ul.tab li {float: left;}
@@ -61,7 +62,6 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
     width: 15%;
     right: 0;
     overflow: auto;
-    /*margin: 50px auto 0 auto;*/
 }
 
 .tabcontentInfo {
@@ -154,7 +154,4 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   margin-bottom: 20px;
   padding: 15px;
   z-index:9999; 
-}
-.trans {
-  background: rgb(124,124,124);
 }
