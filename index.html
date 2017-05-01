@@ -216,12 +216,8 @@ $( function() {
 		<button type="button" id="clearChart" class="btn btn-sm" data-bind="click: $root.clearChart">
 		  <i class="fa fa-trash"></i>
 		</button>
-		<div class="input-group well" align="center">
-		  <div style="padding-bottom: 1%" class="form-group">
-		    <label for="fieldChartsSelect">Variable</label>
-		    <select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
-		  </div>
-		</div>
+		<label for="fieldChartsSelect">Variable</label>
+		<select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
 		<div id="innerChart" style="width:600px;height:250px;" >
 		</div>
 	      </div>
