@@ -136,14 +136,14 @@ $( function() {
 	    <div style="padding-bottom: 5%">
 	      <select name="datasetSelect" id="datasetSelect" data-bind="options: availableDatasets,optionsValue: 'index', optionsText: 'name',optionsCaption: 'Choose...',event:{change: $root.datasetSelected}"></select>
 	    </div>
-	    <ul class="nav nav-tabs">
+	    <ul class="nav nav-pills">
 	      <li><a id="dataset-animate-pill" data-toggle="" href="#dataset-animate">Animate</a></li>
 	      <li><a id="dataset-analyze-pill" data-toggle="" href="#dataset-analyze">Analyze</a></li>
 	      <li><a id="dataset-charts-pill" data-toggle="" href="#dataset-charts">Charts</a></li>
 	    </ul>
 	    <div class="tab-content">
 	      <div id="dataset-animate" class="tab-pane fade">
-		<div id="dataset-animate-subpanel" class="input-group well" align="center">
+		<div class="input-group well" align="center">
 		  <div style="padding-bottom: 1%" class="form-group">
 		    <label for="fieldSelect">Variable</label>
 		    <select name="fieldSelect" data-bind="options: fields" id="fieldSelect"></select>

@@ -168,10 +168,9 @@ define(
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
-	    $('#dataset-animate').show();
-	    $('#dataset-animate-subpanel').show();
-	    $('#dataset-analyze').show();
-	    $('#dataset-charts').show();
+	    //$('#dataset-animate').show();
+	    //$('#dataset-analyze').show();
+	    //$('#dataset-charts').show();
 	    self.selectedDataset = self.availableDatasets()[index];  
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
