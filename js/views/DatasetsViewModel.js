@@ -192,6 +192,8 @@ define(
 	  }
 	}
 	self.showPill = function(pillname){
+	  
+	    $("#dataset-info").show();
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
 	    $('#dataset-'+pillname).siblings().hide();
