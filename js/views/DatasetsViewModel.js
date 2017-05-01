@@ -75,10 +75,6 @@ define(
 	    self.selectedDataset.layer.empty();
 	    self.selectedDataset.loaded = false;
 	  }
-	  $('#dataset-info').hide();
-	  $('#dataset-animate').hide();
-	  $('#dataset-analyze').hide();
-	  $('#dataset-charts').hide();
 	  $('#dataset-info-tab').parent().addClass('active').siblings().removeClass('active');
 	  $('#dataset-info-tab').attr('data-toggle', '');
 	  $('#dataset-animate-tab').attr('data-toggle', '');
@@ -191,6 +187,13 @@ define(
 	    self.showTab('info');
 	  }
 	}
+	self.hideTabs = function(){
+	  $('#dataset-info').hide();
+	  $('#dataset-animate').hide();
+	  $('#dataset-analyze').hide();
+	  $('#dataset-charts').hide();
+	}
+
 	self.showTab = function(tabname){
 	  
 	  var index  = $("#datasetSelect :selected").attr('value');
@@ -492,6 +495,7 @@ define(
 	self.clearChart = function(){
 	  Plotly.purge("innerChart");
 	}
+	self.hideTabs();
       }
 
       return DatasetsViewModel;
