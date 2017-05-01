@@ -81,6 +81,7 @@ define(
 	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
 	  self.plotChartSwitch = false;
+	  $('#togglePlottingOn').attr('display','none');
 	}
 
 	/*
