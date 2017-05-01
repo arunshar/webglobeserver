@@ -198,7 +198,7 @@ define(
 	    $('#dataset-'+tabname).siblings().hide();
 	    $('#dataset-'+tabname).show();
 	    if(tabname == 'info'){
-	      $('$dataset-info-span').text(self.selectedDataset.info);
+	      $('#dataset-info-span').text(self.selectedDataset.info);
 	    }
 	  }
 	}
