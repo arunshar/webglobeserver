@@ -79,11 +79,11 @@ define(
 	  $('#dataset-animate').hide();
 	  $('#dataset-analyze').hide();
 	  $('#dataset-charts').hide();
-	  $('#dataset-info-pill').parent().addClass('active').siblings().removeClass('active');
-	  $('#dataset-info-pill').attr('data-toggle', '');
-	  $('#dataset-animate-pill').attr('data-toggle', '');
-	  $('#dataset-analyze-pill').attr('data-toggle', '');
-	  $('#dataset-charts-pill').attr('data-toggle', '');
+	  $('#dataset-info-tab').parent().addClass('active').siblings().removeClass('active');
+	  $('#dataset-info-tab').attr('data-toggle', '');
+	  $('#dataset-animate-tab').attr('data-toggle', '');
+	  $('#dataset-analyze-tab').attr('data-toggle', '');
+	  $('#dataset-charts-tab').attr('data-toggle', '');
 	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
 	}
@@ -166,11 +166,11 @@ define(
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  self.resetDatasets();
 	  if(self.availableDatasets()[index] != undefined){
-	    $('#dataset-info-pill').parent().addClass('active').siblings().removeClass('active');
-	    $('#dataset-info-pill').attr('data-toggle', 'pill');
-	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
-	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
-	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
+	    $('#dataset-info-tab').parent().addClass('active').siblings().removeClass('active');
+	    $('#dataset-info-tab').attr('data-toggle', 'tab');
+	    $('#dataset-animate-tab').attr('data-toggle', 'tab');
+	    $('#dataset-analyze-tab').attr('data-toggle', 'tab');
+	    $('#dataset-charts-tab').attr('data-toggle', 'tab');
 	    self.selectedDataset = self.availableDatasets()[index];  
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -188,15 +188,15 @@ define(
 	      "min" : dataset.fields[0].mindate 
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
-	    self.showPill('info');
+	    self.showTab('info');
 	  }
 	}
-	self.showPill = function(pillname){
+	self.showTab = function(tabname){
 	  
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
-	    $('#dataset-'+pillname).siblings().hide();
-	    $('#dataset-'+pillname).show();
+	    $('#dataset-'+tabname).siblings().hide();
+	    $('#dataset-'+tabname).show();
 	  }
 	}
 
