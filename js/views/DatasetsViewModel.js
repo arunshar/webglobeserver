@@ -188,10 +188,18 @@ define(
 	      "min" : dataset.fields[0].mindate 
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
+	    self.showPill('info');
 	  }
 	}
 	self.showPill = function(pillname){
-	  alert(pillname);
+	  var index  = $("#datasetSelect :selected").attr('value');
+	  if(self.availableDatasets()[index] != undefined){
+	    $('#dataset-'+pillname).show();
+	    $('#dataset-'+pillname).siblings().hide();
+
+	  }else{
+	    logger.log("No dataset selected.","alert-danger");
+	  }
 	}
 
 	self.showAnalysisPanel = function(dataset) {
