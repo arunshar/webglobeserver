@@ -457,6 +457,7 @@ define(
 	  if(lon < 0){
 	    lon = 360 + lon;
 	  }
+	  alert(datasetid+ " " +fieldname);
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
