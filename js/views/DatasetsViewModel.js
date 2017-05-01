@@ -501,7 +501,8 @@ define(
 	}
 	self.togglePlotting = function(){
 	  alert("coming here");
-	  $('#middle.inactive, #middle.active').toggle();
+	  $("$togglePlottingOn").toggle();
+	  $("$togglePlottingOff").toggle();
 	}
 	self.hideTabs();
       }
