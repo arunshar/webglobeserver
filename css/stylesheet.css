@@ -137,10 +137,6 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   padding-right: 6px;
 }
 
-.dataset-action {
-  padding: 4px;
-}
-
 .panel-heading {
   font-size: 13px;
   color: #000000;
@@ -158,4 +154,7 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   margin-bottom: 20px;
   padding: 15px;
   z-index:9999; 
+}
+.trans {
+  background: rgb(124,124,124);
 }
