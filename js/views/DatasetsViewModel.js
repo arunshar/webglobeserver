@@ -321,21 +321,20 @@ define(
 	    return;
 	  }
 	  var analysisoutputname = $("#analysisOutputName").val();
-	  var url = self.selectedDatasetAnalysis.url;
+	  var url = self.selectedDataset.url;
 	  logger.log("Submitting " + analysisname + " <a href=\""
-	      + url + "\">" + self.selectedDatasetAnalysis.name
+	      + url + "\">" + self.selectedDataset.name
 	      + ":" + fieldname + "</a>", "alert-info");
 
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  
-
 	  $.ajax({
 	    url: webGlobeServer + 'RunJob',
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
-	      datasetid: self.selectedDatasetAnalysis.id,
-	      datasetname: self.selectedDatasetAnalysis.name,
+	      datasetid: self.selectedDataset.id,
+	      datasetname: self.selectedDataset.name,
 	      url: url,
 	      analysisname: analysisname,
 	      fieldname: fieldname,
