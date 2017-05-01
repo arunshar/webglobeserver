@@ -499,6 +499,9 @@ define(
 	self.clearChart = function(){
 	  Plotly.purge("innerChart");
 	}
+	self.togglePlotting = function(){
+	  $('#middle.inactive, #middle.active').toggle();
+	}
 	self.hideTabs();
       }
 

@@ -155,3 +155,15 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
   padding: 15px;
   z-index:9999; 
 }
+
+.middle {
+  text-align: center;
+  margin: 0 auto;
+  padding: 2rem;
+  cursor: pointer;
+}
+
+.active {
+  color: green;
+
+}	

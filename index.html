@@ -218,6 +218,10 @@ $( function() {
 		</button>
 		<label for="fieldChartsSelect">Variable</label>
 		<select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
+		<div class="middle" data-bind="click: $root.togglePlotting">
+		  <i class="fa fa-toggle-on fa-2x active" id="on" style="display:none;"></i>
+		  <i class="fa fa-toggle-on fa-2x fa-rotate-180 inactive" id="off" ></i>
+		</div> 
 		<div id="innerChart" style="width:600px;height:250px;" >
 		</div>
 	      </div>
