@@ -137,10 +137,10 @@ $( function() {
 	      <select name="datasetSelect" id="datasetSelect" data-bind="options: availableDatasets,optionsValue: 'index', optionsText: 'name',optionsCaption: 'Choose...',event:{change: $root.datasetSelected}"></select>
 	    </div>
 	    <ul class="nav nav-pills">
-	      <li><a id="dataset-info-pill" data-toggle="" data-bind="click: $root.showPill(info)">Info</a></li>
-	      <li><a id="dataset-animate-pill" data-toggle="" data-bind="click: $root.showPill(animate)">Animate</a></li>
-	      <li><a id="dataset-analyze-pill" data-toggle="" data-bind="click: $root.showPill(analyze)">Analyze</a></li>
-	      <li><a id="dataset-charts-pill" data-toggle="" data-bind="click: $root.showPill(charts)">Charts</a></li>
+	      <li><a id="dataset-info-pill" data-toggle="" data-bind='click: $root.showPill("info")'>Info</a></li>
+	      <li><a id="dataset-animate-pill" data-toggle="" data-bind='click: $root.showPill("animate")'>Animate</a></li>
+	      <li><a id="dataset-analyze-pill" data-toggle="" data-bind='click: $root.showPill("analyze")'>Analyze</a></li>
+	      <li><a id="dataset-charts-pill" data-toggle="" data-bind='click: $root.showPill("charts")'>Charts</a></li>
 	    </ul>
 	    <div class="tab-content">
 	      <div id="dataset-info" class="tab-pane fade">
