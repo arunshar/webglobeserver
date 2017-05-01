@@ -82,7 +82,8 @@ define(
 	  self.fields.removeAll();
 	  self.clearChart();
 	  self.plotChartSwitch = false;
-	  $('#togglePlottingOn').attr('display','none');
+	  $('#togglePlottingOn').hide();
+	  $('#togglePlottingOff').show();
 	}
 
 	/*
