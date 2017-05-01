@@ -130,6 +130,7 @@ define(
 			fields.push(field);
 		      }
 		      var datasetLayer = layerManager.createDatasetLayer(name);
+		      alert("Info is "+info);
 
 		      self.availableDatasets.push({
 			'index': i,
