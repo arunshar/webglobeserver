@@ -213,14 +213,14 @@ $( function() {
 		</div>
 	      </div>
 	      <div id="dataset-charts" class="tab-pane">
-		<button type="button" id="clearChart" class="btn btn-sm" data-bind="click: $root.clearChart">
+		<span id="clearChart" data-bind="click: $root.clearChart">
 		  <i class="fa fa-trash"></i>
-		</button>
-		<label for="fieldChartsSelect">Variable</label>
+		</span>
 		<span class="middle" data-bind="click: $root.togglePlotting">
 		  <i class="fa fa-toggle-on fa-2x active" id="togglePlottingOn" style="display:none;"></i>
 		  <i class="fa fa-toggle-on fa-2x fa-rotate-180 inactive" id="togglePlottingOff" ></i>
 		</span> 
+		<label for="fieldChartsSelect">Variable</label>
 		<select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
 		<div id="innerChart" style="width:600px;height:250px;" >
 		</div>
