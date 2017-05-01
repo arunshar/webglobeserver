@@ -80,6 +80,7 @@ define(
 	  $('#dataset-charts-tab').attr('data-toggle', '');
 	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
+	  self.clearChart();
 	  self.plotChartSwitch = false;
 	  $('#togglePlottingOn').attr('display','none');
 	}
