@@ -98,6 +98,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
 	    // Initialize the Explorer object
 	    explorer.initialize(globe);
+	    return;
 	    var logger = new LogManagerModel();
 
 	    // --------------------------------------------------------
