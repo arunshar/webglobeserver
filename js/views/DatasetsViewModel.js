@@ -500,6 +500,7 @@ define(
 	  Plotly.purge("innerChart");
 	}
 	self.togglePlotting = function(){
+	  alert("coming here");
 	  $('#middle.inactive, #middle.active').toggle();
 	}
 	self.hideTabs();
