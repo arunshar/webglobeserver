@@ -142,15 +142,14 @@ $( function() {
 	      <li><a id="dataset-analyze-tab" data-toggle="" data-bind='click: $root.showTab("analyze")'>Analyze</a></li>
 	      <li><a id="dataset-charts-tab" data-toggle="" data-bind='click: $root.showTab("charts")'>Charts</a></li>
 	    </ul>
-	    <div class="tab-content">
-	      <div style="background-color:black" id="dataset-info" class="tab-pane fade">
+	    <div>
+	      <div id="dataset-info" >
 		<div class="input-group well" align="center">
 		<h3 data-bind="text: $root.selectedDataset.info"></h3>
 		<span data-bind="text: selectedDataset.info"></span>
 		</div>
 	      </div>
-	      <div id="dataset-animate" class="tab-pane fade">
-		<h3>JKHKHK</h3>
+	      <div id="dataset-animate">
 		<div class="input-group well" align="center">
 		  <div style="padding-bottom: 1%" class="form-group">
 		    <label for="fieldSelect">Variable</label>
