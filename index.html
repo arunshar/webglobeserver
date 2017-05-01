@@ -213,6 +213,7 @@ $( function() {
 		</div>
 	      </div>
 	      <div id="dataset-charts" class="tab-pane">
+		<div class="input-group well">
 		<span id="clearChart" data-bind="click: $root.clearChart">
 		  <i class="fa fa-trash"></i>
 		</span>
@@ -222,6 +223,7 @@ $( function() {
 		</span> 
 		<label for="fieldChartsSelect">Variable</label>
 		<select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
+		</div>
 		<div id="innerChart" style="width:600px;height:250px;" >
 		</div>
 	      </div>
