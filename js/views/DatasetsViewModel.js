@@ -453,11 +453,10 @@ define(
 	self.plotChart = function(lat,lon){
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  var datasetid = self.selectedDataset.id;
-	  var fieldname = self.selectedDataset.fieldname;
+	  var fieldname = $("#fieldChartsSelect :selected").text();
 	  if(lon < 0){
 	    lon = 360 + lon;
 	  }
-	  alert(datasetid+ " " +fieldname);
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
