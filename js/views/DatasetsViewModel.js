@@ -75,10 +75,12 @@ define(
 	    self.selectedDataset.layer.empty();
 	    self.selectedDataset.loaded = false;
 	  }
+	  $('#dataset-info').hide();
 	  $('#dataset-animate').hide();
 	  $('#dataset-analyze').hide();
 	  $('#dataset-charts').hide();
-	  $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
+	  $('#dataset-info-pill').parent().addClass('active').siblings().removeClass('active');
+	  $('#dataset-info-pill').attr('data-toggle', '');
 	  $('#dataset-animate-pill').attr('data-toggle', '');
 	  $('#dataset-analyze-pill').attr('data-toggle', '');
 	  $('#dataset-charts-pill').attr('data-toggle', '');
