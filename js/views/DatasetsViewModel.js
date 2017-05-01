@@ -36,11 +36,8 @@ define(
 	self.availableDatasets = ko.observableArray([]);
 	self.selectedDataset = ko.observable();
 	self.fields = ko.observableArray([]);
+	self.plotChartSwitch = false;
 	//fields that are used to check the status
-	self.infoActive = false;
-	self.openActive = false;
-	self.openAnalysis = false;
-	self.downloading = false;
 	self.submitting = false;
 	self.uploading = false;
 	self.probing = false;
@@ -54,7 +51,7 @@ define(
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
-	  if(self.selectedDataset != null && self.selectedDataset.loaded == true){
+	  if(self.selectedDataset != null && self.plotChartSwitch){
 	    self.plotChart(position.latitude,position.longitude);
 	  }else{
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
@@ -83,6 +80,7 @@ define(
 	  $('#dataset-charts-tab').attr('data-toggle', '');
 	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
+	  self.plotChartSwitch = false;
 	}
 
 	/*
@@ -204,22 +202,6 @@ define(
 	    if(tabname == 'info'){
 	      $('#dataset-info-span').text(self.selectedDataset.info);
 	    }
-	  }
-	}
-
-	self.showAnalysisPanel = function(dataset) {
-	  if (!self.openAnalysis) {
-	    self.selectedDatasetAnalysis = dataset;
-	    for (var i = 0; i < dataset.fields.length; i++) {
-	      self.analysisFields.push(dataset.fields[i]);
-	    }
-	    $("#analysisPanel").show();
-	    self.openAnalysis = true;
-	  } else {
-	    self.selectedDatasetAnalysis = null;
-	    self.analysisFields.removeAll();
-	    $("#analysisPanel").hide();
-	    self.openAnalysis = false;
 	  }
 	}
 
@@ -355,15 +337,6 @@ define(
 	  //finish submitting 
 	}
 
-	self.showInfo = function(dataset) {
-	  if (!self.infoActive) {
-	    $("#datasetInfo").show().html('<h4><a href="'+dataset.info_url+'">'+dataset.name+'</a></h4>\n<hr/>'+dataset.info);
-	    self.infoActive = true;
-	  } else {
-	    $("#datasetInfo").hide();
-	    self.infoActive = false;
-	  }
-	}
 	self.probeData = function(){
 	  if(self.probing){
 	    logger.log('Please wait until the current probe is finished.','alert-danger');
@@ -500,6 +473,7 @@ define(
 	  Plotly.purge("innerChart");
 	}
 	self.togglePlotting = function(){
+	  self.plotChartSwitch = !self.plotChartSwitch;
 	  $("#togglePlottingOn").toggle();
 	  $("#togglePlottingOff").toggle();
 	}
