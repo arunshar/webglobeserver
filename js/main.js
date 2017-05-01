@@ -71,7 +71,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
             // Define the configuration for the primary globe
             var globeOptions = {};
-                /*showBackground: true,
+                showBackground: true,
                 showReticule: true,
                 showViewControls: true,
 		showWidgets: false,
@@ -81,24 +81,23 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
                 includeZoomControls: true,
                 includeExaggerationControls: config.showExaggerationControl,
                 includeFieldOfViewControls: config.showFieldOfViewControl
-            },*/
-            var globe;
+            },
+           globe;
 
 	    // Create the explorer's primary globe that's associated with the specified HTML5 canvas
 	    globe = new Globe(new WorldWind.WorldWindow("canvasOne"), globeOptions);
 
 	    // Defined the Globe's layers and layer options
 	    globe.layerManager.addBaseLayer(new WorldWind.BMNGLayer(), {enabled: true, hideInMenu: true, detailHint: config.imageryDetailHint});
-	    /*globe.layerManager.addBaseLayer(new WorldWind.BMNGLandsatLayer(), {enabled: false, detailHint: config.imageryDetailHint});
+	    globe.layerManager.addBaseLayer(new WorldWind.BMNGLandsatLayer(), {enabled: false, detailHint: config.imageryDetailHint});
 	    globe.layerManager.addBaseLayer(new WorldWind.BingAerialWithLabelsLayer(null), {enabled: false, detailHint: config.imageryDetailHint});
 	    globe.layerManager.addBaseLayer(new UsgsImageryTopoBaseMapLayer(), {enabled: false, detailHint: config.imageryDetailHint});
 	    globe.layerManager.addBaseLayer(new UsgsTopoBaseMapLayer(), {enabled: false, detailHint: config.imageryDetailHint});
 	    globe.layerManager.addBaseLayer(new WorldWind.BingRoadsLayer(null), {enabled: false, opacity: 0.7, detailHint: config.imageryDetailHint});
 	    //globe.layerManager.addBaseLayer(new WorldWind.OpenStreetMapImageLayer(null), {enabled: false, opacity: 0.7, detailHint: config.imageryDetailHint});
-*/
+
 	    // Initialize the Explorer object
 	    explorer.initialize(globe);
-	    return;
 	    var logger = new LogManagerModel();
 
 	    // --------------------------------------------------------
