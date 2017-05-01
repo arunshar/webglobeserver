@@ -69,10 +69,11 @@ define(
 
 	self.resetDatasets = function(){
 	  if((self.selectedDataset != null) && (!self.isNotLoaded())){
-	    self.selectedDataset.loaded = false;
 	    self.selectedDataset.layer.removeAllRenderables();
-	    self.selectedDataset.layer.empty();
 	    globe.redraw();
+	    //next two steps are needed to handle memory issues
+	    self.selectedDataset.layer.empty();
+	    self.selectedDataset.loaded = false;
 	  }
 	  $('#dataset-animate').hide();
 	  $('#dataset-analyze').hide();
@@ -180,14 +181,14 @@ define(
 	      "min" : dataset.fields[0].mindate 
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
-	    $('#dataset-animate').show();
-	    $('#dataset-analyze').show();
-	    $('#dataset-charts').show();
 	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
+	    $('#dataset-animate').show();
+	    $('#dataset-analyze').show();
+	    $('#dataset-charts').show();
 	  }
 	}
 
