@@ -107,9 +107,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
 	    ko.applyBindings(new LayersViewModel(globe), document.getElementById('layers'));
 	    ko.applyBindings(dvModel,document.getElementById('datasets'));
-	    //ko.applyBindings(dvModel,document.getElementById('datasets1'));
 	    ko.applyBindings(dvModel,document.getElementById('upload'));
-	    ko.applyBindings(dvModel,document.getElementById('charts'));
 	    ko.applyBindings(new ProjectionSwitchModel(globe),document.getElementById('projectionSwitch'));
 	    ko.applyBindings(new AccountManagerModel(logger),document.getElementById('account'));
 
