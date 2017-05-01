@@ -500,9 +500,8 @@ define(
 	  Plotly.purge("innerChart");
 	}
 	self.togglePlotting = function(){
-	  alert("coming here");
-	  $("$togglePlottingOn").toggle();
-	  $("$togglePlottingOff").toggle();
+	  $("#togglePlottingOn").toggle();
+	  $("#togglePlottingOff").toggle();
 	}
 	self.hideTabs();
       }
