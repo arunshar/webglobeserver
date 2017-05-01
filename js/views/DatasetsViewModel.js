@@ -197,6 +197,8 @@ define(
 	  if(self.availableDatasets()[index] != undefined){
 	    $('#dataset-'+tabname).siblings().hide();
 	    $('#dataset-'+tabname).show();
+	    $('#dataset-'+tabname).children().show();
+
 	  }
 	}
 
