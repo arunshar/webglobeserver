@@ -68,7 +68,7 @@ define(
 	self.tapRecognizer = new WorldWind.TapRecognizer(globe.wwd, handleClick);
 
 	self.resetDatasets = function(){
-	  self.hideDatasets();
+	  self.hideTabs();
 	  if((self.selectedDataset != null) && (!self.isNotLoaded())){
 	    self.selectedDataset.layer.removeAllRenderables();
 	    globe.redraw();
