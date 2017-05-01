@@ -137,14 +137,14 @@ $( function() {
 	      <select name="datasetSelect" id="datasetSelect" data-bind="options: availableDatasets,optionsValue: 'index', optionsText: 'name',optionsCaption: 'Choose...',event:{change: $root.datasetSelected}"></select>
 	    </div>
 	    <ul class="nav nav-tabs">
-	      <li><a id="dataset-info-tab" data-toggle="" data-bind='click: $root.showTab("info")'>Info</a></li>
+	      <li><a id="dataset-info-tab" data-toggle="" data-bind='click: $root.showTab("info")'><i class="fa fa-info"  aria-hidden="true"> </i>Info</a></li>
 	      <li><a id="dataset-animate-tab" data-toggle="" data-bind='click: $root.showTab("animate")'>Animate</a></li>
 	      <li><a id="dataset-analyze-tab" data-toggle="" data-bind='click: $root.showTab("analyze")'>Analyze</a></li>
 	      <li><a id="dataset-charts-tab" data-toggle="" data-bind='click: $root.showTab("charts")'>Charts</a></li>
 	    </ul>
 	    <div>
 	      <div id="dataset-info" class="tab-pane">
-		<div class="input-group well" align="center">
+		<div class="input-group well">
 		<span id="dataset-info-span"></span>
 		</div>
 	      </div>
