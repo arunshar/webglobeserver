@@ -321,6 +321,10 @@ define(
 	    return;
 	  }
 	  var analysisoutputname = $("#analysisOutputName").val();
+	  if(analysisoutputname == ''){
+	    logger.log("Missing input arguments", "alert-warning");
+	    return;
+	  }
 	  var url = self.selectedDataset.url;
 	  logger.log("Submitting " + analysisname + " <a href=\""
 	      + url + "\">" + self.selectedDataset.name
