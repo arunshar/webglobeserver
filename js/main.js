@@ -70,7 +70,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
             WorldWind.configuration.baseUrl = ww.WWUtil.currentUrlSansFilePart() + "/" + constants.WORLD_WIND_PATH;
 
             // Define the configuration for the primary globe
-            var globeOptions = {};
+            var globeOptions = {
                 showBackground: true,
                 showReticule: true,
                 showViewControls: true,
