@@ -218,6 +218,11 @@ $( function() {
 		</div>
 	      </div>
 	      <div id="dataset-charts" class="tab-pane">
+		<button type="button" id="clearChart" class="btn btn-sm" data-bind="click: $root.clearChart">
+		  <i class="fa fa-trash"></i>
+		</button>
+		<div id="innerChart" style="width:600px;height:250px;" >
+		</div>
 	      </div>
 	    </div>
 	  </div>
