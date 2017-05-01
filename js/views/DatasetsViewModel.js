@@ -181,13 +181,12 @@ define(
 	      "min" : dataset.fields[0].mindate 
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
-	    $('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
+	    //$('#dataset-animate-pill').parent().addClass('active').siblings().removeClass('active');
 
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
 	    $('#dataset-animate').show();
-	    $('#dataset-animate').children().show();
 	    $('#dataset-analyze').show();
 	    $('#dataset-charts').show();
 	  }
