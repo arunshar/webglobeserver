@@ -144,8 +144,11 @@ $( function() {
 	    </ul>
 	    <div class="tab-content">
 	      <div id="dataset-info" class="tab-pane fade">
-		<h3 data-bind="text: selectedDataset.info"></h3>
+		<div class="input-group well" align="center">
+		<h3 data-bind="text: $root.selectedDataset.info"></h3>
+		<h3 data-bind="text: $root.selectedDataset.info()"></h3>
 		<span data-bind="text: selectedDataset.info"></span>
+		</div>
 	      </div>
 	      <div id="dataset-animate" class="tab-pane fade">
 		<div class="input-group well" align="center">
