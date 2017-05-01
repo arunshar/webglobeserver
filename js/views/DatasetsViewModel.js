@@ -171,10 +171,6 @@ define(
 	    $('#dataset-animate-pill').attr('data-toggle', 'pill');
 	    $('#dataset-analyze-pill').attr('data-toggle', 'pill');
 	    $('#dataset-charts-pill').attr('data-toggle', 'pill');
-	    $('#dataset-info').show();
-	    $('#dataset-animate').show();
-	    $('#dataset-analyze').show();
-	    $('#dataset-charts').show();
 	    self.selectedDataset = self.availableDatasets()[index];  
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
@@ -193,6 +189,9 @@ define(
 	    });
 	    $('#load-end-date').val(dataset.fields[0].maxdate);
 	  }
+	}
+	self.showPill = function(pillname){
+	  alert(pillname);
 	}
 
 	self.showAnalysisPanel = function(dataset) {
