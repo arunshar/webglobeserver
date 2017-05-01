@@ -194,11 +194,8 @@ define(
 	self.showPill = function(pillname){
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
-	    $('#dataset-'+pillname).show();
 	    $('#dataset-'+pillname).siblings().hide();
-
-	  }else{
-	    logger.log("No dataset selected.","alert-danger");
+	    $('#dataset-'+pillname).show();
 	  }
 	}
 
