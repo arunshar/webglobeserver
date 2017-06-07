@@ -230,7 +230,7 @@ public class NetcdfColorMap {
         String data = "uniform sampler2D tile_image;\n" +
                 "uniform float HighClip = "+this.maxValue+";\n" +
                 "uniform float LowClip = "+this.minValue+";\n\n" +
-                "void main(void)\n" +
+                "void spark(void)\n" +
                 "{\n" +
                 "\t vec4 hsi = texture2D(tile_image, gl_TexCoord[0].st);\n" +
                 "\t if(hsi.r < LowClip || hsi.r > HighClip) discard;\n" +

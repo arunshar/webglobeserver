@@ -200,6 +200,9 @@ define(
 	  
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
+	    //do not activate analyze tab for non analyzable 
+	    if(tabname == 'analyze' && !self.selectedDataset.is_analyzable)
+	      return;
 	    $('#dataset-'+tabname).siblings().hide();
 	    $('#dataset-'+tabname).show();
 	    if(tabname == 'info'){

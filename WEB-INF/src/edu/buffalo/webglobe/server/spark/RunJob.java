@@ -147,7 +147,7 @@ public class RunJob extends HttpServlet {
         };
 
         RunSparkJob.runSparkJob("/home/ubuntu/jars/GPChangeSpark-0.0.1-SNAPSHOT.jar",
-                        "gpchange.spark.main.MonitorGlobalHypers", arg, "/home/ubuntu/spark-1.6.1",outputs[2], "2g", "2g", jars);
+                        "gpchange.spark.spark.MonitorGlobalHypers", arg, "/home/ubuntu/spark-1.6.1",outputs[2], "2g", "2g", jars);
 
         RunSparkJob.terminateCluster("/home/centos/bash-scripts/terminatecluster.sh", outputs[0]);
 

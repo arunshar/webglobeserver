@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,9 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 import org.apache.hadoop.io.IOUtils;
+import scala.Tuple2;
 import ucar.ma2.Array;
+import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.dataset.NetcdfDataset;
@@ -183,4 +184,223 @@ public class NetCDFUtils {
         }
         return null;
     }
+
+    public static Tuple2<int[], ArrayList<int[]>> listOrigins(int latLen, int lonLen, int d) throws IOException {
+
+        ArrayList<int[]> listOrigins = new ArrayList<int[]>();
+        int[] shape = { latLen / d, lonLen / (2 * d) };
+        for (int i = 0; i < d; i++)
+            for (int j = 0; j < 2 * d; j++) {
+                int[] origins = { i * shape[0], j * shape[1] };
+                listOrigins.add(origins);
+            }
+
+        return new Tuple2<int[], ArrayList<int[]>>(shape, listOrigins);
+    }
+
+    public static ArrayList<Tuple2<int[], float[][][]>> partition(String hdfsuri, String path, String varName, int d)
+            throws IOException, InvalidRangeException {
+
+        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
+        NetcdfFile cdfFile = dataset.getReferencedFile();
+        Array src = cdfFile.findVariable(varName).read();
+        dataset.close();
+
+        int timeLen = src.getShape()[0];
+        int latLen = src.getShape()[1];
+        int lonLen = src.getShape()[2];
+
+        Tuple2<int[], ArrayList<int[]>> tuple = NetCDFUtils.listOrigins(latLen, lonLen, d);
+        final int[] shape = { timeLen, tuple._1[0], tuple._1[1] };
+        ArrayList<int[]> listOrigins = tuple._2;
+
+        ArrayList<Tuple2<int[], float[][][]>> listSections = new ArrayList<Tuple2<int[], float[][][]>>();
+        for (int[] origin : listOrigins) {
+            int[] curOri = { 0, origin[0], origin[1] };
+            float[][][] section = (float[][][]) src.section(curOri, shape).copyToNDJavaArray();
+
+            listSections.add(new Tuple2<int[], float[][][]>(curOri, section));
+        }
+
+        return listSections;
+    }
+
+    public static double[][] getDataSafe(String hdfsuri, String path, String varName, int[] origin, int[] shape)
+            throws IOException, InvalidRangeException {
+        double[][] data = new double[shape[0]][shape[1] * shape[2]];
+        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
+        NetcdfFile cdfFile = dataset.getReferencedFile();
+        Array src = cdfFile.findVariable(varName).read(origin, shape);
+
+        for (int l = 0; l < shape[0]; l++)
+            for (int j = 0; j < shape[1]; j++)
+                for (int k = 0; k < shape[2]; k++) {
+                    data[l][j * shape[2] + k] = src.getFloat(k + j * shape[2] + l * shape[1] * shape[2]);
+                }
+
+        dataset.close();
+        return data;
+    }
+
+    public static double[][] getDataSafe(String hdfsuri, List<String> paths, String varName, int[] origini,
+                                         int[] shapei) throws IOException, InvalidRangeException {
+        int[] origin = { 0, 0, 0 };
+        int[] shape = { shapei[0] * paths.size(), shapei[1], shapei[2] };
+        double[][] data = new double[shape[0]][shape[1] * shape[2]];
+
+        for (int i = 0; i < paths.size(); i++) {
+            origin[0] = shapei[0] * i;
+            double[][] datai = getDataSafe(hdfsuri, paths.get(i), varName, origini, shapei);
+            copy(data, origin, shape, datai, shapei);
+        }
+        return data;
+    }
+
+    public static void copy(double[][] dataDest, int[] origin, int[] shapeDest, double[][] dataSrc, int[] shapeSrc) {
+        for (int i = 0; i < shapeSrc[0]; i++) {
+            for (int j = 0; j < shapeSrc[1]; j++) {
+                for (int k = 0; k < shapeSrc[2]; k++) {
+                    dataDest[i + origin[0]][(j + origin[1]) * shapeDest[2] + k + origin[2]] = dataSrc[i][j * shapeSrc[2]
+                            + k];
+                }
+            }
+        }
+    }
+
+    public static double[][] getData(String hdfsuri, String path, String var, int row, int col, int[] o, int[] s)
+            throws IOException, InvalidRangeException {
+        if (o[2] < 0) {
+            if (o[2] + s[2] <= 0) {
+                int[] ot = o.clone();
+                ot[2] = ot[2] + col;
+                double[][] data = getData(hdfsuri, path, var, row, col, ot, s);
+                return data;
+
+            } else {
+                double[][] data = new double[s[0]][s[1] * s[2]];
+                int[] ot = o.clone();
+                ot[2] = 0;
+                int[] st = s.clone();
+                st[2] = s[2] + o[2];
+                double[][] dt = getData(hdfsuri, path, var, row, col, ot, st);
+                int[] od = { 0, 0, -o[2] };
+                copy(data, od, s, dt, st);
+
+                ot[2] = col + o[2];
+                st[2] = -o[2];
+                dt = getData(hdfsuri, path, var, row, col, ot, st);
+                od[2] = 0;
+                copy(data, od, s, dt, st);
+                return data;
+            }
+        } else if (o[2] + s[2] > col) {
+            if (o[2] >= col) {
+                int[] ot = o.clone();
+                ot[2] = ot[2] % col;
+                double[][] data = getData(hdfsuri, path, var, row, col, ot, s);
+                return data;
+
+            } else {
+                double[][] data = new double[s[0]][s[1] * s[2]];
+                int[] ot = o.clone();
+                int[] st = s.clone();
+                st[2] = col - ot[2];
+                double[][] dt = getData(hdfsuri, path, var, row, col, ot, st);
+                int[] od = { 0, 0, 0 };
+                copy(data, od, s, dt, st);
+
+                ot[2] = 0;
+                st[2] = (o[2] + s[2]) - col;
+                dt = getData(hdfsuri, path, var, row, col, ot, st);
+                od[2] = col - o[2];
+                copy(data, od, s, dt, st);
+                return data;
+            }
+
+        } else if (o[1] < 0) {
+            double[][] data = new double[s[0]][s[1] * s[2]];
+            int[] ot = o.clone();
+            ot[1] = 0;
+            int[] st = s.clone();
+            st[1] = s[1] + o[1];
+            double[][] dt = getData(hdfsuri, path, var, row, col, ot, st);
+            int[] od = { 0, -o[1], 0 };
+            copy(data, od, s, dt, st);
+
+            ot[1] = 0;
+            ot[2] = o[2] - s[2] / 2;
+            st[1] = -o[1];
+            st[2] = s[2] / 2;
+            dt = getData(hdfsuri, path, var, row, col, ot, st);
+            od[1] = 0;
+            copy(data, od, s, dt, st);
+
+            ot[1] = 0;
+            ot[2] = o[2] + s[2];
+            st[1] = -o[1];
+            st[2] = s[2] / 2;
+            dt = getData(hdfsuri, path, var, row, col, ot, st);
+            od[2] = s[2] / 2;
+            copy(data, od, s, dt, st);
+            return data;
+
+        } else if (o[1] + s[1] > row) {
+            double[][] data = new double[s[0]][s[1] * s[2]];
+            int[] ot = o.clone();
+            int[] st = s.clone();
+            st[1] = row - o[1];
+            double[][] dt = getData(hdfsuri, path, var, row, col, ot, st);
+            int[] od = { 0, 0, 0 };
+            copy(data, od, s, dt, st);
+
+            ot[1] = row - (o[1] + s[1] - row);
+            ot[2] = o[2] - s[2] / 2;
+            st[1] = s[1] - (row - o[1]);
+            st[2] = s[2] / 2;
+            dt = getData(hdfsuri, path, var, row, col, ot, st);
+            od[1] = row - o[1];
+            copy(data, od, s, dt, st);
+
+            ot[1] = row - (o[1] + s[1] - row);
+            ot[2] = o[2] + s[2];
+            st[1] = s[1] - (row - o[1]);
+            st[2] = s[2] / 2;
+            dt = getData(hdfsuri, path, var, row, col, ot, st);
+            od[2] = s[2] / 2;
+            copy(data, od, s, dt, st);
+            return data;
+        } else {
+            double[][] data = getDataSafe(hdfsuri, path, var, o, s);
+            return data;
+        }
+    }
+
+    public static double[][] getDataWithNeighbor(String hdfsuri, String path, String varName, int row, int col,
+                                                 int[] origin, int[] shape, int extent) throws IOException, InvalidRangeException {
+        int[] origin_e = origin.clone();
+        int[] shape_e = shape.clone();
+        origin_e[1] = origin_e[1] - extent;
+        origin_e[2] = origin_e[2] - extent;
+        shape_e[1] = shape_e[1] + 2 * extent;
+        shape_e[2] = shape_e[2] + 2 * extent;
+
+        double[][] data = getData(hdfsuri, path, varName, row, col, origin_e, shape_e);
+        return data;
+    }
+
+    public static double[][] getDataWithNeighbor(String hdfsuri, List<String> paths, String varName, int row, int col,
+                                                 int[] origini, int[] shapei, int extent) throws IOException, InvalidRangeException {
+        int[] origin = { 0, 0, 0 };
+        int[] shapeiex = { shapei[0], shapei[1] + 2 * extent, shapei[2] + 2 * extent };
+        int[] shape = { shapei[0] * paths.size(), shapeiex[1], shapeiex[2] };
+        double[][] data = new double[shape[0]][shape[1] * shape[2]];
+
+        for (int i = 0; i < paths.size(); i++) {
+            origin[0] = shapei[0] * i;
+            double[][] datai = getDataWithNeighbor(hdfsuri, paths.get(i), varName, row, col, origini, shapei, extent);
+            copy(data, origin, shape, datai, shapeiex);
+        }
+        return data;
+    }
+
 }

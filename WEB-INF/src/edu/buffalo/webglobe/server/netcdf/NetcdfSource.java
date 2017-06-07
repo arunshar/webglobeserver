@@ -41,6 +41,8 @@ public abstract class NetcdfSource implements Serializable {
     protected ArrayList<String> units = null;
     protected CalendarDate startDate;
     protected CalendarDate endDate;
+    protected Array lonArr;
+    protected Array latArr;
 
     public NetcdfDataset getDataset() {
         return dataset;
@@ -86,6 +88,8 @@ public abstract class NetcdfSource implements Serializable {
                 }
             }
         }
+        latArr = dataset.findVariable("lat").read();
+        lonArr = dataset.findVariable("lon").read();
         List<Dimension> dims = dataset.getDimensions();
         timeLen = dims.get(0).getLength();
         latLen = dims.get(1).getLength();
@@ -155,6 +159,10 @@ public abstract class NetcdfSource implements Serializable {
         return dateFormatter.toString(startDate.add(i , CalendarPeriod.Field.Day));
     }
 
+    public int getTimeInd(Double date) {
+        return 0;
+    }
+
     public int getLatLen() {
         return latLen;
     }
@@ -167,6 +175,17 @@ public abstract class NetcdfSource implements Serializable {
 
     public String getDatasetInfoURL() {
         return datasetInfoURL;
+    }
+
+    public double getTimeFromInd(int timeIndex) {
+        return timeIndex;
+    }
+    public Array getLonArr(){
+        return this.lonArr;
+    }
+
+    public Array getLatArr(){
+        return this.latArr;
     }
 }
 

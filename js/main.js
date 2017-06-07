@@ -71,7 +71,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
             // Define the configuration for the primary globe
             var globeOptions = {
-                showBackground: true,
+                showBackground true,
                 showReticule: true,
                 showViewControls: true,
 		showWidgets: false,
