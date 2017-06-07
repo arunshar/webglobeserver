@@ -70,19 +70,19 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
             WorldWind.configuration.baseUrl = ww.WWUtil.currentUrlSansFilePart() + "/" + constants.WORLD_WIND_PATH;
 
             // Define the configuration for the primary globe
-            var globeOptions = {
-                showBackground true,
-                showReticule: true,
-                showViewControls: true,
-		showWidgets: false,
-                includePanControls: config.showPanControl,
-                includeRotateControls: true,
-                includeTiltControls: true,
-                includeZoomControls: true,
-                includeExaggerationControls: config.showExaggerationControl,
-                includeFieldOfViewControls: config.showFieldOfViewControl
-            },
-           globe;
+	    var globeOptions = {
+	      showBackground: true,
+	      showReticule: true,
+	      showViewControls: true,
+	      showWidgets: false,
+	      includePanControls: config.showPanControl,
+	      includeRotateControls: true,
+	      includeTiltControls: true,
+	      includeZoomControls: true,
+	      includeExaggerationControls: config.showExaggerationControl,
+	      includeFieldOfViewControls: config.showFieldOfViewControl
+	    },
+	    globe;
 
 	    // Create the explorer's primary globe that's associated with the specified HTML5 canvas
 	    globe = new Globe(new WorldWind.WorldWindow("canvasOne"), globeOptions);
