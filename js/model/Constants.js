@@ -69,8 +69,9 @@ define([], function () {
          * @constant
          */
         WORLD_WIND_PATH: "js/libs/webworldwind/",
-        //WEBGLOBE_SERVER: "http://localhost:8080/webglobeserver/"
-        WEBGLOBE_SERVER: "http://199.109.195.187:8080/webglobeserver/"
+        WEBGLOBE_SERVER: "http://localhost:8080/webglobeserver/",
+	WEBGLOBE_USER: "chandola"
+        //WEBGLOBE_SERVER: "http://199.109.195.187:8080/webglobeserver/"
     }
 
     return Constants;

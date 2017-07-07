@@ -42,7 +42,8 @@ define(
 	self.uploading = false;
 	self.probing = false;
 	self.interval = null;
-
+	self.blurvalue = ko.observable('0.5');
+	self.radiusvalue = ko.observable('2');
 	/* register listeners */
 	var handleClick = function (recognizer) {
 	  // Obtain the event location.
@@ -92,61 +93,54 @@ define(
 	self.populateDatasets = function() {
 	  self.availableDatasets.removeAll();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  $
-	    .ajax(
-		{
-		  url : webGlobeServer
-		    + 'GetDatasetDetails',
-		  cache : false,
-		  type : 'POST',
-		  contentType : 'application/json; charset=utf-8',
-		  success : function(dataJSON) {
-		    for (var i = 0; i < dataJSON.count.value; i++) {
-		      var datasetInfo = 'dataset' + i;
-		      var id = dataJSON[datasetInfo].id;
-		      var url = dataJSON[datasetInfo].url;
-		      var name = dataJSON[datasetInfo].name;
-		      if (dataJSON[datasetInfo].available == 'all')
-			user_data = false;
-		      else
-			user_data = true;
+	  $.ajax(
+	      {
+		url : webGlobeServer
+		  + 'GetDatasetDetails',
+		cache : false,
+		type : 'POST',
+		contentType : 'application/json; charset=utf-8',
+		data: JSON.stringify({
+		  username: constants.WEBGLOBE_USER
+		}),
+		success : function(dataJSON) {
+		  for (var i = 0; i < dataJSON.count.value; i++) {
+		    var datasetInfo = 'dataset' + i;
+		    var id = dataJSON[datasetInfo].id;
+		    var url = dataJSON[datasetInfo].url;
+		    var name = dataJSON[datasetInfo].name;
 
-		      var info = dataJSON[datasetInfo].info;
-		      var info_url = dataJSON[datasetInfo].info_url;
-		      var is_analyzable = true;
-		      if (dataJSON[datasetInfo].is_analyzable == 0)
-			is_analyzable = false;
-		      var fieldcount = dataJSON[datasetInfo].fieldcount;
-		      var fields = [];
-		      for (var j = 0; j < fieldcount; j++) {
-			
-			var fieldInfo = 'field' + j;
-			var fieldName = dataJSON[datasetInfo][fieldInfo];
-			var minDate = dataJSON[datasetInfo]['field'+j+'_mindate'];
-			var maxDate = dataJSON[datasetInfo]['field'+j+'_maxdate'];
-			var field = {'name': fieldName, 'mindate': minDate, 'maxdate': maxDate};
-			fields.push(field);
-		      }
-		      var datasetLayer = layerManager.createDatasetLayer(name);
+		    var info = dataJSON[datasetInfo].info;
+		    var info_url = dataJSON[datasetInfo].info_url;
+		    var minDate = dataJSON[datasetInfo]['mindate'];
+		    var maxDate = dataJSON[datasetInfo]['maxdate'];
+		    var fieldcount = dataJSON[datasetInfo].fieldcount;
+		    var fields = [];
+		    for (var j = 0; j < fieldcount; j++) {
 
-		      self.availableDatasets.push({
-			'index': i,
-			'id' : id,
-			'url' : url,
-			'name' : name,
-			'user_data' : user_data,
-			'info' : info,
-			'info_url' : info_url,
-			'is_analyzable': is_analyzable,
-			'fields' : fields,
-			'enabled' : false,
-			'layer' : datasetLayer,
-			'loaded' : false
-		      });
+		      var fieldInfo = 'field' + j;
+		      var fieldName = dataJSON[datasetInfo][fieldInfo];
+		      var field = {'name': fieldName, 'mindate': minDate, 'maxdate': maxDate};
+		      fields.push(field);
 		    }
+		    var datasetLayer = layerManager.createDatasetLayer(name);
 
+		    self.availableDatasets.push({
+		      'index': i,
+		      'id' : id,
+		      'url' : url,
+		      'name' : name,
+		      'info' : info,
+		      'info_url' : info_url,
+		      'fields' : fields,
+		      'enabled' : false,
+		      'layer' : datasetLayer,
+		      'loaded' : false
+		    });
 		  }
-		})
+
+		}
+	      })
 	  .fail(
 	      function(xhr, textStatus, err) {
 		logger
@@ -197,12 +191,10 @@ define(
 	}
 
 	self.showTab = function(tabname){
-	  
+
 	  var index  = $("#datasetSelect :selected").attr('value');
 	  if(self.availableDatasets()[index] != undefined){
 	    //do not activate analyze tab for non analyzable 
-	    if(tabname == 'analyze' && !self.selectedDataset.is_analyzable)
-	      return;
 	    $('#dataset-'+tabname).siblings().hide();
 	    $('#dataset-'+tabname).show();
 	    if(tabname == 'info'){
@@ -211,35 +203,54 @@ define(
 	  }
 	}
 
-	self.loadImages = function() {
+	self.loadData = function() {
 	  if(self.isNotLoaded()){
 	    var webGlobeServer = constants.WEBGLOBE_SERVER;
 
 	    var id = self.selectedDataset.id;
 	    var fieldname = $("#fieldSelect :selected").text();
+	    $("#load-spinner").show();
+	    $("#load-data").attr("disabled",true);
 
 	    $.ajax({
-	      url: webGlobeServer + 'LoadImages',
+	      url: webGlobeServer + 'LoadData',
 	      cache: false,
 	      type: 'POST',
 	      data: {
+		username: constants.WEBGLOBE_USER,
 		datasetId: id,
 		fieldname: fieldname,
 		from: $('#load-start-date').val(),
 		to: $('#load-end-date').val()
 	      },
 	      success: function (data) {
-		var imageUrls = data.imageUrls;
-		var imageDates = data.imageDates;
-		self.selectedDataset.layer.populate(imageUrls,imageDates);
-		self.selectedDataset.layer.enabled = true;
 		self.selectedDataset.loaded = true;
-		logger.log("Succesfully loaded images","alert-info");
+		self.selectedDataset.data = data.data;
+		self.selectedDataset.dates = data.dates;
+		self.selectedDataset.bounds = data.bounds;
+		self.selectedDataset.shape = data.shape;
+		self.selectedDataset.limits = data.limits;
+
+		//var imageUrls = data.imageUrls;
+		//var imageDates = data.imageDates;
+		//self.selectedDataset.layer.populate(imageUrls,imageDates);
+		self.updateHeatmap();
+		logger.log("Succesfully loaded data","alert-info");
+		$("#load-spinner").hide();
+		$("#load-data").attr("disabled",false);
 	      }
 	    }).fail(function (xhr, textStatus, err) {
-	      logger.log(err,"alert-danger");
+	      logger.log("Error loading data","alert-danger");
+	      $("#load-spinner").hide();
+	      $("#load-data").attr("disabled",false);
 	    });
 	  }	  
+	}
+	
+	self.updateHeatmap = function(){
+	  self.selectedDataset.layer.populateJSON(self.selectedDataset.bounds,self.selectedDataset.data,self.selectedDataset.shape,self.selectedDataset.dates,self.selectedDataset.limits,self.blurvalue(),self.radiusvalue());
+	  self.selectedDataset.layer.enabled = true;
+	  globe.redraw();
 	}
 
 	self.isNotLoaded = function(){
@@ -284,7 +295,7 @@ define(
 	    self.interval = window.setInterval(function () {
 	      self.selectedDataset.layer.showNext();
 	      globe.redraw();
-	    }, 200);
+	    }, 300);
 	  }
 	}
 
@@ -319,12 +330,13 @@ define(
 	      + ":" + fieldname + "</a>", "alert-info");
 
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  
+
 	  $.ajax({
 	    url: webGlobeServer + 'RunJob',
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER,
 	      datasetid: self.selectedDataset.id,
 	      datasetname: self.selectedDataset.name,
 	      url: url,
@@ -357,15 +369,21 @@ define(
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  self.probing = true;
 	  $("#probe-spinner").show();
+	  $("#probe-data").attr("disabled",true);
+	  $("#upload-data").attr("disabled",true);
 	  //probe the data set
 	  $.ajax({
 	    url: webGlobeServer + 'ProbeDataset',
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER,
 	      url: url,
 	    }),
 	    success: function (data) {
+	      $("#probe-spinner").hide();
+	      $("#probe-data").attr("disabled",false);
+	      $("#upload-data").attr("disabled",false);
 	      if(parseInt(data.status) == -1){
 		logger.log("Error loading data set","alert-danger");
 	      }else{
@@ -373,7 +391,6 @@ define(
 		var name = data.name;
 		var info = data.info;
 		var infoURL = data.infoURL;
-		logger.log('<h4>'+name+'</h4><hr/>Number of Variables = '+numvars,'alert-info');
 		//prepopulate fields
 		$('#upload-dataName').val(name);
 		$('#upload-dataInfo').val(info);
@@ -381,10 +398,13 @@ define(
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {
+	    $("#probe-spinner").hide();
+	    $("#probe-data").attr("disabled",false);
+	    $("#upload-data").attr("disabled",false);
+
 	    logger.log("Error loading data set","alert-danger");
 	  });                            
 	  self.probing = false;
-	  $("#probe-spinner").hide();
 	}
 
 	self.uploadData = function(){
@@ -392,15 +412,15 @@ define(
 	  var dataName = $('#upload-dataName').val();
 	  var dataInfo = $('#upload-dataInfo').val();
 	  var dataInfoURL = $('#upload-dataInfoURL').val();
-	  var visualizationOnly = 0;
-	  if ($('#upload-visualization-only').is(":checked"))
-	  {
-	    visualizationOnly = 1;
-	  }
 	  var selectedColormap = $('#upload-select-colormap').val();
+	  var stride = $('#upload-stride').val();
 
-	  if (url == '' || dataName == '' || dataInfo == ''){
-	    logger.log('URL, name, and information are required arguments.','alert-danger');
+	  if (url == '' || dataName == '' || dataInfo == '' || isNaN(stride)){
+	    logger.log('URL, name, stride, and information are required arguments.','alert-danger');
+	    return;
+	  }	
+	  if (dataName.length > 64){
+	    logger.log('Dataset name should be 64 characters or less.','alert-danger');
 	    return;
 	  }	
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
@@ -411,17 +431,16 @@ define(
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER,
 	      url: url,
 	      dataName: dataName,
 	      dataInfo: dataInfo,
 	      dataInfoURL: dataInfoURL,
-	      visualizationOnly: visualizationOnly,
-	      selectedColormap: selectedColormap
+	      stride: stride
 	    }),
 	    success: function (data) {
 	      var message = data.message;
 	      logger.log(message,'info');
-
 	    }
 	  }).fail(function (xhr, textStatus, err) {
 	    logger.log(err,"alert-danger");
@@ -430,6 +449,37 @@ define(
 	self.populateDatasets();
 
 	self.plotChart = function(lat,lon){
+	  $("#plot-chart-spinner").show();
+	  if(self.selectedDataset.loaded){
+	    //find index for the lat 
+	    var latWidth = (self.selectedDataset.bounds[1] - self.selectedDataset.bounds[0])/self.selectedDataset.shape[0];
+	    var latIndex = Math.floor((Number(lat) - self.selectedDataset.bounds[0])/latWidth);
+	    var lonWidth = (self.selectedDataset.bounds[3] - self.selectedDataset.bounds[2])/self.selectedDataset.shape[1];
+	    var lonIndex = Math.floor((Number(lon) - self.selectedDataset.bounds[2])/lonWidth);
+	    //get data
+	    var xdata = self.selectedDataset.dates;
+	    var ydata = [];
+	    var start = latIndex*self.selectedDataset.shape[1]*self.selectedDataset.shape[2]+lonIndex*self.selectedDataset.shape[2]; 
+	    for(var i = 0; i < self.selectedDataset.shape[2]; i++){
+	      ydata.push(self.selectedDataset.data[start+i]);
+	    }
+
+	    var ylabel = "Observation";
+	    var xlabel = "Time";
+	    var layout = {
+	      title: self.selectedDataset.fieldname,
+	      xaxis: {title: xlabel},
+	      yaxis: {title: ylabel},
+	      margin: {t:0}
+	    };
+	    Plotly.plot( innerChart, [{
+	      x: xdata,y: ydata }], layout );
+	  }else{
+	    logger.log("Dataset not loaded","alert-danger");
+	  }
+	  $("#plot-chart-spinner").hide();
+	}
+	self.plotChart1 = function(lat,lon){
 	  $("#plot-chart-spinner").show();
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 	  var datasetid = self.selectedDataset.id;
@@ -443,6 +493,7 @@ define(
 	    cache: false,
 	    type: 'POST',
 	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER,
 	      datasetid: datasetid,
 	      fieldname: fieldname,
 	      lat: lat,
@@ -457,7 +508,7 @@ define(
 		logger.log("No data returned for the selected location","alert-danger");
 		return;
 	      }
-	      
+
 	      var ylabel = dataJSON[0].unitString;
 	      for(var i = 0; i < retnum; i++){
 		xdata.push(dataJSON[i].date);
@@ -471,10 +522,10 @@ define(
 		margin: {t:0}
 	      };
 	      Plotly.plot( innerChart, [{
-	      	x: xdata,y: ydata }], layout );
+		x: xdata,y: ydata }], layout );
 	    }
 	  }).fail(function (xhr, textStatus, err) {
-	      $("#plot-chart-spinner").hide();
+	    $("#plot-chart-spinner").hide();
 	    logger.log("No data returned for the selected location","alert-danger");
 	  });
 	}

@@ -29,9 +29,11 @@ define(['knockout',
 	  cache: false,
 	  type: 'POST',
 	  contentType: 'application/json; charset=utf-8',
-	  success: function (dataJSON) { 
-	    self.userName(dataJSON.userInfo.userName);
-
+	  data: JSON.stringify({
+	    username: constants.WEBGLOBE_USER
+	  }),
+	  success: function (data) { 
+	    self.userName(data.userInfo.userName);
 	  }
 	}).fail(function (xhr, textStatus, err) {
 	  logger.log("Error getting account information from the server","alert-danger");
@@ -44,11 +46,14 @@ define(['knockout',
 	    cache: false,
 	    type: 'POST',
 	    contentType: 'application/json; charset=utf-8',
-	    success: function (dataJSON) { 
+	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER
+	    }),
+	    success: function (data) { 
 	      self.submittedAnalysisJobs.removeAll();
-	      var retnum = Object.keys(dataJSON).length;
+	      var retnum = Object.keys(data).length;
 	      for(var i = 0; i < retnum; i++){
-		self.submittedAnalysisJobs.push({'index':dataJSON[i].id, 'name': dataJSON[i].name, 'field': dataJSON[i].field, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time, 'analysis': dataJSON[i].analysis, 'status': dataJSON[i].status, 'result_loc': dataJSON[i].result_loc}); 
+		self.submittedAnalysisJobs.push({'index':data[i].id, 'name': data[i].name, 'field': data[i].field, 'submission_time': data[i].submission_time, 'finish_time': data[i].finish_time, 'analysis': data[i].analysis, 'status': data[i].status, 'result_loc': data[i].result_loc}); 
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {
@@ -64,11 +69,14 @@ define(['knockout',
 	    cache: false,
 	    type: 'POST',
 	    contentType: 'application/json; charset=utf-8',
-	    success: function (dataJSON) { 
+	    data: JSON.stringify({
+	      username: constants.WEBGLOBE_USER
+	    }),
+	    success: function (data) { 
 	      self.submittedUploadJobs.removeAll();
-	      var retnum = Object.keys(dataJSON).length;
+	      var retnum = Object.keys(data).length;
 	      for(var i = 0; i < retnum; i++){
-		self.submittedUploadJobs.push({'index':dataJSON[i].id, 'dataset_name': dataJSON[i].dataset_name, 'submission_time': dataJSON[i].submission_time, 'finish_time': dataJSON[i].finish_time,'status': dataJSON[i].status}); 
+		self.submittedUploadJobs.push({'index':data[i].id, 'dataset_name': data[i].dataset_name, 'submission_time': data[i].submission_time, 'finish_time': data[i].finish_time,'status': data[i].status}); 
 	      }
 	    }
 	  }).fail(function (xhr, textStatus, err) {

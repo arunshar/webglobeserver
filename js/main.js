@@ -18,6 +18,7 @@ requirejs.config({
         'jquery-growl': 'libs/jquery-plugins/jquery.growl',
         'bootstrap': 'libs/bootstrap/v3.3.6/bootstrap',
         'worldwind': 'libs/webworldwind/worldwindlib',
+	'heatmap': 'libs/heatmap/heatmap',
         'model': 'model' // root application path
     },
     // Shim configuration for Bootstrap's JQuery dependency
