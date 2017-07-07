@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
+import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.Utils;
 
 /**
@@ -52,47 +54,58 @@ public class RunJob extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        this.userName = request.getUserPrincipal().getName();
+        String userName = null;
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        int datasetId = data.get("datasetid").getAsInt();
-        this.url =  data.get("url").getAsString();
-        String analysisName = data.get("analysisname").getAsString().replace(" ", "");
-        String fieldName = data.get("fieldname").getAsString();
-        this.analysisOutputName = data.get("analysisoutputname").getAsString().replace(" ", "");
-        if(this.analysisOutputName.equals(""))
-            this.analysisOutputName="defaultanalysisname";
-        Utils.logger.severe("COmING IN HERE");
+        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+            userName = data.get("username").getAsString();
+        }else{
+            userName = request.getUserPrincipal().getName();
+        }
+
         HashMap<String,String> responseData = new HashMap<String, String>();
-        Connection conn;
-        Statement stmt;
-        try {
-            conn = DBUtils.getConnection();
-            stmt = conn.createStatement();
 
-            //add an entry to the submitted_analysis_jobs table
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String curDate = dt.format(new Date());
-            String cmd = "INSERT INTO submitted_analysis_jobs (user_name,dataset_id,analysis,field,status,submission_time,finish_time,result_loc,priority) VALUES (\"" +
-                    userName + "\"," +
-                    datasetId + ",\"" +
-                    analysisName + "\",\"" +
-                    fieldName + "\",\"" +
-                    "RUNNING" + "\",\"" +
-                    curDate + "\"," +
-                    "NULL" + ",\"" +
-                    "NULL" + "\",\"1\")";
-            ResultSet rs = DBUtils.executeInsert(conn,stmt,cmd);
+        if(userName == null){
+            responseData.put("message", "Error getting username");
+        }else {
+            int datasetId = data.get("datasetid").getAsInt();
+            this.url = data.get("url").getAsString();
+            String analysisName = data.get("analysisname").getAsString().replace(" ", "");
+            String fieldName = data.get("fieldname").getAsString();
+            this.analysisOutputName = data.get("analysisoutputname").getAsString().replace(" ", "");
+            if (this.analysisOutputName.equals(""))
+                this.analysisOutputName = "defaultanalysisname";
+            Utils.logger.severe("COmING IN HERE");
+            Connection conn;
+            Statement stmt;
+            try {
+                conn = DBUtils.getConnection();
+                stmt = conn.createStatement();
 
-            if (rs.next()) {
-                jobId = rs.getInt(1);
+                //add an entry to the submitted_analysis_jobs table
+                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String curDate = dt.format(new Date());
+                String cmd = "INSERT INTO submitted_analysis_jobs (user_name,dataset_id,analysis,field,status,submission_time,finish_time,result_loc,priority) VALUES (\"" +
+                        userName + "\"," +
+                        datasetId + ",\"" +
+                        analysisName + "\",\"" +
+                        fieldName + "\",\"" +
+                        "RUNNING" + "\",\"" +
+                        curDate + "\"," +
+                        "NULL" + ",\"" +
+                        "NULL" + "\",\"1\")";
+                ResultSet rs = DBUtils.executeInsert(conn, stmt, cmd);
+
+                if (rs.next()) {
+                    jobId = rs.getInt(1);
+                }
+
+                runJob();
+                responseData.put("message", "Analysis job started. Status of job is available under the user information panel. On success, the data set will be available for upload.");
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                responseData.put("message", "Error starting job");
             }
-
-            runJob();
-            responseData.put("message", "Analysis job started. Status of job is available under the user information panel. On success, the data set will be available for upload.");
-            stmt.close();
-            conn.close();
-        }catch(SQLException e){
-            responseData.put("message", "Error starting job");
         }
         String responseJson = new Gson().toJson(responseData);
         response.setContentType("application/json");
@@ -104,10 +117,9 @@ public class RunJob extends HttpServlet {
         Utils.logger.severe("INSIDE RUNJOB");
         String[] outputs = RunSparkJob.createSparkCluster("/home/centos/bash-scripts/sparkcluster.sh", 10, "m1.medium");
 
-
         String hdfsuri;
         try{
-            hdfsuri = Utils.parseURL(url)[0];
+            hdfsuri = Utils.parseURL(url).get(0)[0];
         } catch(MalformedURLException e){
             return;
         }

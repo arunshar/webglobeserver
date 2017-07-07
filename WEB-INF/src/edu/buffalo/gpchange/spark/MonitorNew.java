@@ -14,7 +14,7 @@ import edu.buffalo.gpchange.CovSEEPNoiseiso;
 import edu.buffalo.gpchange.EWMASmoother;
 import edu.buffalo.gpchange.GPChange;
 import edu.buffalo.gpchange.GPMonitor;
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import edu.buffalo.webglobe.server.netcdf.NetcdfColorMap;
 import edu.buffalo.webglobe.server.utils.Printer;
 import org.apache.hadoop.conf.Configuration;
@@ -72,8 +72,8 @@ public class MonitorNew {
 
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		final String varName = "tasmax";
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(0).toString());
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(0).toString());
 		final int timeLen = dims[0];
 		final int latLen = dims[1];
 		final int longLen = dims[2];

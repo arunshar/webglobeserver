@@ -21,7 +21,7 @@ public class NetcdfDirectory extends NetcdfSource implements Serializable {
 
     public NetcdfDirectory(String protocol, String uri, String target) throws Exception {
         super(protocol, uri, target);
-        this.filepaths = NetCDFUtils.listPaths(uri, target);
+        this.filepaths = NetcdfUtils.listPaths(uri, target);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class NetcdfDirectory extends NetcdfSource implements Serializable {
 
     @Override
     protected NetcdfDataset loadDataset() {
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.uri, filepaths.get(0), 3000);
+        NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(this.uri, filepaths.get(0), 3000);
         return dataset;
     }
 
     @Override
     public NetcdfDataset loadDataset(int yearInd) {
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.uri, filepaths.get(yearInd), 3000);
+        NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(this.uri, filepaths.get(yearInd), 3000);
         return dataset;
     }
 

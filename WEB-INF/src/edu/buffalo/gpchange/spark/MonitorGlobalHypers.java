@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.buffalo.gpchange.*;
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import edu.buffalo.webglobe.server.netcdf.NetcdfDirectory;
 import edu.buffalo.webglobe.server.utils.Printer;
 import org.apache.spark.SparkConf;
@@ -68,8 +68,8 @@ public class MonitorGlobalHypers {
 		final boolean ifSmoothSpacially = Integer.parseInt(args[12]) != 0;
 		final int k = Integer.parseInt(args[13]); // neighborhood extent
 		
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(0).toString());
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(0).toString());
 		final int timeLen = dims[0];
 		final int latLen = dims[1];
 		final int longLen = dims[2];
@@ -82,7 +82,7 @@ public class MonitorGlobalHypers {
 		JavaRDD<double[]> logHypersRdd = sc.objectFile(logHypersFile);
 		final double[] loghypers = logHypersRdd.first();
 
-		Tuple2<int[], ArrayList<int[]>> temp = NetCDFUtils.listOrigins(latLen, longLen, d);
+		Tuple2<int[], ArrayList<int[]>> temp = NetcdfUtils.listOrigins(latLen, longLen, d);
 		final int[] shape = temp._1;
 		List<int[]> listOrigin = temp._2;
 		//List<int[]> listOrigin = temp._2.subList(60, 62);
@@ -101,10 +101,10 @@ public class MonitorGlobalHypers {
 						int[] shape_i = { timeLen, shape[0], shape[1] };
 						double[][] data = null;
 						if (ifSmoothSpacially)
-							data = NetCDFUtils.getDataWithNeighbor(hdfsuri, arrPaths, varName, latLen, longLen,
-									origin_i, shape_i, k);
+							data = NetcdfUtils.getDataWithNeighbor(hdfsuri, arrPaths, varName, latLen, longLen,
+                                    origin_i, shape_i, k);
 						else
-							data = NetCDFUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
+							data = NetcdfUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
 
 						CovSEEPNoiseiso cse = new CovSEEPNoiseiso(loghypers, loghypers.length);
 

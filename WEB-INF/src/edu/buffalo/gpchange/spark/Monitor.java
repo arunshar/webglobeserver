@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.buffalo.gpchange.*;
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import edu.buffalo.webglobe.server.utils.Printer;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -63,8 +63,8 @@ public class Monitor {
 		final int k = Integer.parseInt(args[11]); // neighborhood extent
 
 		// get list of netcdf files
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(0).toString());
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(0).toString());
 		final int timeLen = dims[0];
 		final int latLen = dims[1];
 		final int longLen = dims[2];
@@ -98,10 +98,10 @@ public class Monitor {
 						int[] shape_i = { timeLen, shape[0], shape[1] };
 						double[][] data = null;
 						if (ifSmoothSpacially)
-							data = NetCDFUtils.getDataWithNeighbor(hdfsuri, arrPaths, varName, latLen, longLen,
-									origin_i, shape_i, k);
+							data = NetcdfUtils.getDataWithNeighbor(hdfsuri, arrPaths, varName, latLen, longLen,
+                                    origin_i, shape_i, k);
 						else
-							data = NetCDFUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
+							data = NetcdfUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
 
 						//monitor
 						CovSEEPNoiseiso cse = new CovSEEPNoiseiso(loghypers, loghypers.length);

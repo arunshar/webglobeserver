@@ -6,14 +6,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.Integer;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import edu.buffalo.webglobe.server.utils.Constants;
 import edu.buffalo.webglobe.server.utils.Utils;
-import ucar.nc2.time.CalendarDate;
-import ucar.nc2.time.CalendarDateFormatter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -52,7 +54,19 @@ public class GetDatasetDetails extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String userName = request.getUserPrincipal().getName();
+        String userName;
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+            userName = data.get("username").getAsString();
+        }else{
+            userName = request.getUserPrincipal().getName();
+        }
+
+        if(userName == null){
+            Utils.logger.severe("Error getting username");
+            return;
+        }
+
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
 		// query database
 
@@ -63,26 +77,29 @@ public class GetDatasetDetails extends HttpServlet {
 			// Step 1: Allocate a database Connection object
             conn = DBUtils.getConnection();
 			stmt = conn.createStatement();
-			String cmd = "select id,name,url,available,info,info_url,is_analyzable from netcdf_datasets where is_accessible = 1 and (available = \"all\" or available = \""
-					+ userName + "\")";
+			String cmd = "select id,name,info,info_url,time_min,time_max from netcdf_datasets where is_accessible = 1";
 			rset = DBUtils.executeQuery(conn,stmt,cmd);
 			int i = 0;
 			while (rset.next()) {
 				Map<String, String> datasetInfo = new HashMap<String, String>();
 				String name = rset.getString("name");
-				String url = rset.getString("url");
-				String available = rset.getString("available");
 				String info = rset.getString("info");
 				String info_url = rset.getString("info_url");
-                int is_analyzable = rset.getInt("is_analyzable");
-				int id = rset.getInt("id");
+
+                Date tsmin = rset.getTimestamp("time_min");
+                Date tsmax = rset.getTimestamp("time_max");
+
+
+                datasetInfo.put("mindate", new SimpleDateFormat("yyyy-MM-dd").format(tsmin));
+                datasetInfo.put("maxdate", new SimpleDateFormat("yyyy-MM-dd").format(tsmax));
+
+
+                int id = rset.getInt("id");
 				datasetInfo.put("id", (new Integer(id)).toString());
 				datasetInfo.put("name", name);
-				datasetInfo.put("url", url);
-				datasetInfo.put("available", available);
 				datasetInfo.put("info", info);
 				datasetInfo.put("info_url", info_url);
-                datasetInfo.put("is_analyzable", Integer.toString(is_analyzable));
+
 				// get fields
 				String cmd1 = "select id,field_name from netcdf_dataset_fields where dataset_id = " + id;
 				stmt1 = conn.createStatement();
@@ -90,31 +107,6 @@ public class GetDatasetDetails extends HttpServlet {
 				int j = 0;
 				while (rset1.next()) {
 					datasetInfo.put("field" + j, rset1.getString("field_name"));
-                    // get time limits
-                    CalendarDateFormatter dateFormatter = new CalendarDateFormatter("yyyy-MM-dd");
-
-                    int fieldId = rset1.getInt("id");
-                    String cmd2;
-                    Statement stmt2;
-                    ResultSet rset2;
-                    cmd2 = "select timestamp from netcdf_dataset_images where dataset_id="+id+
-                            " and field_id="+fieldId+" and time_index = (select min(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
-                    stmt2 = conn.createStatement();
-                    rset2 = DBUtils.executeQuery(conn,stmt2,cmd2);
-                    rset2.next();
-                    String tsmin = rset2.getString(1);
-
-                    cmd2 = "select timestamp from netcdf_dataset_images where dataset_id="+id+
-                            " and field_id="+fieldId+" and time_index = (select max(time_index) from netcdf_dataset_images where dataset_id="+id+" and field_id="+fieldId+")";
-                    stmt2 = conn.createStatement();
-                    rset2 = DBUtils.executeQuery(conn,stmt2,cmd2);
-                    rset2.next();
-                    String tsmax = rset2.getString(1);
-
-                    CalendarDate d1 = dateFormatter.parse(tsmin);
-                    CalendarDate d2 = dateFormatter.parse(tsmax);
-                    datasetInfo.put("field"+j+"_mindate", dateFormatter.toString(d1));
-                    datasetInfo.put("field"+j+"_maxdate", dateFormatter.toString(d2));
                     j++;
 				}
 				datasetInfo.put("fieldcount", (new Integer(j)).toString());

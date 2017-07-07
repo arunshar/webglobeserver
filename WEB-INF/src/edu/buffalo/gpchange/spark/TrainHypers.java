@@ -7,7 +7,7 @@ import java.util.List;
 
 import edu.buffalo.gpchange.CovSEEPNoiseiso;
 import edu.buffalo.gpchange.GPChange;
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import edu.buffalo.webglobe.server.utils.Printer;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -31,20 +31,20 @@ public class TrainHypers {
 		final int train_maxit = Integer.parseInt(args[8]);
 
 		// get list of netcdf files
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
 		ArrayList<String> trainpaths = new ArrayList<String>();
 		for (int i = train_start_ind; i <= train_end_ind; i++) {
 			trainpaths.add(paths.get(i));
 		}
 
 		// get dimensions of netCDF files
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(train_start_ind).toString());
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(train_start_ind).toString());
 		final int timeLen = dims[0];
 		final int latLen = dims[1];
 		final int longLen = dims[2];
 
 		// divide the world map into blocks
-		Tuple2<int[], ArrayList<int[]>> temp = NetCDFUtils.listOrigins(latLen, longLen, d);
+		Tuple2<int[], ArrayList<int[]>> temp = NetcdfUtils.listOrigins(latLen, longLen, d);
 		final int[] shape = temp._1;
 		List<int[]> listOrigin = temp._2;
 
@@ -75,7 +75,7 @@ public class TrainHypers {
 
 						// load data
                         Printer.printArrayInt(origin);
-						double[][] data = NetCDFUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
+						double[][] data = NetcdfUtils.getDataSafe(hdfsuri, arrPaths, varName, origin_i, shape_i);
 
 						// training
 						System.out.println("Training...");

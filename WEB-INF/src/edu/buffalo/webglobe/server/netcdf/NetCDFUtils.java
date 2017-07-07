@@ -22,11 +22,12 @@ import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
+import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
 
 import edu.buffalo.webglobe.server.spark.HDFSRandomAccessFile;
 
-public class NetCDFUtils {
+public class NetcdfUtils {
 	/**
 	 * Converts the native ma2.Array from the NetCDF library to a one
 	 * dimensional Java Array of Doubles.
@@ -68,11 +69,10 @@ public class NetCDFUtils {
      */
     public static NetcdfDataset loadHTTPNetcdfDataSet(String url, String target){
         NetcdfDataset.setUseNaNs(false);
-
         try{
-            return new NetcdfDataset(NetcdfFile.open(url+"/"+target));
+            return new NetcdfDataset(NetcdfFile.open(url+target));
         } catch (IOException e) {
-            Utils.logger.severe(("Couldn't open dataset " +url+"/"+target));        }
+            Utils.logger.severe(("Couldn't open dataset " +url+target));        }
         return null;
     }
 	/**
@@ -99,7 +99,22 @@ public class NetCDFUtils {
 		}
 	}
 
-	/**
+    /**
+     * Loads a NetCDF Dataset from local file.
+     *
+     * @param location
+     *            File path on local filesystem
+     */
+    public static NetcdfDataset loadLocalFileDataset(String location) {
+        NetcdfDataset.setUseNaNs(false);
+        try{
+            return new NetcdfDataset(NetcdfFile.open(location));
+        } catch (IOException e) {
+            Utils.logger.severe(("Couldn't open dataset " +location));        }
+        return null;
+    }
+
+    /**
 	 * Return a list of paths of files in a HDFS directory.
 	 *
 	 * @param dfsuri
@@ -123,7 +138,7 @@ public class NetCDFUtils {
     public static String copyRemoteFileToHDFS(String uri, String dir) throws IOException, URISyntaxException {
         //first copy the file to local directory
         URL url = new URL(uri);
-        String [] tokens = Utils.parseURL(uri);
+        String [] tokens = Utils.parseURL(uri).get(0);
         String localTarget = Constants.LOCAL_TMP_DIRECTORY+'/'+tokens[2];
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         FileOutputStream fos = new FileOutputStream(localTarget);
@@ -143,7 +158,7 @@ public class NetCDFUtils {
     }
 
 	public static int[] getDimLens(String hdfsuri, String filePath) throws IOException {
-		NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, filePath, 10000);
+		NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(hdfsuri, filePath, 10000);
 
 		NetcdfFile cdfFile = dataset.getReferencedFile();
 
@@ -201,7 +216,7 @@ public class NetCDFUtils {
     public static ArrayList<Tuple2<int[], float[][][]>> partition(String hdfsuri, String path, String varName, int d)
             throws IOException, InvalidRangeException {
 
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
+        NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
         Array src = cdfFile.findVariable(varName).read();
         dataset.close();
@@ -210,7 +225,7 @@ public class NetCDFUtils {
         int latLen = src.getShape()[1];
         int lonLen = src.getShape()[2];
 
-        Tuple2<int[], ArrayList<int[]>> tuple = NetCDFUtils.listOrigins(latLen, lonLen, d);
+        Tuple2<int[], ArrayList<int[]>> tuple = NetcdfUtils.listOrigins(latLen, lonLen, d);
         final int[] shape = { timeLen, tuple._1[0], tuple._1[1] };
         ArrayList<int[]> listOrigins = tuple._2;
 
@@ -228,7 +243,7 @@ public class NetCDFUtils {
     public static double[][] getDataSafe(String hdfsuri, String path, String varName, int[] origin, int[] shape)
             throws IOException, InvalidRangeException {
         double[][] data = new double[shape[0]][shape[1] * shape[2]];
-        NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
+        NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(hdfsuri, path, 10000);
         NetcdfFile cdfFile = dataset.getReferencedFile();
         Array src = cdfFile.findVariable(varName).read(origin, shape);
 
@@ -403,4 +418,61 @@ public class NetCDFUtils {
         return data;
     }
 
+    public static Variable findLatVariable(NetcdfDataset netcdfDataset) {
+        for(String ext:Constants.VALID_LATITUDE_TAGS){
+            if(netcdfDataset.findVariable(ext) != null) return netcdfDataset.findVariable(ext);
+        }
+        return null;
+    }
+
+    public static Variable findLonVariable(NetcdfDataset netcdfDataset) {
+        for(String ext:Constants.VALID_LONGITUDE_TAGS){
+            if(netcdfDataset.findVariable(ext) != null) return netcdfDataset.findVariable(ext);
+        }
+        return null;
+    }
+
+    public static Variable findTimeVariable(NetcdfDataset netcdfDataset) {
+        for(String ext:Constants.VALID_TIME_TAGS){
+            if(netcdfDataset.findVariable(ext) != null) return netcdfDataset.findVariable(ext);
+        }
+
+        return null;
+    }
+
+    public static int findLatDimensionIndex(Variable variable){
+        List<Dimension> dimensions = variable.getDimensions();
+        int i = 0;
+        for(Dimension d: dimensions){
+            if(Constants.VALID_LATITUDE_TAGS.contains(d.getShortName())){
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    public static int findLonDimensionIndex(Variable variable){
+        List<Dimension> dimensions = variable.getDimensions();
+        int i = 0;
+        for(Dimension d: dimensions){
+            if(Constants.VALID_LONGITUDE_TAGS.contains(d.getShortName())){
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    public static int findTimeDimensionIndex(Variable variable){
+        List<Dimension> dimensions = variable.getDimensions();
+        int i = 0;
+        for(Dimension d: dimensions){
+            if(Constants.VALID_TIME_TAGS.contains(d.getShortName())){
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
 }

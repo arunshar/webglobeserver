@@ -64,9 +64,9 @@ public abstract class NetcdfSource implements Serializable {
         variables = new ArrayList<String>();
         units = new ArrayList<String>();
 
-        dataDescription = NetCDFUtils.extractInfo(dataset);
-        datasetName = NetCDFUtils.extractTitle(dataset);
-        datasetInfoURL = NetCDFUtils.extractInfoURL(dataset);
+        dataDescription = NetcdfUtils.extractInfo(dataset);
+        datasetName = NetcdfUtils.extractTitle(dataset);
+        datasetInfoURL = NetcdfUtils.extractInfoURL(dataset);
         GridDataset gridDataset = new GridDataset(dataset);
         List grids = gridDataset.getGrids();
         if(grids.size() > 0){

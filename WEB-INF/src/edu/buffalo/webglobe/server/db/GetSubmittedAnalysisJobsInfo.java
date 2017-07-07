@@ -11,6 +11,9 @@ import java.util.Map;
 import java.lang.Integer;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,7 +24,7 @@ import java.sql.Timestamp;
 /**
  * Servlet implementation class GetSubmittedAnalysisJobsInfo
  */
-@WebServlet("/GetSubmittedAnalysisJobsInfo")
+    @WebServlet("/GetSubmittedAnalysisJobsInfo")
 public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +54,18 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
-		String userName = request.getUserPrincipal().getName();
+        String userName;
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+            userName = data.get("username").getAsString();
+        }else{
+            userName = request.getUserPrincipal().getName();
+        }
+
+        if(userName == null){
+            Utils.logger.severe("Error getting username");
+            return;
+        }
 		// query database
         Connection conn;
 		Statement stmt;

@@ -1,6 +1,9 @@
 package edu.buffalo.webglobe.server.db;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,8 +48,20 @@ public class GetSubmittedUploadJobsInfo extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
-		String userName = request.getUserPrincipal().getName();
-		// query database
+        String userName;
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+            userName = data.get("username").getAsString();
+        }else{
+            userName = request.getUserPrincipal().getName();
+        }
+
+        if(userName == null){
+            Utils.logger.severe("Error getting username");
+            return;
+        }
+
+        // query database
         Connection conn;
 		Statement stmt;
 		ResultSet rset;
@@ -55,9 +70,12 @@ public class GetSubmittedUploadJobsInfo extends HttpServlet {
             conn = DBUtils.getConnection();
 
 			stmt = conn.createStatement();
-			String cmd = "select J.id as id,J.dataset_name as dataset_name,J.status as status,J.submission_time as submission_time, J.finish_time as finish_time, J.priority as priority from submitted_image_creation_jobs J where J.user_name = \""
+			String cmd = "select J.id as id,J.dataset_name as dataset_name,J.status as status,J.submission_time"+
+                    " as submission_time, J.finish_time as finish_time, J.priority as priority from submitted_upload_jobs J "+
+                    "where J.user_name = \""
 					+ userName + "\" order by J.submission_time";
-			rset = DBUtils.executeQuery(conn, stmt, cmd);
+
+            rset = DBUtils.executeQuery(conn, stmt, cmd);
 			int i = 0;
 			while (rset.next()) {
 				Map<String, String> submittedJobInfo = new HashMap<String, String>();

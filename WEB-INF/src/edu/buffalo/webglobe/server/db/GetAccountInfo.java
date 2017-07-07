@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import edu.buffalo.webglobe.server.utils.Constants;
+import edu.buffalo.webglobe.server.utils.Utils;
 
 
 /**
@@ -41,7 +44,18 @@ public class GetAccountInfo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	    Map<String,  Map<String,String> > responseData = new HashMap<String,  Map<String,String> >();
-	    String userName = request.getUserPrincipal().getName();
+        String userName;
+        JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+            userName = data.get("username").getAsString();
+        }else{
+            userName = request.getUserPrincipal().getName();
+        }
+
+        if(userName == null){
+            Utils.logger.severe("Error getting username");
+            return;
+        }
 	    Map<String, String> userInfo = new HashMap<String, String>();
 	    userInfo.put("userName",userName);
 	    responseData.put("userInfo",userInfo);

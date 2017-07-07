@@ -28,10 +28,10 @@ public class NetcdfFile extends NetcdfSource implements Serializable {
     @Override
     protected NetcdfDataset loadDataset() {
         if(this.protocol.equalsIgnoreCase("hdfs")) {
-            NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(this.uri, this.target, 3000);
+            NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(this.uri, this.target, 3000);
             return dataset;
         }else{
-            NetcdfDataset dataset = NetCDFUtils.loadHTTPNetcdfDataSet(this.uri, this.target);
+            NetcdfDataset dataset = NetcdfUtils.loadHTTPNetcdfDataSet(this.uri, this.target);
             return dataset;
         }
     }

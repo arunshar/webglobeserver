@@ -1,11 +1,11 @@
-<project name="webglobeserver" default="compile" basedir=".">
+<project name="webglobeserver2" default="compile" basedir=".">
   <description>
   Build file for webglobe server
   </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="classes"/>
-  <property name="tomcatlib" location="/home/ubuntu/apache-tomcat-8.0.36/lib"/>
+  <property name="tomcatlib" location="/Library/Tomcat/lib"/>
 
   <target name="init">
     <!-- Create the time stamp -->

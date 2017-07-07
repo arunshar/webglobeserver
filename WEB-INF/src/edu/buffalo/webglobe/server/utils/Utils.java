@@ -1,5 +1,7 @@
 package edu.buffalo.webglobe.server.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.netcdf.NetcdfColorMap;
 
 import java.awt.image.BufferedImage;
@@ -7,9 +9,12 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
@@ -72,20 +77,40 @@ public class Utils {
 		return false;
 	}
 
-    public static String[] parseURL(String uri) throws MalformedURLException{
+    public static Vector<String[]> parseURL(String uri) throws MalformedURLException{
 
         try {
-            String[] tokens = new String[3];
-            if(uri.indexOf("://") == -1){
-                throw(new MalformedURLException());
-            }
-            String protocol = uri.substring(0,uri.indexOf("://"));
-            String s1 = uri.substring(uri.indexOf("://") + 3, uri.length());
+            Vector<String[]> allTokens = new Vector<String[]>(0);
+            String delim = " \n\r,;"; //insert here all delimiters
+            StringTokenizer st = new StringTokenizer(uri,delim);
+            String _p = "";
+            String _u = "";
+            int i = 0;
+            while (st.hasMoreTokens()) {
+                String u = st.nextToken();
 
-            tokens[0] = protocol;
-            tokens[1] = protocol+"://" + s1.substring(0, s1.indexOf('/'));
-            tokens[2] = s1.substring(s1.indexOf('/'), s1.length());
-            return tokens;
+                String[] tokens = new String[3];
+                if (u.indexOf("://") == -1) {
+                    throw (new MalformedURLException());
+                }
+                String protocol = u.substring(0, u.indexOf("://"));
+                String s1 = u.substring(u.indexOf("://") + 3, u.length());
+
+                tokens[0] = protocol;
+                tokens[1] = protocol + "://" + s1.substring(0, s1.indexOf('/'));
+                tokens[2] = s1.substring(s1.indexOf('/'), s1.length());
+                if(i == 0){
+                    _p = tokens[0];
+                    _u = tokens[1];
+                }else{
+                    if(!_p.equalsIgnoreCase(tokens[0]) && !_u.equalsIgnoreCase(tokens[1])){
+                        throw (new MalformedURLException());
+                    }
+                }
+                allTokens.add(tokens);
+                i++;
+            }
+            return allTokens;
         }catch(Exception e) {
             return null;
         }
@@ -94,4 +119,9 @@ public class Utils {
     public static boolean isNCFile(String uri){
         return uri.lastIndexOf('.') != -1 && VALID_EXTENSIONS.contains(uri.substring(uri.lastIndexOf('.') + 1, uri.length()));
     }
+
+    public static String cleanFileName(String fileName) {
+        return fileName.replace('/','_').replace(' ','_');
+    }
+
 }

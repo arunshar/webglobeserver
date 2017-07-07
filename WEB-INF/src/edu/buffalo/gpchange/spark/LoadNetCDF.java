@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -70,21 +70,21 @@ public class LoadNetCDF {
 		final String varName = "tasmax";
 
 		// read list of files in the input directory
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
 
 		// get spark context
 		SparkConf conf = new SparkConf().setAppName("OnlineMonitor");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 
 		// read data
-		ArrayList<Tuple2<int[], float[][][]>> listSections = NetCDFUtils.partition(hdfsuri, paths.get(0), varName, d);
+		ArrayList<Tuple2<int[], float[][][]>> listSections = NetcdfUtils.partition(hdfsuri, paths.get(0), varName, d);
 		JavaPairRDD<Tuple3<Integer, Integer, Integer>, ArrayList<ArrayList<Double>>> sectionsRDD = sc
 				.parallelize(listSections, listSections.size()).mapToPair(new MapSection());
 
 		System.out.println(sectionsRDD.count());
 		
 		for (int i = 1; i < paths.size(); i++) {
-			ArrayList<Tuple2<int[], float[][][]>> listSectionsi = NetCDFUtils.partition(hdfsuri, paths.get(i), varName, d);
+			ArrayList<Tuple2<int[], float[][][]>> listSectionsi = NetcdfUtils.partition(hdfsuri, paths.get(i), varName, d);
 			JavaPairRDD<Tuple3<Integer, Integer, Integer>, ArrayList<ArrayList<Double>>> sectionsRDDi = sc
 					.parallelize(listSectionsi, listSectionsi.size()).mapToPair(new MapSection());
 			sectionsRDD = sectionsRDD.join(sectionsRDDi).mapValues(new MapJoinTimeSeries());

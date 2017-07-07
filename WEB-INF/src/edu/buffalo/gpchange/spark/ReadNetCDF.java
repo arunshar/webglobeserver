@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import edu.buffalo.webglobe.server.utils.Printer;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -29,12 +29,12 @@ public class ReadNetCDF {
 		final int numSlices = Integer.parseInt(args[3]);
 		final int d = Integer.parseInt(args[4]);
 		
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(0).toString());
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(0).toString());
 		final int latLen = dims[1];
 		final int longLen = dims[2];
 
-		Tuple2<int[], ArrayList<int[]>> temp = NetCDFUtils.listOrigins(latLen, longLen, d);
+		Tuple2<int[], ArrayList<int[]>> temp = NetcdfUtils.listOrigins(latLen, longLen, d);
 		final int[] shape = temp._1;
 		List<int[]> listOrigin = temp._2.subList(0, 1);
 
@@ -62,7 +62,7 @@ public class ReadNetCDF {
 						double[][] data = new double[shape_i[0]*arrPaths.size()][shape_i[1] * shape_i[2]];
 						
 						for (int i = 0; i < arrPaths.size(); i++) {
-							NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, arrPaths.get(i), 10000);
+							NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(hdfsuri, arrPaths.get(i), 10000);
 							NetcdfFile cdfFile = dataset.getReferencedFile();
 							Array src = cdfFile.findVariable(varName).read(origin_i, shape_i);
 							float[][][] srcJavaArr = (float[][][]) src.copyToNDJavaArray();

@@ -7,7 +7,7 @@ import java.util.List;
 
 import edu.buffalo.gpchange.CovSEEPNoiseiso;
 import edu.buffalo.gpchange.GPChange;
-import edu.buffalo.webglobe.server.netcdf.NetCDFUtils;
+import edu.buffalo.webglobe.server.netcdf.NetcdfUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -32,12 +32,12 @@ public class TrainGlobalHypers {
 		final String varName = "tasmax";
 		final int yearLen = 365;
 
-		ArrayList<String> paths = NetCDFUtils.listPaths(hdfsuri, inputDir);
-		int[] dims = NetCDFUtils.getDimLens(hdfsuri, paths.get(0).toString());
+		ArrayList<String> paths = NetcdfUtils.listPaths(hdfsuri, inputDir);
+		int[] dims = NetcdfUtils.getDimLens(hdfsuri, paths.get(0).toString());
 		final int latLen = dims[1];
 		final int longLen = dims[2];
 
-		Tuple2<int[], ArrayList<int[]>> temp = NetCDFUtils.listOrigins(latLen, longLen, d);
+		Tuple2<int[], ArrayList<int[]>> temp = NetcdfUtils.listOrigins(latLen, longLen, d);
 		final int[] shape = temp._1;
 		List<int[]> listOrigin = temp._2;
 
@@ -46,7 +46,7 @@ public class TrainGlobalHypers {
 
 		for (int i = train_start_ind; i <= train_end_ind; i++) {
 
-			NetcdfDataset dataset = NetCDFUtils.loadDFSNetCDFDataSet(hdfsuri, paths.get(i), 10000);
+			NetcdfDataset dataset = NetcdfUtils.loadDFSNetCDFDataSet(hdfsuri, paths.get(i), 10000);
 			NetcdfFile cdfFile = dataset.getReferencedFile();
 			int[] shape_i = { yearLen, 1, 1 };
 			for (int m = 0; m < listOrigin.size(); m++) {
