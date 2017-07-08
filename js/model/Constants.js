@@ -69,6 +69,7 @@ define([], function () {
          * @constant
          */
         WORLD_WIND_PATH: "js/libs/webworldwind/",
+	//Change the next line to point to the URL of the base application
         WEBGLOBE_SERVER: "http://localhost:8080/webglobeserver/",
 	WEBGLOBE_USER: "chandola"
         //WEBGLOBE_SERVER: "http://199.109.195.187:8080/webglobeserver/"

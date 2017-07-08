@@ -1,10 +1,11 @@
-<project name="webglobeserver2" default="compile" basedir=".">
+<project name="webglobeserver" default="compile" basedir=".">
   <description>
   Build file for webglobe server
   </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="classes"/>
+  <!-- Change the next line to point to the correct Tomcat lib directory-->
   <property name="tomcatlib" location="/Library/Tomcat/lib"/>
 
   <target name="init">
