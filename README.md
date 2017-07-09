@@ -17,7 +17,7 @@ Follow directions at http://ant.apache.org/
 ### Step 5 - Install Hadoop Distributed File System (HDFS)
 Follow directions at https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html for single node or https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html multi-node installation.
 
-We will assume that `myhdfsurl` is the base HDFS url and `myhdfsbasedir` is a writable directory within the HDFS where the data will be stored. Additionally, we will assume that `mylocaltmpdir` is a writable directory (e.g., `/tmp`) on the local file system.
+We will assume that `myhdfsurl` is the base HDFS url and `myhdfsbasedir` is a writable directory within the HDFS where the data will be stored. Additionally, we will assume that `mylocaltmpdir` is a writable directory (e.g., `/tmp`) on the local file system of the machine running the Tomcat web server.
 ### Step 6 - Setup parameters
 In `WEB-INF/build.xml`, change the following line:
 ```xml
