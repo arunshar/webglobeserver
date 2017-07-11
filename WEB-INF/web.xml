@@ -9,7 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <security-constraint>
+  <!--security-constraint>
     <web-resource-collection>
       <web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
       <url-pattern>/*</url-pattern>
@@ -29,5 +29,5 @@
       <form-login-page>/login.html</form-login-page>
       <form-error-page>/login-failed.html</form-error-page>
     </form-login-config>
-  </login-config>
+  </login-config-->
 </web-app>
