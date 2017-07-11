@@ -102,6 +102,8 @@ public class GetSubmittedUploadJobsInfo extends HttpServlet {
 			stmt.close();
 			conn.close();
 		} catch (SQLException ex) {
+            Utils.logger.severe("Error connecting to the database");
+
 			ex.printStackTrace();
 		}
 		String responseJson = new Gson().toJson(responseData);
