@@ -19,6 +19,7 @@
 -- Table structure for table `netcdf_dataset_fields`
 --
 CREATE DATABASE IF NOT EXISTS webglobeserver;
+USE webglobeserver;
 DROP TABLE IF EXISTS `netcdf_dataset_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -82,10 +83,8 @@ CREATE TABLE `submitted_analysis_jobs` (
   `result_loc` char(120) DEFAULT NULL,
   `priority` char(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `submitted_jobs_foreign_key_1` (`user_name`),
-  KEY `submitted_jobs_foreign_key_2` (`dataset_id`),
-  CONSTRAINT `submitted_jobs_foreign_key_1` FOREIGN KEY (`user_name`) REFERENCES `tomcat_users` (`user_name`),
-  CONSTRAINT `submitted_jobs_foreign_key_2` FOREIGN KEY (`dataset_id`) REFERENCES `netcdf_datasets` (`id`)
+  KEY `submitted_jobs_foreign_key_1` (`dataset_id`),
+  CONSTRAINT `submitted_jobs_foreign_key_1` FOREIGN KEY (`dataset_id`) REFERENCES `netcdf_datasets` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,7 +105,6 @@ CREATE TABLE `submitted_upload_jobs` (
   `finish_time` datetime DEFAULT NULL,
   `priority` char(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `submitted_image_creation_jobs_foreign_key_1` (`user_name`),
-  CONSTRAINT `submitted_image_creation_jobs_foreign_key_1` FOREIGN KEY (`user_name`) REFERENCES `tomcat_users` (`user_name`)
+  KEY `submitted_image_creation_jobs_foreign_key_1` (`user_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
