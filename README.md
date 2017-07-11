@@ -37,21 +37,21 @@ to:
 WEBGLOBE_SERVER: "http://mytomcaturl:8080/webglobeserver/"
 ```
 
-In `WEB-INF/src/edu/buffalo/webglobe/server/utils/Constants.java`, change the following lines:
-```java
-  public static final String HDFS_SERVER = "hdfs://localhost:9000";
-  public static final String HDFS_BASEDIR = "/user/chandola/";
-  public static final String LOCAL_TMP_DIRECTORY = "/home/ubuntu/fileserver/tmp";
-  public static final String DB_USER_NAME = "root";
-  public static final String DB_PASSWORD = "root";
+In `WEB-INF/src/config/configuration.xml`, change the following lines:
+```xml
+  <entry key="HDFS_SERVER">hdfs://localhost:9000</entry>
+  <entry key="HDFS_BASEDIR">/user/chandola/</entry>
+  <entry key="LOCAL_TMP_DIRECTORY">/home/ubuntu/fileserver/tmp</entry>
+  <entry key="DB_USER_NAME">root</entry>
+  <entry key="DB_PASSWORD">root</entry>
 ```
 to
-```java
-  public static final String HDFS_SERVER = "hdfs://myhdfsurl:9000";
-  public static final String HDFS_BASEDIR = "myhdfsbasedir";
-  public static final String LOCAL_TMP_DIRECTORY = "mylocaltmpdir";
-  public static final String DB_USER_NAME = "mysqlusername";
-  public static final String DB_PASSWORD = "mysqlpassword";
+```xml
+  <entry key="HDFS_SERVER">hdfs://myhdfsurl</entry>
+  <entry key="HDFS_BASEDIR">myhdfsbasedir</entry>
+  <entry key="LOCAL_TMP_DIRECTORY">mylocaltmpdir</entry>
+  <entry key="DB_USER_NAME">mysqlusername</entry>
+  <entry key="DB_PASSWORD">mysqlpassword</entry>
 ```
 ### Step 7 - Compile JAVA code
 From the `WEB-INF` directory, type:
