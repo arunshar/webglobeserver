@@ -151,7 +151,7 @@ public class HDFSDataSet {
     public ArrayList<String> readData(){
         try {
             Configuration conf = new Configuration();
-            FileSystem hdfs = FileSystem.get( new URI( Constants.HDFS_SERVER ), conf );
+            FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
 
             Path file = new Path(this.hdfsPath);
 

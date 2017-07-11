@@ -79,7 +79,7 @@ public class UploadDataset extends HttpServlet {
         this.stride = data.get("stride").getAsInt();
         Map<String, String> responseData = new HashMap<String, String>();
         String userName;
-        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+        if(Utils.configuration.getValue("AUTHENTICATION_TYPE").equalsIgnoreCase("GLOBUS")){
             userName = data.get("username").getAsString();
         }else{
             userName = request.getUserPrincipal().getName();
@@ -193,12 +193,12 @@ public class UploadDataset extends HttpServlet {
                                 for (int j = 0; j < netcdfDataSource.getVariables().size(); j++) {
                                     String variable = netcdfDataSource.getVariables().get(j);
                                     NetcdfVariable netcdfVariable = new NetcdfVariable(netcdfDataSource, variable);
-                                    String hdfsFileName = Constants.HDFS_BASEDIR+"/"+Utils.cleanFileName(dataName)+"/"+netcdfVariable.getVariableName()+".csv";
+                                    String hdfsFileName = Utils.configuration.getValue("HDFS_BASEDIR")+"/"+Utils.cleanFileName(dataName)+"/"+netcdfVariable.getVariableName()+".csv";
 
                                     //dump data to HDFS
                                     Utils.logger.info("Writing out data to HDFS");
                                     Configuration configuration = new Configuration();
-                                    FileSystem hdfs = FileSystem.get( new URI( Constants.HDFS_SERVER ), configuration );
+                                    FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), configuration );
 
                                     Path file = new Path(hdfsFileName);
 

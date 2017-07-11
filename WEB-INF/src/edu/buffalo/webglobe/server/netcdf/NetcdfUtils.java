@@ -139,22 +139,22 @@ public class NetcdfUtils {
         //first copy the file to local directory
         URL url = new URL(uri);
         String [] tokens = Utils.parseURL(uri).get(0);
-        String localTarget = Constants.LOCAL_TMP_DIRECTORY+'/'+tokens[2];
+        String localTarget = Utils.configuration.getValue("LOCAL_TMP_DIRECTORY")+'/'+tokens[2];
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         FileOutputStream fos = new FileOutputStream(localTarget);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         //next copy the local file to HDFS
-        FileSystem fs = FileSystem.get(new URI(Constants.HDFS_SERVER), new Configuration());
-        Path dirPath = new Path(Constants.HDFS_BASEDIR+"/"+dir);
+        FileSystem fs = FileSystem.get(new URI(Utils.configuration.getValue("HDFS_SERVER")), new Configuration());
+        Path dirPath = new Path(Utils.configuration.getValue("HDFS_BASEDIR")+"/"+dir);
         fs.mkdirs(dirPath);
-        Path destPath = new Path(Constants.HDFS_BASEDIR+"/"+dir+tokens[2]);
+        Path destPath = new Path(Utils.configuration.getValue("HDFS_BASEDIR")+"/"+dir+tokens[2]);
         OutputStream os = fs.create(destPath);
         InputStream is = new BufferedInputStream(new FileInputStream(localTarget));
         IOUtils.copyBytes(is, os, 4096, false);
         //finally delete the local file
         File localFile = new File(localTarget);
         localFile.delete();
-        return Constants.HDFS_BASEDIR+"/"+dir+tokens[2];
+        return Utils.configuration.getValue("HDFS_BASEDIR")+"/"+dir+tokens[2];
     }
 
 	public static int[] getDimLens(String hdfsuri, String filePath) throws IOException {

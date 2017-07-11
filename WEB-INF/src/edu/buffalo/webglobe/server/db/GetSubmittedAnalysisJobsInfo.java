@@ -56,7 +56,7 @@ public class GetSubmittedAnalysisJobsInfo extends HttpServlet {
 		Map<String, Map<String, String>> responseData = new HashMap<String, Map<String, String>>();
         String userName;
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+        if(Utils.configuration.getValue("AUTHENTICATION_TYPE").equalsIgnoreCase("GLOBUS")){
             userName = data.get("username").getAsString();
         }else{
             userName = request.getUserPrincipal().getName();

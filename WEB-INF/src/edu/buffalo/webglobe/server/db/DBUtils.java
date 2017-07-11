@@ -14,7 +14,7 @@ public class DBUtils {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", Constants.DB_USER_NAME, Constants.DB_PASSWORD);
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/webglobeserver", Utils.configuration.getValue("DB_USER_NAME"), Utils.configuration.getValue("DB_PASSWORD"));
         }  catch (SQLException ex) {
             ex.printStackTrace();
         } catch (ClassNotFoundException e) {

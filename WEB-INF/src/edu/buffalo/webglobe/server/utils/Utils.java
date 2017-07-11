@@ -1,7 +1,5 @@
 package edu.buffalo.webglobe.server.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.netcdf.NetcdfColorMap;
 
 import java.awt.image.BufferedImage;
@@ -14,7 +12,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
@@ -22,6 +19,7 @@ import static edu.buffalo.webglobe.server.utils.Constants.VALID_EXTENSIONS;
 public class Utils {
     public final static Logger logger = Logger.getLogger("WEBGLOBE.LOGGER");
 
+    public final static Configuration configuration = new Configuration();
 	public static boolean createImage(float[][] data, float min, float max, String fileName) {
 		int numLatitudes = data.length;
 		int numLongitudes = data[0].length;

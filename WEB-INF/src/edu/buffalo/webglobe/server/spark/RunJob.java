@@ -56,7 +56,7 @@ public class RunJob extends HttpServlet {
         // TODO Auto-generated method stub
         String userName = null;
         JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
-        if(Constants.AUTHENTICATION_TYPE.equalsIgnoreCase("GLOBUS")){
+        if(Utils.configuration.getValue("AUTHENTICATION_TYPE").equalsIgnoreCase("GLOBUS")){
             userName = data.get("username").getAsString();
         }else{
             userName = request.getUserPrincipal().getName();

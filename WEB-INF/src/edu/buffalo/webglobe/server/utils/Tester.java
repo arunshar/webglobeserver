@@ -112,12 +112,13 @@ public class Tester {
             e.printStackTrace();
         }
         */
-
+        /*
         HDFSDataSet hdfsDataSet = new HDFSDataSet(33,"air","1947-12-31","2009-12-31");
         System.out.println(hdfsDataSet.getBoundedTimeNum());
         List<Date> dates = hdfsDataSet.getDates().subList(hdfsDataSet.getStartTimeIndex(),hdfsDataSet.getEndTimeIndex());
         ArrayList<String> data = hdfsDataSet.readData();
         System.out.println(data.size());
-
+          */
+        System.out.println(Utils.configuration.getValue("HDFS_SERVER"));
     }
 }
