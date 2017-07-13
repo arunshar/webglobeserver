@@ -10,7 +10,7 @@ Follow directions at https://www.mysql.com/downloads/. We will assume that `mysq
 From the command line:
 ```
 cd webglobeserver
-mysql -u mysqlusername -pmysqlpassword < setup/webglobeserver.dump.sql
+mysql -u mysqluser -pmysqlpassword < setup/webglobeserver.dump.sql
 ```
 ### Step 4 - Install ant
 Follow directions at http://ant.apache.org/
@@ -50,7 +50,7 @@ to
   <entry key="HDFS_SERVER">hdfs://myhdfsurl</entry>
   <entry key="HDFS_BASEDIR">myhdfsbasedir</entry>
   <entry key="LOCAL_TMP_DIRECTORY">mylocaltmpdir</entry>
-  <entry key="DB_USER_NAME">mysqlusername</entry>
+  <entry key="DB_USER_NAME">mysqluser</entry>
   <entry key="DB_PASSWORD">mysqlpassword</entry>
 ```
 ### Step 7 - Compile JAVA code
