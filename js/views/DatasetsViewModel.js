@@ -487,6 +487,7 @@ define(
 	  if(lon < 0){
 	    lon = 360 + lon;
 	  }
+
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
@@ -542,3 +543,39 @@ define(
 
       return DatasetsViewModel;
     });
+
+
+/* 
+	reverse geo-coding function...
+	LATITUDE, LONGITUDE ---> name of closest city/town
+*/ 
+
+//TODO: use the lat and long values used by Plot.ly to create a graph to label the location that is being plotted
+
+function reverseGeocode() {
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+      params: {
+        latlng: LATLONG,
+        key: GEOCODING_API_KEY
+      }
+    })
+    .then(function (response) {
+      console.log(response);
+      var formattedAddress = response.data.results[0].formatted_address;
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
