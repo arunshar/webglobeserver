@@ -554,19 +554,23 @@ define(
 
 //TODO: use the lat and long values used by Plot.ly to create a graph to label the location that is being plotted
 
+var numOfTraces = 0;
+
 function reverseGeocode(lat,long) {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
       params: {
         latlng: lat+","+long,
-        key: GOOGLE_API_KEY
+        key: keys.GOOGLE_API_KEY
       }
     })
     .then(function (response) {
+      
       console.log(response);
-      var formattedAddress = response.data.results[0].formatted_address;
-      //alert(formattedAddress);
 
-      $( "#traces" ).append( '<li class="list-group-item">trace x: '+formattedAddress+'</li>');
+      var formattedAddress = response.data.results[0].formatted_address;
+
+      $( "#traces" ).append( '<li class="list-group-item"><code>trace '+ numOfTraces + '</code>: '+formattedAddress+'</li>');
+      numOfTraces++;
 
     })
     .catch(function (error) {
