@@ -53,6 +53,8 @@ define(
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
 	  if(self.selectedDataset != null && self.plotChartSwitch){
+	  	reverseGeocode(position.latitude,position.longitude);
+	  	//alert(position.latitude+","+position.longitude);
 	    self.plotChart(position.latitude,position.longitude);
 	  }else{
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
@@ -552,22 +554,26 @@ define(
 
 //TODO: use the lat and long values used by Plot.ly to create a graph to label the location that is being plotted
 
-function reverseGeocode() {
+function reverseGeocode(lat,long) {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
       params: {
-        latlng: LATLONG,
-        key: GEOCODING_API_KEY
+        latlng: lat+","+long,
+        key: GOOGLE_API_KEY
       }
     })
     .then(function (response) {
       console.log(response);
       var formattedAddress = response.data.results[0].formatted_address;
+      //alert(formattedAddress);
+
+      $( "#traces" ).append( '<li class="list-group-item">trace x: '+formattedAddress+'</li>');
 
     })
     .catch(function (error) {
       console.log(error);
     });
 }
+
 
 
 
