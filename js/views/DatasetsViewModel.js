@@ -53,6 +53,8 @@ define(
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
 	  if(self.selectedDataset != null && self.plotChartSwitch){
+	  	reverseGeocode(position.latitude,position.longitude);
+	  	//alert(position.latitude+","+position.longitude);
 	    self.plotChart(position.latitude,position.longitude);
 	  }else{
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
@@ -487,6 +489,7 @@ define(
 	  if(lon < 0){
 	    lon = 360 + lon;
 	  }
+
 	  //get data
 	  $.ajax({
 	    url: webGlobeServer + 'GetTimeSeriesData',
@@ -531,6 +534,7 @@ define(
 	}
 	self.clearChart = function(){
 	  Plotly.purge("innerChart");
+	  resetLocations();
 	}
 	self.togglePlotting = function(){
 	  self.plotChartSwitch = !self.plotChartSwitch;
@@ -542,3 +546,48 @@ define(
 
       return DatasetsViewModel;
     });
+
+
+var numOfTraces = 0;
+
+/* 
+	reverse geo-coding function...
+	LATITUDE, LONGITUDE ---> name of closest city/town
+*/ 
+
+function reverseGeocode(lat,long) {
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+      params: {
+        latlng: lat+","+long,
+        key: keys.GOOGLE_API_KEY
+      }
+    })
+    .then(function (response) {
+      
+      console.log(response);
+
+      var formattedAddress = response.data.results[0].formatted_address;
+
+      $( "#traces" ).append( '<li class="list-group-item"><code>trace '+ numOfTraces + '</code>: '+formattedAddress+'</li>');
+      numOfTraces++;
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+function resetLocations() {
+	numOfTraces = 0;
+	$( "#traces" ).html("");
+}
+
+
+
+
+
+
+
+
+
+
