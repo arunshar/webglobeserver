@@ -534,6 +534,7 @@ define(
 	}
 	self.clearChart = function(){
 	  Plotly.purge("innerChart");
+	  resetLocations();
 	}
 	self.togglePlotting = function(){
 	  self.plotChartSwitch = !self.plotChartSwitch;
@@ -547,14 +548,12 @@ define(
     });
 
 
+var numOfTraces = 0;
+
 /* 
 	reverse geo-coding function...
 	LATITUDE, LONGITUDE ---> name of closest city/town
 */ 
-
-//TODO: use the lat and long values used by Plot.ly to create a graph to label the location that is being plotted
-
-var numOfTraces = 0;
 
 function reverseGeocode(lat,long) {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
@@ -578,7 +577,10 @@ function reverseGeocode(lat,long) {
     });
 }
 
-
+function resetLocations() {
+	numOfTraces = 0;
+	$( "#traces" ).html("");
+}
 
 
 
