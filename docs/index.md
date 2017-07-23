@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-![](icon.png)
+![](/icon.png)
 # [](#header-1)Team
 Justin Zwick, Arun Sharma
 **Mentor**: Varun Chandola
@@ -89,12 +89,6 @@ end
   - level 2 item
 - level 1 item
 
-### Small image
-
-
-### Large image
-
-![](https://guides.github.com/activities/hello-world/branching.png)
 
 
 ### Definition lists can be used with HTML syntax.
