@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-![](/webglobeserver/icon.png)
+![](/webglobeserver/icon.png){: .center-image}
 # [](#header-1)Team
 Justin Zwick, Arun Sharma
 **Mentor**: Varun Chandola
