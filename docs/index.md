@@ -1,15 +1,17 @@
 ---
 layout: default
 ---
+![](icon.png)
 # [](#header-1)Team
 Justin Zwick, Arun Sharma
 **Mentor**: Varun Chandola
 ## [](#header-2)Source Code
-[Available at](http://github.com/chandola/webglobeserver/).
-[Try out the app](http://199.109.195.187:8080/webglobeserver/).
+[http://github.com/chandola/webglobeserver/](http://github.com/chandola/webglobeserver/).
+## [](#header-3)Try out the app
+[http://199.109.195.187:8080/webglobeserver/](http://199.109.195.187:8080/webglobeserver/).
 
 
-## [](#header-2)Header 2
+## [](#header-4)WebGlobeServer
 
 > This is a blockquote following a header.
 >
@@ -89,7 +91,6 @@ end
 
 ### Small image
 
-![](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
 
 ### Large image
 
