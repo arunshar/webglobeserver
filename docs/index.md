@@ -13,7 +13,7 @@ layout: default
 [http://199.109.195.187:8080/webglobeserver/](http://199.109.195.187:8080/webglobeserver/).
 ## [](#header-4)Youtube Demonstration
 _coming soon_
-## [](#header-5)WebGlobeServer
+## [](#header-5)webGlobe
 
 > NASA Web World Wind (and its predecessor, World Wind JAVA), holds immense promise for climate and weather researchers.
 >
