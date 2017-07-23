@@ -4,7 +4,7 @@
 <properties>
   <entry key="HDFS_SERVER">hdfs://localhost:9000</entry>
   <entry key="HDFS_BASEDIR">/user/chandola/</entry>
-  <entry key="LOCAL_TMP_DIRECTORY">/home/ubuntu/fileserver/tmp</entry>
+  <entry key="LOCAL_TMP_DIRECTORY">/tmp</entry>
   <entry key="DB_USER_NAME">root</entry>
   <entry key="DB_PASSWORD">root</entry>
   <entry key="AUTHENTICATION_TYPE">GLOBUS</entry>
