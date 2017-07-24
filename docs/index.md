@@ -16,9 +16,9 @@ layout: default
 <dt>Mentor</dt>
 <dd>Varun Chandola (UB)</dd>
 <dt>Source Code</dt>
-<dd>[http://github.com/chandola/webglobeserver/](http://github.com/chandola/webglobeserver/)</dd>
+<dd>http://github.com/chandola/webglobeserver/</dd>
 <dt>Application</dt>
-<dd>[http://199.109.195.187:8080/webglobeserver/](http://199.109.195.187:8080/webglobeserver/)</dd>
+<dd>http://199.109.195.187:8080/webglobeserver/</dd>
 <dt>Youtube Demonstration</dt>
 <dd>Coming soon!</dd>
 </dl>
