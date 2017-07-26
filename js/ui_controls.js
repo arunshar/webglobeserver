@@ -262,6 +262,7 @@ $('.tabcontentLeft').perfectScrollbar();
 $('.tabcontentRight').perfectScrollbar();
 $('.tabcontentInfo').perfectScrollbar();
 $('.tabcontentGraphs').perfectScrollbar();
+$('#location-list').perfectScrollbar();
 
 function checkNumber(box) {
   var coords = box.value;
@@ -278,3 +279,4 @@ $(document).on("click", "[data-hide-closest]", function(e) {
   var $this = $(this);
   $this.closest($this.attr("data-hide-closest")).hide();
 });
+

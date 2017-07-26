@@ -169,3 +169,7 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
 #heatmapLegend { background:white; position:absolute; bottom:0; right:0; padding:10px; }
 #min { float:left; }
 #max { float:right; }
+
+#location-list {
+  max-height:300px;
+}
