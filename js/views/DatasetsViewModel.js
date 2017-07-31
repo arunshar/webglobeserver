@@ -53,7 +53,9 @@ define(
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
 	  if(self.selectedDataset != null && self.plotChartSwitch){
-	  	reverseGeocode(position.latitude,position.longitude);
+	  	if(self.selectedDataset.loaded) {
+	  		reverseGeocode(position.latitude,position.longitude);
+	  	}
 	  	//alert(position.latitude+","+position.longitude);
 	    self.plotChart(position.latitude,position.longitude);
 	  }else{
