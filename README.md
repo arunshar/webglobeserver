@@ -53,11 +53,25 @@ to
   <entry key="DB_USER_NAME">mysqluser</entry>
   <entry key="DB_PASSWORD">mysqlpassword</entry>
 ```
-### Step 7 - Compile JAVA code
+### Step 7 - Add a valid Google API Key
+In `js/keys/keys.js`, change
+```
+var keys = {
+	GOOGLE_API_KEY: ''
+}
+```
+to
+```
+var keys = {
+	GOOGLE_API_KEY: validkey
+}
+```
+where validkey is a Google API Key. For more information on obtaining a Google API Key, check out https://developers.google.com/maps/documentation/geocoding/get-api-key
+### Step 8 - Compile JAVA code
 From the `WEB-INF` directory, type:
 ```
 ant
 ```
-### Step 8 - Run WebGlobe application
+### Step 9 - Run WebGlobe application
 Assuming that Tomcat, HDFS, and MySQL are running, from any browser go to:
 http://mytomcaturl/webglobeserver/.
