@@ -319,42 +319,52 @@ define(
 	  }
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
 	  var analysisname = $("#analysisSelect :selected").text();
-	  if(analysisname != "Change Detection"){
+	  if(analysisname == "Correlation Analysis"){
 	    logger.log("Only Gaussian Process change detection is currently supported.","alert-warning");
-	    return;
-	  }
-	  var analysisoutputname = $("#analysisOutputName").val();
-	  if(analysisoutputname == ''){
-	    logger.log("Missing input arguments", "alert-warning");
-	    return;
-	  }
-	  var url = self.selectedDataset.url;
-	  logger.log("Submitting " + analysisname + " <a href=\""
-	      + url + "\">" + self.selectedDataset.name
-	      + ":" + fieldname + "</a>", "alert-info");
-
-	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-
+	    var url = self.selectedDataset.url;
+          logger.log("Submitting " + analysisname + " <a href=\""
+              + url + "\">" + self.selectedDataset.name
+              + ":" + fieldname + "</a>", "alert-info");
+	  var webGlobeServer = constant.WEBGLOBE_SERVER;
 	  $.ajax({
-	    url: webGlobeServer + 'RunJob',
+	    url: webGlobeServer + 'AnalyzeData',
 	    cache: false,
 	    type: 'POST',
-	    data: JSON.stringify({
-	      username: constants.WEBGLOBE_USER,
-	      datasetid: self.selectedDataset.id,
-	      datasetname: self.selectedDataset.name,
-	      url: url,
-	      analysisname: analysisname,
-	      fieldname: fieldname,
-	      analysisoutputname: analysisoutputname
-	    }),
-	    success: function (data) {
-	      var message = data.message;
-	      logger.log(message,'info');
-	    }
-	  }).fail(function (xhr, textStatus, err) {
-	    logger.log(err,"alert-danger");
-	  });                            
+	});
+	  return;
+	  }
+	 // var analysisoutputname = $("#analysisOutputName").val();
+	 // if(analysisoutputname == ''){
+	   // logger.log("Missing input arguments", "alert-warning");
+	   // return;
+	 //}
+	  // var url = self.selectedDataset.url;
+	  // logger.log("Submitting " + analysisname + " <a href=\""
+	  //     + url + "\">" + self.selectedDataset.name
+	  //     + ":" + fieldname + "</a>", "alert-info");
+
+	  // var webGlobeServer = constants.WEBGLOBE_SERVER;
+
+	  // $.ajax({
+	  //   url: webGlobeServer + 'RunJob',
+	  //   cache: false,
+	  //   type: 'POST',
+	  //   data: JSON.stringify({
+	  //     username: constants.WEBGLOBE_USER,
+	  //     datasetid: self.selectedDataset.id,
+	  //     datasetname: self.selectedDataset.name,
+	  //     url: url,
+	  //     analysisname: analysisname,
+	  //     fieldname: fieldname,
+	  //     analysisoutputname: analysisoutputname
+	  //   }),
+	  //   success: function (data) {
+	  //     var message = data.message;
+	  //     logger.log(message,'info');
+	  //   }
+	  // }).fail(function (xhr, textStatus, err) {
+	  //   logger.log(err,"alert-danger");
+	  // });                            
 
 	  //finish submitting 
 	}
