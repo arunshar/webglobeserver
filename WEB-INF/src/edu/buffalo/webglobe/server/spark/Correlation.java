@@ -145,7 +145,7 @@ public class Correlation {
             FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
 
             Path file = new Path(this.hdfsPath);
-            HashMap<String, ArrayList<Float>> returnmap = new HashMap<>();
+            HashMap<String, ArrayList<Float> > returnmap = new HashMap<String, ArrayList<Float>>();
             BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(file)));
             String line;
             String[] data = new String[this.latNum*this.lonNum*this.boundedTimeNum];
@@ -181,7 +181,7 @@ public class Correlation {
             }
 
 
-            HashMap<String,ArrayList<String>> corrmap = new HashMap<>();
+            HashMap<String,ArrayList<String>> corrmap = new HashMap<String,ArrayList<String>>();
             for (Map.Entry<String, ArrayList<Float>> entry : returnmap.entrySet()){
                 int year = 1950;
                 int index = (year-1948)*12;

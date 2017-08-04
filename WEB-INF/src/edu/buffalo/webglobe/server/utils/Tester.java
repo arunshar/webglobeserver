@@ -26,10 +26,16 @@ import java.util.Vector;
  * @version $Id$
  */
 public class Tester {
-    public static void main(String [] args){
+    public static void main(String [] args) throws Exception{
+
+        String url = "https://www.cse.buffalo.edu/ubds/docs/air.mon.mean.nc";
+        Vector<String []> tokens = Utils.parseURL(url);
+        System.out.println(tokens.get(0)[0]);
+        NetcdfDataSource netcdfDataSource = new NetcdfDataSource(tokens,1);
+        netcdfDataSource.initialize();
         /*
-        String url = "http://www.cse.buffalo.edu/ubds/docs/tasmin_day_BCSD_rcp45_r1i1p1_CCSM4_2014.nc";
         try {
+
             NetcdfDataset f = new NetcdfDataset((NetcdfFile.open(url)));
             System.out.println(f.getConventionUsed());
         } catch (IOException e) {

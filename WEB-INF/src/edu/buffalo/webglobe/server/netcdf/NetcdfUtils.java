@@ -69,6 +69,8 @@ public class NetcdfUtils {
      */
     public static NetcdfDataset loadHTTPNetcdfDataSet(String url, String target){
         NetcdfDataset.setUseNaNs(false);
+        if(url.startsWith("https"))
+            url = url.replace("https","http");
         try{
             return new NetcdfDataset(NetcdfFile.open(url+target));
         } catch (IOException e) {
