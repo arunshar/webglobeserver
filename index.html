@@ -137,8 +137,8 @@ $( function() {
 	    <ul class="nav nav-tabs">
 	      <li><a id="dataset-info-tab" data-toggle="" data-bind='click: $root.showTab("info")'><i class="fa fa-info"  aria-hidden="true"></i> Info</a></li>
 	      <li><a id="dataset-animate-tab" data-toggle="" data-bind='click: $root.showTab("animate")'><i class="fa fa-video-camera" aria-hidden="true"></i> Animate</a></li>
-	      <li><a id="dataset-analyze-tab" data-toggle="" data-bind='click: $root.showTab("analyze")'><i class="fa fa-flask" aria-hidden="true"></i> Analyze</a></li>
 	      <li><a id="dataset-charts-tab" data-toggle="" data-bind='click: $root.showTab("charts")'><i class="fa fa-line-chart" aria-hidden="true"></i> Charts</a></li>
+	      <li><a id="dataset-analyze-tab" data-toggle="" data-bind='click: $root.showTab("analyze")'><i class="fa fa-flask" aria-hidden="true"></i> Analyze</a></li>
 	      <li><a id="dataset-notebook-tab" data-toggle="" data-bind='click: $root.showTab("notebook")'><i class="fa fa-code-fork" aria-hidden="true"></i> Notebook</a></li>
 	    </ul>
 	    <div>
@@ -188,33 +188,6 @@ $( function() {
 		  </button>    
 		</div>
 	      </div>
-	      <div id="dataset-analyze" class="tab-pane">
-		<div class="input-group well">
-		  <form role="form" id="analysisForm">
-		    <div class="form-group row" style="padding: 5px;">
-		      <label for="fieldAnalysisSelect" class="col-6 col-form-label">Variable</label>
-		      <div class="col-4">
-			<select name="fieldAnalysisSelect" data-bind="options: fields" id="fieldAnalysisSelect"></select>
-		      </div>
-		    </div>
-		    <div class="form-group row" style="padding: 5px;">
-		      <label for="analysisSelect" class="col-2 col-form-label">Analysis</label>
-		      <div class="col-4">
-			<select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
-		      </div>
-		    </div>
-		    <div class="form-group row" style="padding: 5px;">
-		      <label for="analysisOutputName" class="col-2 col-form-label">Output Name</label>
-		      <div class="col-4">
-			<input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
-		      </div>
-		    </div>
-		    <div class="form-group row" style="padding: 5px;">
-		      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
-		    </div>
-		  </form>
-		</div>
-	      </div>
 	      <div id="dataset-charts" class="tab-pane">
 	      <br>
 			<div class="input-group well">
@@ -253,6 +226,33 @@ $( function() {
 				</div>
 			</div>
 
+	      </div>
+	      <div id="dataset-analyze" class="tab-pane">
+		<div class="input-group well">
+		  <form role="form" id="analysisForm">
+		    <div class="form-group row" style="padding: 5px;">
+		      <label for="fieldAnalysisSelect" class="col-6 col-form-label">Variable</label>
+		      <div class="col-4">
+			<select name="fieldAnalysisSelect" data-bind="options: fields" id="fieldAnalysisSelect"></select>
+		      </div>
+		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <label for="analysisSelect" class="col-2 col-form-label">Analysis</label>
+		      <div class="col-4">
+			<select name="analysisSelect" data-bind="options: analysisMethods" id="analysisSelect"></select>
+		      </div>
+		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <label for="analysisOutputName" class="col-2 col-form-label">Output Name</label>
+		      <div class="col-4">
+			<input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
+		      </div>
+		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
+		    </div>
+		  </form>
+		</div>
 	      </div>
 	    </div>
 	  </div>
