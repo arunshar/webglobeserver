@@ -267,6 +267,8 @@ define(
 	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showNext();
 	    globe.redraw();		
+	  }else{
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }	  
 	}
 
@@ -274,6 +276,8 @@ define(
 	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showPrevious();
 	    globe.redraw();		
+	  }else{
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }	  
 	}
 
@@ -281,6 +285,8 @@ define(
 	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showFirst();
 	    globe.redraw();
+	  }else{
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }
 	}
 
@@ -288,6 +294,8 @@ define(
 	  if(!self.isNotLoaded()){
 	    self.selectedDataset.layer.showLast();
 	    globe.redraw();
+	  }else{
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }
 	}
 
@@ -300,6 +308,8 @@ define(
 	      self.selectedDataset.layer.showNext();
 	      globe.redraw();
 	    }, 300);
+	  }else{
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }
 	}
 
@@ -482,7 +492,7 @@ define(
 	    Plotly.plot( innerChart, [{
 	      x: xdata,y: ydata }], layout );
 	  }else{
-	    logger.log("Dataset not loaded","alert-danger");
+	    logger.log("Load data from the info tab first.","alert-danger");
 	  }
 	  $("#plot-chart-spinner").hide();
 	}
