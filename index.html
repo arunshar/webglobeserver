@@ -137,8 +137,8 @@ $( function() {
 	    <ul class="nav nav-tabs">
 	      <li><a id="dataset-info-tab" data-toggle="" data-bind='click: $root.showTab("info")'><i class="fa fa-info"  aria-hidden="true"></i> Info</a></li>
 	      <li><a id="dataset-animate-tab" data-toggle="" data-bind='click: $root.showTab("animate")'><i class="fa fa-video-camera" aria-hidden="true"></i> Animate</a></li>
-	      <li><a id="dataset-charts-tab" data-toggle="" data-bind='click: $root.showTab("charts")'><i class="fa fa-line-chart" aria-hidden="true"></i> Charts</a></li>
 	      <li><a id="dataset-analyze-tab" data-toggle="" data-bind='click: $root.showTab("analyze")'><i class="fa fa-flask" aria-hidden="true"></i> Analyze</a></li>
+	      <li><a id="dataset-charts-tab" data-toggle="" data-bind='click: $root.showTab("charts")'><i class="fa fa-line-chart" aria-hidden="true"></i> Charts</a></li>
 	      <li><a id="dataset-notebook-tab" data-toggle="" data-bind='click: $root.showTab("notebook")'><i class="fa fa-code-fork" aria-hidden="true"></i> Notebook</a></li>
 	    </ul>
 	    <div>
@@ -188,47 +188,8 @@ $( function() {
 		  </button>    
 		</div>
 	      </div>
-	      <div id="dataset-charts" class="tab-pane">
-	      <br>
-			<div class="input-group well">
-			  <span id="clearChart" data-bind="click: $root.clearChart">
-			    <i class="fa fa-trash"></i>
-			  </span>
-			  <span class="middle" data-bind="click: $root.togglePlotting">
-			    <i class="fa fa-toggle-on active" id="togglePlottingOn" style="display:none;"></i>
-			    <i class="fa fa-toggle-on fa-rotate-180 inactive" id="togglePlottingOff" ></i>
-			  </span> 
-			  <label for="fieldChartsSelect">Variable </label>
-			  <select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
-			  <i id="plot-chart-spinner" style="display: none;" class="fa fa-spinner fa-spin fa-fw"></i>     
-			</div>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h4 class="panel-title">Charts:</h4>
-				</div>
-				<!--div id="innerChart" style="max-width:600px;height:250px;" ></div-->
-				<div id="innerChart" style="height:250px;"></div>
-			</div>
-			
-			<!--the name of the locations plotted-->
-			<div id="locations">
-				<div class="panel panel-default">
-				  <div class="panel-heading">
-				    <h4 class="panel-title">Locations plotted:</h4>
-				  </div>
-				  <div id="location-list" class="panel-body">
-					  <ul id="traces" class="list-group">
-
-
-					  </ul>
-				  </div>
-				</div>
-			</div>
-
-	      </div>
 	      <div id="dataset-analyze" class="tab-pane">
-		<div style="width: 300px" class="input-group well">
+		<div class="input-group well">
 		  <form role="form" id="analysisForm">
 		    <div class="form-group row" style="padding: 5px;">
 		      <label for="fieldAnalysisSelect" class="col-6 col-form-label">Variable</label>
@@ -249,10 +210,76 @@ $( function() {
 		      </div>
 		    </div>
 		    <div class="form-group row" style="padding: 5px;">
-		      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
+		      <label for="year" class="col-2 col-form-label">year</label>
+		      <div class="col-4">
+			<input type="text" name="year" class="form-control input-sm" id="year"/>
+		      </div>
 		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <label for="coordinates1" class="col-2 col-form-label">coordinates1</label>
+		      <div class="col-4">
+			<input type="text" name="coordinates1" class="form-control input-sm" id="coordinates1"/>
+		      </div>
+		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <label for="coordinates2" class="col-2 col-form-label">coordinates2</label>
+		      <div class="col-4">
+			<input type="text" name="coordinates2" class="form-control input-sm" id="coordinates2"/>
+		      </div>
+		    </div>
+		    <div class="form-group row" style="padding: 5px;">
+		      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze
+		      <i id="analysis-spinner" style="display: none;" class="fa fa-spinner fa-spin fa-fw"></i></button>       
+		    </div>
+
+		    <div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">Charts:</h4>
+				</div>
+				<div id="analysisChart" style="width:600px;height:250px;" ></div>
+			</div> 
+			   
+		  </div>
 		  </form>
 		</div>
+	      </div>
+	      <div id="dataset-charts" class="tab-pane">
+	      <br>
+			<div class="input-group well">
+			  <span id="clearChart" data-bind="click: $root.clearChart">
+			    <i class="fa fa-trash"></i>
+			  </span>
+			  <span class="middle" data-bind="click: $root.togglePlotting">
+			    <i class="fa fa-toggle-on active" id="togglePlottingOn" style="display:none;"></i>
+			    <i class="fa fa-toggle-on fa-rotate-180 inactive" id="togglePlottingOff" ></i>
+			  </span> 
+			  <label for="fieldChartsSelect">Variable </label>
+			  <select name="fieldChartsSelect" data-bind="options: fields" id="fieldChartsSelect"></select>
+			  <i id="plot-chart-spinner" style="display: none;" class="fa fa-spinner fa-spin fa-fw"></i>     
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">Charts:</h4>
+				</div>
+				<div id="innerChart" style="width:600px;height:250px;" ></div>
+			</div>
+			
+			<!--the name of the locations plotted-->
+			<div id="locations">
+				<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h4 class="panel-title">Locations plotted:</h4>
+				  </div>
+				  <div id="location-list" class="panel-body">
+					  <ul id="traces" class="list-group">
+
+
+					  </ul>
+				  </div>
+				</div>
+			</div>
+
 	      </div>
 	    </div>
 	  </div>
