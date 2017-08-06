@@ -6,7 +6,6 @@ import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.util.Progressable;
 
 import java.io.*;
 import java.net.URI;
@@ -139,13 +138,13 @@ public class Correlation {
 
     }
 
-    public HashMap<String, ArrayList<String>> readData(){
+    public ArrayList<String> readData(String lonlat1, String lonlat2, int year,String analysisoutputname){
         try {
             Configuration conf = new Configuration();
             FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
 
             Path file = new Path(this.hdfsPath);
-            HashMap<String, ArrayList<Float> > returnmap = new HashMap<String, ArrayList<Float>>();
+            HashMap<String, ArrayList<Float>> returnmap = new HashMap<>();
             BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(file)));
             String line;
             String[] data = new String[this.latNum*this.lonNum*this.boundedTimeNum];
@@ -156,7 +155,9 @@ public class Correlation {
                 String[] tokens = line.split(":");
                 String[] latlon = tokens[0].split(",");
                 float lon = Float.parseFloat(latlon[0]);
+                System.out.print("longitutde : "+lon+" , ");
                 float lat = Float.parseFloat(latlon[1]);
+                System.out.println("latitude : "+lat);
                 int st = (this.getLatIndex(lat,this.flipLat)*this.lonNum*this.boundedTimeNum) + (this.getLonIndex(lon,this.flipLon)*this.boundedTimeNum);
                 String st1 = String.valueOf(st);
                 ArrayList<Float> location = new ArrayList<Float>();
@@ -167,23 +168,41 @@ public class Correlation {
                 }
                 returnmap.put(st1,location);
             }
+//            String lonlat1 = "327.5,-17.5";
+//            String lonlat2 = "57.5,-2.5";
+            String[] var = lonlat1.split(",");
+            String[] var2 = lonlat2.split(",");
+            float longitutde = Float.valueOf(var[0]);
+            float latitude = Float.valueOf(var[1]);
+            float longitutde_1 = Float.valueOf(var2[0]);
+            float latitude_1  = Float.valueOf(var2[1]);
+            int location1 = (this.getLatIndex(latitude,this.flipLat)*this.lonNum*this.boundedTimeNum) + (this.getLonIndex(longitutde,this.flipLon)*this.boundedTimeNum);
+            int location2 = (this.getLatIndex(latitude_1,this.flipLat)*this.lonNum*this.boundedTimeNum) + (this.getLonIndex(longitutde_1,this.flipLon)*this.boundedTimeNum);
+            System.out.println("string 1 :"+location1);
+            System.out.println("string 2 : "+location2);
+//            String[] latlon = tokens[0].split(",");
+//            float lon = Float.parseFloat(latlon[0]);
+//            float lat = Float.parseFloat(latlon[1]);
+//            int st = (this.getLatIndex(lat,this.flipLat)*this.lonNum*this.boundedTimeNum) + (this.getLonIndex(lon,this.flipLon)*this.boundedTimeNum);
 
-            for (Map.Entry<String, ArrayList<Float>> entry : returnmap.entrySet()) {
-                System.out.println(entry.getKey()+" : "+entry.getValue());
-//            writer.println(entry.getKey()+" : "+entry.getValue());
-            }
 
-            String location = "4731804";
-            ArrayList<Float> timeseries = returnmap.get(location);
+//            for (Map.Entry<String, ArrayList<Float>> entry : returnmap.entrySet()) {
+//                System.out.println(entry.getKey()+" : "+entry.getValue());
+////            writer.println(entry.getKey()+" : "+entry.getValue());
+//            }
+
+//            String location = "4731804";
+            ArrayList<Float> timeseries = returnmap.get(String.valueOf(location1));
             final double[] locdata = new double[timeseries.size()];
             for (int i =0; i < locdata.length; i++){
                 locdata[i] = timeseries.get(i);
             }
 
+            System.out.println(locdata);
 
-            HashMap<String,ArrayList<String>> corrmap = new HashMap<String,ArrayList<String>>();
+            HashMap<String,ArrayList<String>> corrmap = new HashMap<>();
             for (Map.Entry<String, ArrayList<Float>> entry : returnmap.entrySet()){
-                int year = 1950;
+//                int year = 1950;
                 int index = (year-1948)*12;
                 final double[] worlddata = new double[12];
                 int j = 0;
@@ -192,7 +211,7 @@ public class Correlation {
                     j = j + 1;
                 }
                 System.out.println(worlddata);
-                System.out.println("hi Hi Hi");
+//                System.out.println("hi Hi Hi");
                 ArrayList<String> corrdata = new ArrayList<String>();
                 int i = 0;
                 int count = 0;
@@ -204,7 +223,17 @@ public class Correlation {
                 }
                 corrmap.put(entry.getKey(),corrdata);
             }
-            System.out.println(corrmap);
+
+            PrintWriter writer = new PrintWriter("/Users/arun/Desktop/"+analysisoutputname+".txt", "UTF-8");
+            for (Map.Entry<String, ArrayList<String>> entry : corrmap.entrySet()) {
+//                System.out.println(entry.getKey()+" : "+entry.getValue());
+              writer.println(entry.getKey()+" : "+entry.getValue());
+            }
+
+            System.out.println(corrmap.get(String.valueOf(location2)));
+
+            ArrayList<String> extracted_array =  corrmap.get(String.valueOf(location2));
+//            System.out.println(corrmap);
 
 //            Configuration configuration = new Configuration();
 //            FileSystem hdfs_csv = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), configuration );
@@ -237,7 +266,7 @@ public class Correlation {
 //                strData.add(s);
 //            }
 
-            return corrmap;
+            return extracted_array;
         }catch(Exception e){
             Utils.logger.severe("Error reading data from HDFS");
             Utils.logger.log(Level.SEVERE,e.getMessage());
