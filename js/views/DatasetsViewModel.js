@@ -363,9 +363,6 @@ define(
 	  var selectedLat = self.currentLatitude(); 
 	  var selectedLon = self.currentLongitude(); 
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  alert(selectedyear);
-	  alert(selectedLat);
-	  alert(selectedLon);
 	  if(analysisname == "Correlation Analysis"){
 	    var url = self.selectedDataset.url;
 	    logger.log("Submitting " + analysisname + " <a href=\""
