@@ -227,8 +227,8 @@ $( function() {
 			</div>
 
 	      </div>
-	      <div id="dataset-analyze" class="tab-pane">
-		<div style="width: 300px" class="input-group well">
+	      <div id="dataset-analyze" class="tab-pane" style="position:relative;">
+		<div class="input-group well" style="width: 300px;height: 400px">
 		  <form role="form" id="analysisForm">
 		    <div class="form-group row" style="padding: 5px;">
 		      <label for="fieldAnalysisSelect" class="col-6 col-form-label">Variable</label>
@@ -243,29 +243,87 @@ $( function() {
 		      </div>
 		    </div>
 		    <div class="form-group row" style="padding: 5px;">
-		      <label for="analysisOutputName" class="col-2 col-form-label">Output Name</label>
-		      <div class="col-4">
-			<input type="text" name="analysisOutputName" class="form-control input-sm" id="analysisOutputName"/>
-		      </div>
-		    </div>
-		    <div class="form-group row" style="padding: 5px;">
 		      <button type="button" class="btn btn-primary btn-sm" id="analyzeDataset" data-bind="click: $root.analyzeDataset">Analyze</button>       
 		    </div>
 		  </form>
 		</div>
+		<!-- Modal for each analysis method-->
+		<div class="modal fade" id="anomalydetectionmodal" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body" id="anomalydetectionmodalbody" style="padding: 15px;">
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="anomalydetectionOutputName" class="col-2 col-form-label">Output File Name</label>
+			  <div class="col-4">
+			    <input type="text" style="width: 100px;" name="anomalydetectionOutputName" class="form-control input-sm" id="anomalydetectionOutputName"/>
+			  </div>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <button type="button" class="btn btn-primary btn-sm" data-bind="click: $root.analyzeDatasetSubmit">Submit</button>       
+			</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class="modal fade" id="changedetectionmodal" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body" id="changedetectionmodalbody" style="padding: 15px;">
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="changedetectionOutputName" class="col-2 col-form-label">Output File Name</label>
+			  <div class="col-4">
+			    <input type="text" style="width: 100px;" name="changedetectionOutputName" class="form-control input-sm" id="changedetectionOutputName"/>
+			  </div>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <button type="button" class="btn btn-primary btn-sm" data-bind="click: $root.analyzeDatasetSubmit">Submit</button>       
+			</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class="modal fade" id="correlationanalysismodal" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body" id="correlationanalysismodalbody" style="padding: 15px;">
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="correlationanalysisLatLocation" class="col-2 col-form-label">Latitude</label>
+			  <span style="color:white;background-color:black;padding: 5px" data-bind="text: $root.currentLatitude;"></span>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="correlationanalysisLonLocation" class="col-2 col-form-label">Longitude</label>
+			  <span style="color:white;background-color:black;padding: 5px;" data-bind="text: $root.currentLongitude;"></span>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="correlationanalysisYear" class="col-2 col-form-label">Select Year for Analysis</label>
+			  <select name="fieldSelect" data-bind="options: years" id="correlationanalysisYear"></select>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <label for="correlationanalysisOutputName" class="col-2 col-form-label">Output File Name</label>
+			  <div class="col-4">
+			    <input type="text" style="width: 100px;" name="correlationanalysisOutputName" class="form-control input-sm" id="correlationanalysisOutputName"/>
+			  </div>
+			</div>
+			<div class="form-group row" style="padding: 5px;">
+			  <button type="button" class="btn btn-primary btn-sm" data-bind="click: $root.analyzeDatasetSubmit">Submit</button>       
+			</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	      </div>
-	    </div>
 	  </div>
 	</div>
       </div>
-      <div id="account" class="col-sm-12 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 12px !important;width: 35%;  padding-bottom: 25% !important;">
-	<h4 style="text-align:center;">Welcome <span data-bind="text: userName"></span></h4>	
-	<hr/>
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <div style="text-align:center;">Status of submitted analysis jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedAnalysisJobs"></span></div>
-	  </div>
-	  <div class="panel-body">
+    </div>
+    <div id="account" class="col-sm-12 col-sm-4 panel tabcontentRight rightTabPadding" style="padding:2px;font-size: 12px !important;width: 35%;  padding-bottom: 25% !important;">
+      <h4 style="text-align:center;">Welcome <span data-bind="text: userName"></span></h4>	
+      <hr/>
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <div style="text-align:center;">Status of submitted analysis jobs <span class="glyphicon glyphicon-refresh" style="padding: 3px;" data-bind="click: $root.getSubmittedAnalysisJobs"></span></div>
+	</div>
+	<div class="panel-body">
 	    <h4 style="text-align:center;">Analysis Jobs</h4>
 	    <table class="table-bordered table-striped table-hover table-sm" style="font-size: 10px; text-align: center;">
 	      <thead>

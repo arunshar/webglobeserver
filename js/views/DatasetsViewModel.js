@@ -36,6 +36,7 @@ define(
 	self.availableDatasets = ko.observableArray([]);
 	self.selectedDataset = ko.observable();
 	self.fields = ko.observableArray([]);
+	self.years = ko.observableArray([]);
 	self.plotChartSwitch = false;
 	//fields that are used to check the status
 	self.submitting = false;
@@ -44,6 +45,8 @@ define(
 	self.interval = null;
 	self.blurvalue = ko.observable('0.5');
 	self.radiusvalue = ko.observable('2');
+	self.currentLatitude = ko.observable('Select location on the globe');
+	self.currentLongitude = ko.observable('Select location on the globe');
 	/* register listeners */
 	var handleClick = function (recognizer) {
 	  // Obtain the event location.
@@ -52,11 +55,13 @@ define(
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
+	  self.currentLatitude(position.latitude);
+	  self.currentLongitude(position.longitude);
 	  if(self.selectedDataset != null && self.plotChartSwitch){
-	  	if(self.selectedDataset.loaded) {
-	  		reverseGeocode(position.latitude,position.longitude);
-	  	}
-	  	//alert(position.latitude+","+position.longitude);
+	    if(self.selectedDataset.loaded) {
+	      reverseGeocode(position.latitude,position.longitude);
+	    }
+	    //alert(position.latitude+","+position.longitude);
 	    self.plotChart(position.latitude,position.longitude);
 	  }else{
 	    globe.wwd.goTo(new WorldWind.Location(position.latitude, position.longitude));
@@ -85,6 +90,7 @@ define(
 	  $('#dataset-charts-tab').attr('data-toggle', '');
 	  self.selectedDataset = ko.observable();
 	  self.fields.removeAll();
+	  self.years.removeAll();
 	  self.clearChart();
 	  self.plotChartSwitch = false;
 	  $('#togglePlottingOn').hide();
@@ -118,10 +124,17 @@ define(
 		    var info_url = dataJSON[datasetInfo].info_url;
 		    var minDate = dataJSON[datasetInfo]['mindate'];
 		    var maxDate = dataJSON[datasetInfo]['maxdate'];
+		    var minYear = minDate.substring(0,3)+0;
+		    var maxYear = maxDate.substring(0,3)+0;
+		    var years = [];
+		    for (var j = minYear; j <= maxYear; j++){
+		      years.push(j);
+		    }
+		    
+		    var maxDate = dataJSON[datasetInfo]['maxdate'];
 		    var fieldcount = dataJSON[datasetInfo].fieldcount;
 		    var fields = [];
 		    for (var j = 0; j < fieldcount; j++) {
-
 		      var fieldInfo = 'field' + j;
 		      var fieldName = dataJSON[datasetInfo][fieldInfo];
 		      var field = {'name': fieldName, 'mindate': minDate, 'maxdate': maxDate};
@@ -137,6 +150,7 @@ define(
 		      'info' : info,
 		      'info_url' : info_url,
 		      'fields' : fields,
+		      'years' : years,
 		      'enabled' : false,
 		      'layer' : datasetLayer,
 		      'loaded' : false
@@ -171,6 +185,9 @@ define(
 	    var dataset = self.selectedDataset; 
 	    for (var i = 0; i < dataset.fields.length; i++) {
 	      self.fields.push(dataset.fields[i].name);
+	    }
+	    for (var i = 0; i < dataset.years.length; i++) {
+	      self.years.push(dataset.years[i]);
 	    }
 	    //show time data
 	    $('#load-start-date').attr({
@@ -250,7 +267,7 @@ define(
 	    });
 	  }	  
 	}
-	
+
 	self.updateHeatmap = function(){
 	  self.selectedDataset.layer.populateJSON(self.selectedDataset.bounds,self.selectedDataset.data,self.selectedDataset.shape,self.selectedDataset.dates,self.selectedDataset.limits,self.blurvalue(),self.radiusvalue());
 	  self.selectedDataset.layer.enabled = true;
@@ -319,7 +336,15 @@ define(
 	  }
 	}
 
-	self.analyzeDataset = function() {
+	self.analyzeDataset = function(){
+	  var analysisname = $("#analysisSelect :selected").text();
+	  var analysisname1 = analysisname.replace(/\s+/g, '').toLowerCase();
+	  $('#'+analysisname1+'modal').modal();
+	  $('.modal-backdrop').appendTo('#dataset-analyze');
+	  $('body').removeClass();
+	}
+
+	self.analyzeDatasetSubmit = function() {
 	  if (self.submitting) {
 	    logger
 	      .log(
@@ -328,25 +353,31 @@ define(
 	      return;
 	  }
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
-	  var analysisname = $("#analysisSelect :selected").text();
-	  var webGlobeServer = constants.WEBGLOBE_SERVER;
-	  if(analysisname == "Correlation Analysis"){
-          var url = self.selectedDataset.url;
-          logger.log("Submitting " + analysisname + " <a href=\""
-              + url + "\">" + self.selectedDataset.name
-              + ":" + fieldname + "</a>", "alert-info");
-          $.ajax({
-              url: webGlobeServer + 'AnalyzeData',
-              cache: false,
-              type: 'POST',
-          });
-          return;
+	  var analysisname = $("#correlationanalysisSelect :selected").text();
+	  var analysisoutputname = $("#correlationanalysisOutputName").val();
+	  if(analysisoutputname == ''){
+	    logger.log("Missing input arguments", "alert-warning");
+	    return;
 	  }
-	  // var analysisoutputname = $("#analysisOutputName").val();
-	  // if(analysisoutputname == ''){
-	  //   logger.log("Missing input arguments", "alert-warning");
-	  //   return;
-	  // }
+	  var selectedyear = $("#correlationanalysisYear :selected").text();
+	  var selectedLat = self.currentLatitude(); 
+	  var selectedLon = self.currentLongitude(); 
+	  var webGlobeServer = constants.WEBGLOBE_SERVER;
+	  alert(selectedyear);
+	  alert(selectedLat);
+	  alert(selectedLon);
+	  if(analysisname == "Correlation Analysis"){
+	    var url = self.selectedDataset.url;
+	    logger.log("Submitting " + analysisname + " <a href=\""
+		+ url + "\">" + self.selectedDataset.name
+		+ ":" + fieldname + "</a>", "alert-info");
+	    $.ajax({
+	      url: webGlobeServer + 'AnalyzeData',
+	      cache: false,
+	      type: 'POST',
+	    });
+	    return;
+	  }
 
 	  $.ajax({
 	    url: webGlobeServer + 'RunJob',
@@ -556,6 +587,7 @@ define(
 	  $("#togglePlottingOn").toggle();
 	  $("#togglePlottingOff").toggle();
 	}
+
 	self.hideTabs();
       }
 
@@ -566,43 +598,33 @@ define(
 var numOfTraces = 0;
 
 /* 
-	reverse geo-coding function...
-	LATITUDE, LONGITUDE ---> name of closest city/town
-*/ 
+   reverse geo-coding function...
+   LATITUDE, LONGITUDE ---> name of closest city/town
+   */ 
 
 function reverseGeocode(lat,long) {
-    axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+  axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
       params: {
-        latlng: lat+","+long,
-        key: keys.GOOGLE_API_KEY
+	latlng: lat+","+long,
+	key: keys.GOOGLE_API_KEY
       }
-    })
-    .then(function (response) {
-      
-      console.log(response);
+      })
+  .then(function (response) {
 
-      var formattedAddress = response.data.results[0].formatted_address;
+    console.log(response);
 
-      $( "#traces" ).append( '<li class="list-group-item"><code>trace '+ numOfTraces + '</code>: '+formattedAddress+'</li>');
-      numOfTraces++;
+    var formattedAddress = response.data.results[0].formatted_address;
 
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    $( "#traces" ).append( '<li class="list-group-item"><code>trace '+ numOfTraces + '</code>: '+formattedAddress+'</li>');
+    numOfTraces++;
+
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 function resetLocations() {
-	numOfTraces = 0;
-	$( "#traces" ).html("");
+  numOfTraces = 0;
+  $( "#traces" ).html("");
 }
-
-
-
-
-
-
-
-
-
-
