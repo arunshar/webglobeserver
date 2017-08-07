@@ -67,11 +67,17 @@ var keys = {
 }
 ```
 where validkey is a Google API Key. For more information on obtaining a Google API Key, check out https://developers.google.com/maps/documentation/geocoding/get-api-key
-### Step 8 - Compile JAVA code
+
+### Step 8 - Change username in path information
+In 'WEB-INF/src/edu/buffalo/webglobe/server/spark/Correlation.java' change path value of variable name 'writer' by editing name of respective system. For example :
+```
+PrintWriter writer = new PrintWriter("/Users/'your-username'/Desktop/"+analysisoutputname+".txt", "UTF-8");
+```
+### Step 9 - Compile JAVA code
 From the `WEB-INF` directory, type:
 ```
 ant
 ```
-### Step 9 - Run WebGlobe application
+### Step 10 - Run WebGlobe application
 Assuming that Tomcat, HDFS, and MySQL are running, from any browser go to:
 http://mytomcaturl/webglobeserver/.
