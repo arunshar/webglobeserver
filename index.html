@@ -288,14 +288,14 @@ $( function() {
 		      <div class="modal-body" id="correlationanalysismodalbody" style="padding: 15px;">
 
 		    <div class="form-group row" style="padding: 5px;">
-		      <label for="coordinates1" class="col-2 col-form-label">coordinates1</label>
+		      <label for="coordinates1" class="col-2 col-form-label">Enter coordinates for finding correlation map of location of interest</label>
 		      <div class="col-4">
 			<input type="text" name="coordinates1" class="form-control input-sm" id="coordinates1"/>
 		      </div>
 		    </div>
 
 		    <div class="form-group row" style="padding: 5px;">
-		      <label for="coordinates2" class="col-2 col-form-label">coordinates2</label>
+		      <label for="coordinates2" class="col-2 col-form-label">Enter coordinates for visualizing year-wise correlation values w.r.t above location</label>
 		      <div class="col-4">
 			<input type="text" name="coordinates2" class="form-control input-sm" id="coordinates2"/>
 		      </div>
@@ -314,14 +314,14 @@ $( function() {
 			</div>
 
 			<div class="form-group row" style="padding: 5px;">
-			  <button type="button" class="btn btn-primary btn-sm" data-bind="click: $root.analyzeDatasetSubmit">Submit</button>       
+			  <button type="button" class="btn btn-primary btn-sm" data-bind="click: $root.analyzeDatasetSubmit">Submit<i id="analysis-spinner" style="display: none;" class="fa fa-spinner fa-spin fa-fw"></i></button>       
 			</div>
 
 		    <div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">Charts:</h4>
 				</div>
-				<div id="analysisChart" style="width:600px;height:250px;" ></div>
+				<div id="analysisChart" style="width:500px;height:250px;" ></div>
 			</div> 
 
 		      </div>
