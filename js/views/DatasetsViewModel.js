@@ -123,8 +123,8 @@ define(
 		    var info_url = dataJSON[datasetInfo].info_url;
 		    var minDate = dataJSON[datasetInfo]['mindate'];
 		    var maxDate = dataJSON[datasetInfo]['maxdate'];
-		    var minYear = minDate.substring(0,3)+0;
-		    var maxYear = maxDate.substring(0,3)+0;
+		    var minYear = minDate.substring(0,4);
+		    var maxYear = maxDate.substring(0,4);
 		    var years = [];
 		    for (var j = minYear; j <= maxYear; j++){
 		      years.push(j);
