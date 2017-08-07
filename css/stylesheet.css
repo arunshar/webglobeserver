@@ -173,3 +173,6 @@ ul.tab li a[target] {background-color:rgb(67, 167, 199);background-color: rgba(6
 #location-list {
   max-height:300px;
 }
+.modal, .modal-backdrop {
+  position: absolute !important;
+}

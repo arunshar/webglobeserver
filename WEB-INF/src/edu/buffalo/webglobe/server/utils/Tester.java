@@ -1,5 +1,6 @@
 package edu.buffalo.webglobe.server.utils;
 
+import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.netcdf.NetcdfDataSource;
 import edu.buffalo.webglobe.server.netcdf.NetcdfVariable;
 import edu.buffalo.webglobe.server.spark.HDFSDataSet;
@@ -16,10 +17,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 
 /**
  * @author chandola
@@ -27,12 +29,40 @@ import java.util.Vector;
  */
 public class Tester {
     public static void main(String [] args) throws Exception{
-
+        Connection conn;
+        Statement stmt;
+        String cmd;
+        try{
+            conn =  DBUtils.getConnection();
+            stmt = conn.createStatement();
+            cmd = "SELECT time_min,time_max FROM netcdf_datasets WHERE id = 1";
+            ResultSet rs = DBUtils.executeQuery(conn,stmt,cmd);
+            String fromYear="",toYear="";
+            if (rs.next()) {
+                fromYear = rs.getDate(1).toString();
+                toYear = rs.getDate(2).toString();
+            }
+            stmt.close();
+            conn.close();
+            //create hdfsdataset
+            HDFSDataSet hdfsDataSet = new HDFSDataSet(1,"air",fromYear,toYear);
+            //read data
+            //HashMap<float [],float[]> data = hdfsDataSet.readYearSlice(1948);
+            //System.out.println(data.size());
+            float []data = hdfsDataSet.readLocationSlice(-45,24);
+            System.out.println(data.length);
+            //analyze
+            //output new data
+        } catch (SQLException e) {
+            Utils.logger.severe(e.getMessage());
+        }
+        /*
         String url = "https://www.cse.buffalo.edu/ubds/docs/air.mon.mean.nc";
         Vector<String []> tokens = Utils.parseURL(url);
         System.out.println(tokens.get(0)[0]);
         NetcdfDataSource netcdfDataSource = new NetcdfDataSource(tokens,1);
         netcdfDataSource.initialize();
+        */
         /*
         try {
 

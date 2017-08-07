@@ -18,9 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -54,7 +52,6 @@ public class HDFSDataSet {
 
     private boolean initialized;
     private float[] bounds;
-    private boolean boundTimeNum;
 
     private boolean flipLat;
     private boolean flipLon;
@@ -67,8 +64,6 @@ public class HDFSDataSet {
         this.toDate = toDate;
         this.initialized = false;
         this.initialize();
-
-
     }
 
     private void initialize() {
@@ -179,6 +174,92 @@ public class HDFSDataSet {
             }
 
             return strData;
+        }catch(Exception e){
+            Utils.logger.severe("Error reading data from HDFS");
+            Utils.logger.log(Level.SEVERE,e.getMessage());
+            return null;
+        }
+    }
+
+    public float[] readLocationSlice(double lat, double lon){
+        try {
+            Configuration conf = new Configuration();
+            FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
+            Path file = new Path(this.hdfsPath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(file)));
+            String line;
+            while (true){
+                line = br.readLine();
+                if(line == null)
+                    break;
+                String[] tokens = line.split(":");
+                String[] latlon = tokens[0].split(",");
+                float lon2 = Float.parseFloat(latlon[0]);  //lon
+                float lat2 = Float.parseFloat(latlon[1]);  //lat
+                if(Math.abs(lon2 - lon) < this.lonDelta  && Math.abs(lat2 - lat) < this.latDelta){
+                    String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
+                    float [] data = new float[this.boundedTimeNum];
+                    for(int i = 0; i < this.boundedTimeNum; i++)
+                        data[i] = Float.parseFloat(vals[this.startTimeIndex+i]);
+                    return data;
+                }
+            }
+        }catch(Exception e){
+            Utils.logger.severe("Error reading data from HDFS");
+            Utils.logger.log(Level.SEVERE,e.getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    public HashMap<float[], float []> readYearSlice(int targetYear){
+        // get range for target year
+        int st_ind = -1, en_ind = -1;
+        for(int i = 0; i < this.boundedTimeNum; i++) {
+            Date d = this.dates.get(i+this.startTimeIndex);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            int y = cal.get(Calendar.YEAR);
+            if(y == targetYear){
+                if(st_ind == -1)
+                    st_ind = i;
+                en_ind = i;
+            }else{
+                if(en_ind != -1)
+                    break;
+            }
+        }
+        //check if the range was correctly identified
+        if(st_ind == -1 || en_ind == -1){
+            Utils.logger.severe("Error finding the year range.");
+            return null;
+        }
+        try {
+            Configuration conf = new Configuration();
+            FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
+            Path file = new Path(this.hdfsPath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(file)));
+            String line;
+            HashMap<float[],float[]> floatData = new HashMap<float[],float[]>();
+            while (true){
+                line = br.readLine();
+                if(line == null)
+                    break;
+                String[] tokens = line.split(":");
+                String[] latlon = tokens[0].split(",");
+                float[] key = new float[2];
+                key[0] = Float.parseFloat(latlon[0]);  //lon
+                key[1] = Float.parseFloat(latlon[1]);  //lat
+
+
+                String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
+                float [] data = new float[en_ind - st_ind + 1];
+                for(int i = 0; i < (en_ind - st_ind + 1); i++){
+                    data[i] = Float.parseFloat(vals[i]+st_ind+this.startTimeIndex);
+                }
+                floatData.put(key,data);
+            }
+            return floatData;
         }catch(Exception e){
             Utils.logger.severe("Error reading data from HDFS");
             Utils.logger.log(Level.SEVERE,e.getMessage());

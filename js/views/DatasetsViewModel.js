@@ -117,7 +117,6 @@ define(
 		  for (var i = 0; i < dataJSON.count.value; i++) {
 		    var datasetInfo = 'dataset' + i;
 		    var id = dataJSON[datasetInfo].id;
-		    var url = dataJSON[datasetInfo].url;
 		    var name = dataJSON[datasetInfo].name;
 
 		    var info = dataJSON[datasetInfo].info;
@@ -353,93 +352,47 @@ define(
 	      return;
 	  }
 
-	  var coordinates1 = $('#coordinates1').val();
-	  var coordinates2 = $('#coordinates2').val();
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
 	  var analysisname = $("#analysisSelect :selected").text();
-	  var analysisoutputname = $("#analysisOutputName").val();
+	  var outputname = analysisname.replace(/\s+/g, '').toLowerCase()+'OutputName';
+	  var analysisoutputname = $("#"+outputname).val();
 	  if(analysisoutputname == ''){
 	    logger.log("Missing input arguments", "alert-warning");
 	    return;
 	  }
-	  var year = $('#year :selected').text();
-	  // var selectedLat = self.currentLatitude();
-	  // var selectedLon = self.currentLongitude();
+	  var args = '';
+	   
+	  if(analysisname == "Correlation Analysis"){
+	    var year = $('#year :selected').text();
+	    var selectedLat = self.currentLatitude();
+	    var selectedLon = self.currentLongitude();
+	    args = year+';'+selectedLat+';'+selectedLon;
+	  }
 	  var webGlobeServer = constants.WEBGLOBE_SERVER;
 
-	  if(analysisname == "Correlation Analysis"){
-	  	var coordinates1 = $('#coordinates1').val();
-	  	var coordinates2 = $('#coordinates2').val();
-	  	var fieldname = $("#fieldAnalysisSelect :selected").text();
-	  	var analysisname = $("#analysisSelect :selected").text();
-	  	var year = $('#year :selected').text();
-	  	var analysisoutputname = $("#analysisOutputName").val();
-	  	if(analysisoutputname == ''){
-			logger.log("Missing input arguments", "alert-warning");
-			return;
-		}
-	  	$("#analysis-spinner").show();
-	  	var datasetid = self.selectedDataset.id;
-	    var url = self.selectedDataset.url;
-	    logger.log("Submitting " + analysisname + " <a href=\""
-		+ url + "\">" + self.selectedDataset.name
-		+ ":" + fieldname + "</a>", "alert-info");
-	    $.ajax({
-			url: webGlobeServer + 'AnalyzeData',
-			cache: false,
-			type: 'POST',
-			data: JSON.stringify({
-				username: constants.WEBGLOBE_USER,
-				message : "kya baat",
-				datasetId: datasetid,
-				fieldname: fieldname,
-				to : "2010-03-01",
-				from : "1948-01-01",
-				coordinates1: coordinates1,
-				coordinates2: coordinates2,
-				year: year,
-				analysisoutputname: analysisoutputname,
-			}),
-			success: function (data) {
-				logger.log("Succesfully Analyzed data","alert-info");
-				$("#analysis-spinner").hide();
-				var ydata = data.data;
-				var xdata = data.dates;
-				var ylabel = "Observation";
-				var xlabel = "Time";
-				var layout = {
-					title: self.selectedDataset.fieldname,
-					xaxis: {title: xlabel},
-					yaxis: {title: ylabel},
-					margin: {t:0}
-				};
-				Plotly.plot(analysisChart, [{
-					x: xdata,y: ydata }], layout );
-			}
-		});
-	    return;
-	  }
+	  var datasetid = self.selectedDataset.id;
+	  logger.log("Submitting " + analysisname + " " + self.selectedDataset.name
+	      + ":" + fieldname, "alert-info");
 
-	  // $.ajax({
-	  //   url: webGlobeServer + 'RunJob',
-	  //   cache: false,
-	  //   type: 'POST',
-	  //   data: JSON.stringify({
-	  //     username: constants.WEBGLOBE_USER,
-	  //     datasetid: self.selectedDataset.id,
-	  //     datasetname: self.selectedDataset.name,
-	  //     url: url,
-	  //     analysisname: analysisname,
-	  //     fieldname: fieldname,
-	  //     analysisoutputname: analysisoutputname
-	  //   }),
-	  //   success: function (data) {
-	  //     var message = data.message;
-	  //     logger.log(message,'info');
-	  //   }
-	  // }).fail(function (xhr, textStatus, err) {
-	  //   logger.log(err,"alert-danger");
-	  // });
+	  $.ajax({
+	     url: webGlobeServer + 'RunJobSerial',
+	     cache: false,
+	     type: 'POST',
+	     data: JSON.stringify({
+	       username: constants.WEBGLOBE_USER,
+	       datasetid: self.selectedDataset.id,
+	       analysisname: analysisname,
+	       fieldname: fieldname,
+	       args: args,
+	       analysisoutputname: analysisoutputname
+	     }),
+	     success: function (data) {
+	       var message = data.message;
+	       logger.log(message,'alert-info');
+	     }
+	   }).fail(function (xhr, textStatus, err) {
+	     logger.log(err,"alert-danger");
+	   });
 
 	  //finish submitting 
 	}
