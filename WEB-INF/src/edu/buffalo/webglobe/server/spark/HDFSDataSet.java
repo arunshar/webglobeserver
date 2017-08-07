@@ -181,7 +181,7 @@ public class HDFSDataSet {
         }
     }
 
-    public float[] readLocationSlice(double lat, double lon){
+    public double[] readLocationSlice(double lat, double lon){
         try {
             Configuration conf = new Configuration();
             FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
@@ -194,13 +194,13 @@ public class HDFSDataSet {
                     break;
                 String[] tokens = line.split(":");
                 String[] latlon = tokens[0].split(",");
-                float lon2 = Float.parseFloat(latlon[0]);  //lon
-                float lat2 = Float.parseFloat(latlon[1]);  //lat
+                double lon2 = Double.parseDouble(latlon[0]);  //lon
+                double lat2 = Double.parseDouble(latlon[1]);  //lat
                 if(Math.abs(lon2 - lon) < this.lonDelta  && Math.abs(lat2 - lat) < this.latDelta){
                     String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
-                    float [] data = new float[this.boundedTimeNum];
+                    double [] data = new double[this.boundedTimeNum];
                     for(int i = 0; i < this.boundedTimeNum; i++)
-                        data[i] = Float.parseFloat(vals[this.startTimeIndex+i]);
+                        data[i] = Double.parseDouble(vals[this.startTimeIndex + i]);
                     return data;
                 }
             }
@@ -212,7 +212,7 @@ public class HDFSDataSet {
         return null;
     }
 
-    public HashMap<float[], float []> readYearSlice(int targetYear){
+    public HashMap<double[], double []> readYearSlice(int targetYear){
         // get range for target year
         int st_ind = -1, en_ind = -1;
         for(int i = 0; i < this.boundedTimeNum; i++) {
@@ -240,22 +240,22 @@ public class HDFSDataSet {
             Path file = new Path(this.hdfsPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(hdfs.open(file)));
             String line;
-            HashMap<float[],float[]> floatData = new HashMap<float[],float[]>();
+            HashMap<double[],double[]> floatData = new HashMap<double[],double[]>();
             while (true){
                 line = br.readLine();
                 if(line == null)
                     break;
                 String[] tokens = line.split(":");
                 String[] latlon = tokens[0].split(",");
-                float[] key = new float[2];
-                key[0] = Float.parseFloat(latlon[0]);  //lon
-                key[1] = Float.parseFloat(latlon[1]);  //lat
+                double[] key = new double[2];
+                key[0] = Double.parseDouble(latlon[0]);  //lon
+                key[1] = Double.parseDouble(latlon[1]);  //lat
 
 
                 String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
-                float [] data = new float[en_ind - st_ind + 1];
+                double [] data = new double[en_ind - st_ind + 1];
                 for(int i = 0; i < (en_ind - st_ind + 1); i++){
-                    data[i] = Float.parseFloat(vals[i]+st_ind+this.startTimeIndex);
+                    data[i] = Double.parseDouble(vals[i] + st_ind + this.startTimeIndex);
                 }
                 floatData.put(key,data);
             }
@@ -348,5 +348,21 @@ public class HDFSDataSet {
 
     public boolean isCrossingDateLine(){
         return true;
+    }
+
+    public float getLonMin() {
+        return lonMin;
+    }
+
+    public float getLatMin() {
+        return latMin;
+    }
+
+    public float getLonMax() {
+        return lonMax;
+    }
+
+    public float getLatMax() {
+        return latMax;
     }
 }

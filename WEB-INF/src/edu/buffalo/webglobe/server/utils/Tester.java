@@ -4,6 +4,7 @@ import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.netcdf.NetcdfDataSource;
 import edu.buffalo.webglobe.server.netcdf.NetcdfVariable;
 import edu.buffalo.webglobe.server.spark.HDFSDataSet;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -29,6 +30,17 @@ import java.util.*;
  */
 public class Tester {
     public static void main(String [] args) throws Exception{
+        double[] one = new double[3];
+        one[0] = 3.1;
+        one[1] = 0.4;
+        one[2] = 0.8;
+        double [] two = new double[3];
+        two[0] = 0.2;
+        two[1] = -0.3;
+        two[2] = 9.0;
+        double res = new PearsonsCorrelation().correlation(one,two);
+        System.out.println(res);
+        /*
         Connection conn;
         Statement stmt;
         String cmd;
@@ -49,13 +61,14 @@ public class Tester {
             //read data
             //HashMap<float [],float[]> data = hdfsDataSet.readYearSlice(1948);
             //System.out.println(data.size());
-            float []data = hdfsDataSet.readLocationSlice(-45,24);
+            double []data = hdfsDataSet.readLocationSlice(-45,24);
             System.out.println(data.length);
             //analyze
             //output new data
         } catch (SQLException e) {
             Utils.logger.severe(e.getMessage());
         }
+        */
         /*
         String url = "https://www.cse.buffalo.edu/ubds/docs/air.mon.mean.nc";
         Vector<String []> tokens = Utils.parseURL(url);

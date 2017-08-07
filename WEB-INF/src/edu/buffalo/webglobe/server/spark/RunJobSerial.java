@@ -4,19 +4,30 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.utils.Utils;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.util.Progressable;
+import ucar.ma2.MAMath;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -121,6 +132,7 @@ public class RunJobSerial extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseJson);
     }
+    //a hacked together implementation for correlation analysis
     public void runSerialJob(){
         //run the job
         String cmd;
@@ -131,27 +143,112 @@ public class RunJobSerial extends HttpServlet {
         //get spark url for the datasetid
         String fromYear = "";
         String toYear = "";
+        String name = "";
         try{
             conn =  DBUtils.getConnection();
             stmt = conn.createStatement();
 
-            cmd = "SELECT time_min,time_max FROM netcdf_datasets WHERE id = "+this.datasetId;
+            cmd = "SELECT time_min,time_max,name FROM netcdf_datasets WHERE id = "+this.datasetId;
             ResultSet rs = DBUtils.executeQuery(conn,stmt,cmd);
             if (rs.next()) {
                 fromYear = rs.getDate(1).toString();
                 toYear = rs.getDate(2).toString();
+                name = rs.getString(3);
             }
             stmt.close();
             conn.close();
             //create hdfsdataset
             HDFSDataSet hdfsDataSet = new HDFSDataSet(this.datasetId,fieldName,fromYear,toYear);
-            //read data
+            String[] tokens = this.args.split(";");
+            int targetYear = Integer.parseInt(tokens[0]);
+            double targetLat = Double.parseDouble(tokens[1]);
+            double targetLon = Double.parseDouble(tokens[2]);
+            //read data for the target location
+            double [] targetData = hdfsDataSet.readLocationSlice(targetLat,targetLon);
 
-
+            //read data for all locations for the target year
+            HashMap<double[] , double[] > allData = hdfsDataSet.readYearSlice(targetYear);
+            //find number of years
+            int l = 1;
+            for(double[] k :allData.keySet()) {
+               l = allData.get(k).length;
+                break;
+            }
+            int numYears = targetData.length/l;
+            //split target data by years
+            ArrayList<double[]> yearlyTargetData = new ArrayList<double[]>();
+            for(int i = 0; i < numYears; i++){
+                double[] currData = new double[l];
+                for(int j = 0; j < l; j++){
+                    currData[j] = targetData[i*l + j];
+                }
+                yearlyTargetData.add(currData);
+            }
+            HashMap<double[] , double[] > results = new HashMap<double[], double[]>();
             //analyze
-            //output new data
-            success = true;
-        } catch (SQLException e) {
+            for(double [] k: allData.keySet()){
+                double[] one = allData.get(k);
+                double[] res = new double[numYears];
+                for(int i = 0; i < numYears; i++){
+                    double[] two = yearlyTargetData.get(i);
+                    res[i] = new PearsonsCorrelation().correlation(one,two);
+                }
+                results.put(k,res);
+            }
+            //output new data to HDFS
+            Utils.logger.info("Writing out data to HDFS");
+
+            Configuration configuration = new Configuration();
+            FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), configuration );
+            String hdfsFileName = Utils.configuration.getValue("HDFS_BASEDIR")+"/"+Utils.cleanFileName(this.analysisOutputName)+"/"+Utils.cleanFileName(this.analysisName)+".csv";
+            Path file = new Path(hdfsFileName);
+
+            if ( hdfs.exists( file )) { hdfs.delete( file, true ); }
+            OutputStream os = hdfs.create( file,
+                    new Progressable() {
+                        public void progress() {
+                            Utils.logger.info(".");
+                        } });
+            BufferedWriter br = new BufferedWriter( new OutputStreamWriter( os, "UTF-8" ) );
+            try{
+                long st = System.currentTimeMillis();
+                //write out the map to the buffered writer
+                for(double[] key: results.keySet()){
+                    br.write(key[1]+","+key[0]+":"+results.get(key)+"\n");
+                }
+                long en = System.currentTimeMillis();
+                br.close();
+                hdfs.close();
+                Utils.logger.info("Finished writing out data to HDFS in "+(en - st)/1000 + " seconds");
+
+                //create a meta data entry into netcdf_datasets and netcdf_dataset_fields
+                String dataInfo = "Running "+this.analysisName+" on "+name+ " with arguments: "+args;
+                cmd = "INSERT INTO netcdf_datasets (name,user,info,info_url,is_accessible,lon_min,lon_max,lon_num,"+
+                        "lat_min,lat_max,lat_num,time_min,time_max,time_num) VALUES (\"" +
+                        this.analysisOutputName + "\",\""+userName+"\",\""+dataInfo+"\",\"\",1,"+hdfsDataSet.getLonMin()+","
+                        +hdfsDataSet.getLonMax()+","+hdfsDataSet.getLonNum()+","+hdfsDataSet.getLatMin()+","+hdfsDataSet.getLatMax()+","
+                        +hdfsDataSet.getLatNum()+",\""+hdfsDataSet.getDates().get(hdfsDataSet.getStartTimeIndex())+"\",\""+
+                        hdfsDataSet.getDates().get(hdfsDataSet.getEndTimeIndex())+"\","+hdfsDataSet.getBoundedTimeNum()+")";
+
+                ResultSet rset = DBUtils.executeInsert(conn,stmt,cmd);
+                if(rset.next()) {
+                    int dId = rset.getInt(1);
+                    cmd = "INSERT INTO netcdf_dataset_fields (dataset_id,field_name,units,max_value,min_value,hdfs_path) VALUES (" +
+                            dId + ",\"" + this.analysisName +
+                            "\",\"\",1,-1,\"" + hdfsFileName + "\")";
+                    Statement stmt1 = conn.createStatement();
+                    DBUtils.executeInsert(conn, stmt1, cmd);
+
+                    success = true;
+                }
+            }catch(Exception e){
+                br.close();
+                hdfs.close();
+                Utils.logger.severe("Error in writing out data to HDFS");
+            }
+
+
+        } catch (Exception e) {
             Utils.logger.severe(e.getMessage());
         }
 
