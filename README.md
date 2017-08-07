@@ -69,7 +69,7 @@ var keys = {
 where validkey is a Google API Key. For more information on obtaining a Google API Key, check out https://developers.google.com/maps/documentation/geocoding/get-api-key
 
 ### Step 8 - Change username in path information
-In 'WEB-INF/src/edu/buffalo/webglobe/server/spark/Correlation.java' change path value of variable name 'writer' by editing name of respective system. For example :
+In 'WEB-INF/src/edu/buffalo/webglobe/server/spark/Correlation.java' change path value of variable name 'writer', for example :
 ```
 PrintWriter writer = new PrintWriter("/Users/'your-username'/Desktop/"+analysisoutputname+".txt", "UTF-8");
 ```
