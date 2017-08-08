@@ -26,6 +26,6 @@ layout: default
 <dt>Application</dt>
 <dd><a href="http://199.109.193.229:8080/webglobeserver/">http://199.109.193.229:8080/webglobeserver/</a></dd>
 <dt>Youtube Demonstration</dt>
-<dd>Coming soon!</dd>
+<dd><a href="https://youtu.be/EC5cTWg222w"></a></dd>
 </dl>
 * * *
