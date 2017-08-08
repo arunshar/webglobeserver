@@ -57,7 +57,7 @@ public class HDFSDataSet {
     private boolean flipLon;
     private boolean crossesDateLine;
 
-    public HDFSDataSet(int id, String fieldName, String toDate, String fromDate){
+    public HDFSDataSet(int id, String fieldName, String fromDate, String toDate){
         this.id = id;
         this.fieldName = fieldName;
         this.fromDate = fromDate;
@@ -115,20 +115,21 @@ public class HDFSDataSet {
                 try {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date _d;
-                    _d = format.parse(this.toDate);
-                    this.startTimeIndex = (int) Math.ceil((_d.getTime() - this.timeMin.getTime())/(incr*numMillis));
                     _d = format.parse(this.fromDate);
+                    this.startTimeIndex = (int) Math.ceil((_d.getTime() - this.timeMin.getTime())/(incr*numMillis));
+                    _d = format.parse(this.toDate);
                     this.endTimeIndex = (int) Math.ceil((_d.getTime() - this.timeMin.getTime())/(incr*numMillis));
                 } catch (ParseException e){
                     this.startTimeIndex = 0;
                     this.endTimeIndex = this.timeNum - 1;
-
                 }
                 if(this.startTimeIndex >= this.endTimeIndex){
                     this.startTimeIndex = 0;
                     this.endTimeIndex = this.timeNum - 1;
                 }
-                this.boundedTimeNum = this.endTimeIndex - this.startTimeIndex;
+                if(this.endTimeIndex >= this.timeNum)
+                    this.endTimeIndex = this.timeNum - 1;
+                this.boundedTimeNum = this.endTimeIndex - this.startTimeIndex + 1;
                 this.flipLat = this.isLatFlipped();
                 this.flipLon = this.isLonFlipped();
                 this.crossesDateLine = this.isCrossingDateLine();
@@ -182,6 +183,11 @@ public class HDFSDataSet {
     }
 
     public double[] readLocationSlice(double lat, double lon){
+        if(this.crossesDateLine){
+            if(lon < 0){
+                lon += 360;
+            }
+        }
         try {
             Configuration conf = new Configuration();
             FileSystem hdfs = FileSystem.get( new URI( Utils.configuration.getValue("HDFS_SERVER") ), conf );
@@ -197,6 +203,7 @@ public class HDFSDataSet {
                 double lon2 = Double.parseDouble(latlon[0]);  //lon
                 double lat2 = Double.parseDouble(latlon[1]);  //lat
                 if(Math.abs(lon2 - lon) < this.lonDelta  && Math.abs(lat2 - lat) < this.latDelta){
+
                     String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
                     double [] data = new double[this.boundedTimeNum];
                     for(int i = 0; i < this.boundedTimeNum; i++)
@@ -205,8 +212,7 @@ public class HDFSDataSet {
                 }
             }
         }catch(Exception e){
-            Utils.logger.severe("Error reading data from HDFS");
-            Utils.logger.log(Level.SEVERE,e.getMessage());
+            Utils.logger.severe("Error reading data slice from HDFS");
             return null;
         }
         return null;
@@ -250,7 +256,6 @@ public class HDFSDataSet {
                 double[] key = new double[2];
                 key[0] = Double.parseDouble(latlon[0]);  //lon
                 key[1] = Double.parseDouble(latlon[1]);  //lat
-
 
                 String[] vals = tokens[1].substring(1,tokens[1].length()-1).split(",");
                 double [] data = new double[en_ind - st_ind + 1];

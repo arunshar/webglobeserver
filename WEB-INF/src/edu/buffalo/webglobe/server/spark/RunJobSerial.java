@@ -114,7 +114,7 @@ public class RunJobSerial extends HttpServlet {
                     Thread analysisThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            runSerialJob();
+                            runJobSerial();
                         }
                     });
                     analysisThread.start();
@@ -133,7 +133,7 @@ public class RunJobSerial extends HttpServlet {
         response.getWriter().write(responseJson);
     }
     //a hacked together implementation for correlation analysis
-    public void runSerialJob(){
+    public void runJobSerial(){
         //run the job
         String cmd;
         Connection conn;
@@ -163,38 +163,7 @@ public class RunJobSerial extends HttpServlet {
             int targetYear = Integer.parseInt(tokens[0]);
             double targetLat = Double.parseDouble(tokens[1]);
             double targetLon = Double.parseDouble(tokens[2]);
-            //read data for the target location
-            double [] targetData = hdfsDataSet.readLocationSlice(targetLat,targetLon);
-
-            //read data for all locations for the target year
-            HashMap<double[] , double[] > allData = hdfsDataSet.readYearSlice(targetYear);
-            //find number of years
-            int l = 1;
-            for(double[] k :allData.keySet()) {
-               l = allData.get(k).length;
-                break;
-            }
-            int numYears = targetData.length/l;
-            //split target data by years
-            ArrayList<double[]> yearlyTargetData = new ArrayList<double[]>();
-            for(int i = 0; i < numYears; i++){
-                double[] currData = new double[l];
-                for(int j = 0; j < l; j++){
-                    currData[j] = targetData[i*l + j];
-                }
-                yearlyTargetData.add(currData);
-            }
-            HashMap<double[] , double[] > results = new HashMap<double[], double[]>();
-            //analyze
-            for(double [] k: allData.keySet()){
-                double[] one = allData.get(k);
-                double[] res = new double[numYears];
-                for(int i = 0; i < numYears; i++){
-                    double[] two = yearlyTargetData.get(i);
-                    res[i] = new PearsonsCorrelation().correlation(one,two);
-                }
-                results.put(k,res);
-            }
+            HashMap<double[], double[]> results = RunJobSerial.getPearsonCorrelation(hdfsDataSet,targetLat,targetLon,targetYear);
             //output new data to HDFS
             Utils.logger.info("Writing out data to HDFS");
 
@@ -213,8 +182,14 @@ public class RunJobSerial extends HttpServlet {
             try{
                 long st = System.currentTimeMillis();
                 //write out the map to the buffered writer
+                int numyears = 0;
                 for(double[] key: results.keySet()){
-                    br.write(key[1]+","+key[0]+":"+results.get(key)+"\n");
+                    double [] v = results.get(key);
+                    String s = "";
+                    for(int i = 0;i < v.length; i++)
+                        s += v[i]+" ,";
+                    numyears = v.length;
+                    br.write(key[0]+","+key[1]+":["+s.substring(0,s.length()-2)+"]\n");
                 }
                 long en = System.currentTimeMillis();
                 br.close();
@@ -223,12 +198,16 @@ public class RunJobSerial extends HttpServlet {
 
                 //create a meta data entry into netcdf_datasets and netcdf_dataset_fields
                 String dataInfo = "Running "+this.analysisName+" on "+name+ " with arguments: "+args;
+                String st_d = new SimpleDateFormat("yyyy-MM-dd").format(hdfsDataSet.getDates().get(hdfsDataSet.getStartTimeIndex()));
+                String en_d = new SimpleDateFormat("yyyy-MM-dd").format(hdfsDataSet.getDates().get(hdfsDataSet.getEndTimeIndex()));
+                conn =  DBUtils.getConnection();
+                stmt = conn.createStatement();
+
                 cmd = "INSERT INTO netcdf_datasets (name,user,info,info_url,is_accessible,lon_min,lon_max,lon_num,"+
                         "lat_min,lat_max,lat_num,time_min,time_max,time_num) VALUES (\"" +
                         this.analysisOutputName + "\",\""+userName+"\",\""+dataInfo+"\",\"\",1,"+hdfsDataSet.getLonMin()+","
                         +hdfsDataSet.getLonMax()+","+hdfsDataSet.getLonNum()+","+hdfsDataSet.getLatMin()+","+hdfsDataSet.getLatMax()+","
-                        +hdfsDataSet.getLatNum()+",\""+hdfsDataSet.getDates().get(hdfsDataSet.getStartTimeIndex())+"\",\""+
-                        hdfsDataSet.getDates().get(hdfsDataSet.getEndTimeIndex())+"\","+hdfsDataSet.getBoundedTimeNum()+")";
+                        +hdfsDataSet.getLatNum()+",\""+st_d+"\",\""+en_d+"\","+numyears+")";
 
                 ResultSet rset = DBUtils.executeInsert(conn,stmt,cmd);
                 if(rset.next()) {
@@ -241,6 +220,8 @@ public class RunJobSerial extends HttpServlet {
 
                     success = true;
                 }
+                stmt.close();
+                conn.close();
             }catch(Exception e){
                 br.close();
                 hdfs.close();
@@ -270,7 +251,40 @@ public class RunJobSerial extends HttpServlet {
         } catch (SQLException e) {
             Utils.logger.severe(e.getMessage());
         }
+    }
 
-
+    public static HashMap<double[], double[]> getPearsonCorrelation(HDFSDataSet hdfsDataSet, double targetLat, double targetLon, int targetYear){
+        //read data for the target location
+        double [] targetData = hdfsDataSet.readLocationSlice(targetLat,targetLon);
+        //read data for all locations for the target year
+        HashMap<double[] , double[] > allData = hdfsDataSet.readYearSlice(targetYear);
+        //find number of years
+        int l = 1;
+        for(double[] k :allData.keySet()) {
+            l = allData.get(k).length;
+            break;
+        }
+        int numYears = targetData.length/l;
+        //split target data by years
+        ArrayList<double[]> yearlyTargetData = new ArrayList<double[]>();
+        for(int i = 0; i < numYears; i++){
+            double[] currData = new double[l];
+            for(int j = 0; j < l; j++){
+                currData[j] = targetData[i*l + j];
+            }
+            yearlyTargetData.add(currData);
+        }
+        HashMap<double[] , double[] > results = new HashMap<double[], double[]>();
+        //analyze
+        for(double [] k: allData.keySet()){
+            double[] one = allData.get(k);
+            double[] res = new double[numYears];
+            for(int i = 0; i < numYears; i++){
+                double[] two = yearlyTargetData.get(i);
+                res[i] = new PearsonsCorrelation().correlation(one,two);
+            }
+            results.put(k,res);
+        }
+        return results;
     }
 }

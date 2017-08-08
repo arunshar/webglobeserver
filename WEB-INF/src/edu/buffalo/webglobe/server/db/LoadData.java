@@ -47,7 +47,7 @@ public class LoadData extends HttpServlet {
 		String to = request.getParameter("to");
         HDFSDataSet hdfsDataSet = new HDFSDataSet(datasetId,fieldName,from,to);
         HashMap<String, ArrayList<String>> responseData = new HashMap<String, ArrayList<String>>();
-        List<Date> dates = hdfsDataSet.getDates().subList(hdfsDataSet.getStartTimeIndex(),hdfsDataSet.getEndTimeIndex());
+        List<Date> dates = hdfsDataSet.getDates().subList(hdfsDataSet.getStartTimeIndex(),hdfsDataSet.getEndTimeIndex()+1);
         ArrayList<String> _dates = new ArrayList<String>();
         for(Date d : dates){
             _dates.add(new SimpleDateFormat("yyyy-MM-dd").format(d));

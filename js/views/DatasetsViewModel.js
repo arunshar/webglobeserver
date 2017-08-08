@@ -55,8 +55,8 @@ define(
 
 	  var pickList = globe.wwd.pick(globe.wwd.canvasCoordinates(x, y));
 	  var position = pickList.objects[0].position;
-	  self.currentLatitude(position.latitude);
-	  self.currentLongitude(position.longitude);
+	  self.currentLatitude(position.latitude.toFixed(2));
+	  self.currentLongitude(position.longitude.toFixed(2));
 	  if(self.selectedDataset != null && self.plotChartSwitch){
 	    if(self.selectedDataset.loaded) {
 	      reverseGeocode(position.latitude,position.longitude);
@@ -354,7 +354,8 @@ define(
 
 	  var fieldname = $("#fieldAnalysisSelect :selected").text();
 	  var analysisname = $("#analysisSelect :selected").text();
-	  var outputname = analysisname.replace(/\s+/g, '').toLowerCase()+'OutputName';
+	  var analysisname1 = analysisname.replace(/\s+/g, '').toLowerCase();
+	  var outputname = analysisname1+'OutputName';
 	  var analysisoutputname = $("#"+outputname).val();
 	  if(analysisoutputname == ''){
 	    logger.log("Missing input arguments", "alert-warning");
@@ -363,7 +364,7 @@ define(
 	  var args = '';
 	   
 	  if(analysisname == "Correlation Analysis"){
-	    var year = $('#year :selected').text();
+	    var year = $('#'+analysisname1+'Year :selected').text();
 	    var selectedLat = self.currentLatitude();
 	    var selectedLon = self.currentLongitude();
 	    args = year+';'+selectedLat+';'+selectedLon;

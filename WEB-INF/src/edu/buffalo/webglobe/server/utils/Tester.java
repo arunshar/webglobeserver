@@ -4,6 +4,7 @@ import edu.buffalo.webglobe.server.db.DBUtils;
 import edu.buffalo.webglobe.server.netcdf.NetcdfDataSource;
 import edu.buffalo.webglobe.server.netcdf.NetcdfVariable;
 import edu.buffalo.webglobe.server.spark.HDFSDataSet;
+import edu.buffalo.webglobe.server.spark.RunJobSerial;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -30,7 +31,8 @@ import java.util.*;
  */
 public class Tester {
     public static void main(String [] args) throws Exception{
-        double[] one = new double[3];
+
+        /*double[] one = new double[3];
         one[0] = 3.1;
         one[1] = 0.4;
         one[2] = 0.8;
@@ -39,15 +41,17 @@ public class Tester {
         two[1] = -0.3;
         two[2] = 9.0;
         double res = new PearsonsCorrelation().correlation(one,two);
-        System.out.println(res);
-        /*
+        System.out.println(res); */
+
         Connection conn;
         Statement stmt;
         String cmd;
         try{
             conn =  DBUtils.getConnection();
             stmt = conn.createStatement();
-            cmd = "SELECT time_min,time_max FROM netcdf_datasets WHERE id = 1";
+            //cmd = "INSERT INTO netcdf_datasets (name,user,info,info_url,is_accessible,lon_min,lon_max,lon_num,lat_min,lat_max,lat_num,time_min,time_max,time_num) VALUES (\"hlkhklhlksdf\",\"chandola\",\"Running correlationanalysis on /ubds/docs/air.mon.mean.nc with arguments: 1948;43.09;-79.13\",\"\",1,0.0,357.5,144,90.0,-90.0,73,\"1948-01-31\",\"2010-02-04\",756)";
+            //ResultSet rset = DBUtils.executeInsert(conn,stmt,cmd);
+            cmd = "SELECT time_min,time_max FROM netcdf_datasets WHERE id = 10";
             ResultSet rs = DBUtils.executeQuery(conn,stmt,cmd);
             String fromYear="",toYear="";
             if (rs.next()) {
@@ -57,18 +61,24 @@ public class Tester {
             stmt.close();
             conn.close();
             //create hdfsdataset
-            HDFSDataSet hdfsDataSet = new HDFSDataSet(1,"air",fromYear,toYear);
+            HDFSDataSet hdfsDataSet = new HDFSDataSet(10,"correlationanalysis",fromYear,toYear);
+            ArrayList<String> d = hdfsDataSet.readData();
+            System.out.println(d.size());
+            //Date d = hdfsDataSet.getDates().get(0);
+            //System.out.println(d);
+            //HashMap<double[], double[]> result = RunJobSerial.getPearsonCorrelation(hdfsDataSet,41.21,-80.32,1948);
+            //System.out.println(result.size());
             //read data
             //HashMap<float [],float[]> data = hdfsDataSet.readYearSlice(1948);
             //System.out.println(data.size());
-            double []data = hdfsDataSet.readLocationSlice(-45,24);
-            System.out.println(data.length);
+            //double []data = hdfsDataSet.readLocationSlice(41.21,-80.32);
+            //System.out.println(data.length);
             //analyze
             //output new data
         } catch (SQLException e) {
             Utils.logger.severe(e.getMessage());
         }
-        */
+
         /*
         String url = "https://www.cse.buffalo.edu/ubds/docs/air.mon.mean.nc";
         Vector<String []> tokens = Utils.parseURL(url);
