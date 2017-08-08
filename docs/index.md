@@ -18,7 +18,7 @@ layout: default
 <dt>Source Code</dt>
 <dd>http://github.com/chandola/webglobeserver/</dd>
 <dt>Application</dt>
-<dd>http://199.109.195.187:8080/webglobeserver/</dd>
+<dd><a href="http://199.109.193.229:8080/webglobeserver/">http://199.109.193.229:8080/webglobeserver/</a></dd>
 <dt>Youtube Demonstration</dt>
 <dd>Coming soon!</dd>
 </dl>
