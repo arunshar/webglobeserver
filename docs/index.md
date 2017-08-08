@@ -11,7 +11,7 @@ layout: default
 ![](/webglobeserver/arch.png){: .center-image-large}
 * * *
 > The objective of this demo is to show how one can use webGlobe to understand the impact of climate change on urban areas. One way to pose this question is - _what regions of this world will the climate of my city (e.g., Helsinki) resemble in future?_ Will the climate stay the same (_status quo_), appear similar to regions in the north (global cooling), or appear similar to regions in the south (global warming)? Clearly, getting such insights needs both data, computing, and visualization capabilities. webGlobe is an integrated system that allows:
-* pulling in Climate forecast and reanalysis (historical) data, which is scattered across repositories all over the world. 
+* pulling in climate forecast and reanalysis (historical) data, which is scattered across repositories all over the world. 
 * visualizing data (and eventual analysis results) on the 3D globe
 * running complex analysis on the data by leveraging a cloud based server architecture
 
