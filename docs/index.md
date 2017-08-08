@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-![](/webglobeserver/icon.png){: .center-image}
+![](/webglobeserver/icon.png){: .center-image-small}
 ## [](#header-5)webGlobe
 
 > NASA Web World Wind (and its predecessor, World Wind JAVA), holds immense promise for climate and weather researchers.
@@ -16,7 +16,7 @@ layout: default
 <dt>Mentor</dt>
 <dd>Varun Chandola (UB)</dd>
 <dt>Source Code</dt>
-<dd>http://github.com/chandola/webglobeserver/</dd>
+<dd><a href="http://github.com/chandola/webglobeserver/">http://github.com/chandola/webglobeserver/</a></dd>
 <dt>Application</dt>
 <dd><a href="http://199.109.193.229:8080/webglobeserver/">http://199.109.193.229:8080/webglobeserver/</a></dd>
 <dt>Youtube Demonstration</dt>
