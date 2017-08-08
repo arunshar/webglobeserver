@@ -14,6 +14,7 @@ layout: default
 * pulling in Climate forecast and reanalysis (historical) data, which is scattered across repositories all over the world. 
 * visualizing data (and eventual analysis results) on the 3D globe
 * running complex analysis on the data by leveraging a cloud based server architecture
+
 * * *
 <dl>
 <dt>Team</dt>
